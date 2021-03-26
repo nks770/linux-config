@@ -2,11 +2,26 @@
 
 root=$(pwd)
 pkg=${root}/packages
+tmp=${root}/temp
 
 if [ ! -d ${pkg} ] ; then
   mkdir -pv ${pkg}
 fi
 
-source bin/resources.sh
+if [ ! -d ${tmp} ] ; then
+  mkdir -pv ${tmp}
+fi
 
-downloadPackage modules-4.7.0.tar.gz
+# Load script resources
+source bin/resources.sh
+source bin/system.sh
+
+# Load all modules in modules.d
+for module in $(ls modules.d/*.sh) ; do
+  source ${module}
+done
+
+
+installSystemPackages
+
+setup_modules

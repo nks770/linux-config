@@ -1,3 +1,6 @@
 
+# Tcl/Tk
+tcl8.6.11-src.tar.gz=https://phoenixnap.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tcl8.6.11-src.tar.gz
+
 # Environment Modules
 modules-4.7.0.tar.gz=https://pilotfiber.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz
