@@ -1,0 +1,3 @@
+
+# Environment Modules
+modules-4.7.0.tar.gz=https://pilotfiber.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz
