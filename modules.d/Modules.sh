@@ -23,12 +23,12 @@ fi
 function build_modules() {
 
 # Get desired version number to install
-v=${1}
-if [ -z "${v}" ] ; then
-  v=4.7.0
+modules_v=${1}
+if [ -z "${modules_v}" ] ; then
+  modules_v=4.7.0
 fi
 
-case ${1} in
+case ${modules_v} in
 4.7.0)
    tcl_tk_ver=8.6.11
    ;;
@@ -38,26 +38,28 @@ case ${1} in
 esac
 
 
-echo "Installing Environment Modules version ${v}..."
+echo "Installing Environment Modules version ${modules_v}..."
 
 #check_tcl ${tcl_tk_ver}
 check_tk ${tcl_tk_ver}
 
-downloadPackage modules-${v}.tar.gz
+downloadPackage modules-${modules_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/modules-${v} ] ; then
-  rm -rf ${tmp}/modules-${v}
+if [ -d ${tmp}/modules-${modules_v} ] ; then
+  rm -rf ${tmp}/modules-${modules_v}
 fi
 
-tar xvfz ${pkg}/modules-${v}.tar.gz
-cd ${tmp}/modules-${v}
-./configure --prefix=${opt} \
-            --with-tcl=${opt}tcl-${tcl_tk_ver}/lib \
+tar xvfz ${pkg}/modules-${modules_v}.tar.gz
+cd ${tmp}/modules-${modules_v}
+./configure --prefix=${opt}/Modules/${modules_v} \
+            --with-tclsh=${opt}/tcl-${tcl_tk_ver}/bin/tclsh${tcl_tk_ver%.*} \
+            --with-tcl=${opt}/tcl-${tcl_tk_ver}/lib \
             --with-tcl-ver=${tcl_tk_ver%.*} \
+#            --without-tclx \
 #            --with-tclx=/opt/tcl-${2}/lib \
-#            --with-tclx-ver=${3%.*} \
-            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
+#            --with-tclx-ver=${tcl_tk_ver%.*}
+#            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
 
 }
