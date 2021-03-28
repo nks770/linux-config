@@ -1,8 +1,11 @@
 #!/bin/bash
 
 root=$(pwd)
+opt=/opt
 pkg=${root}/packages
 tmp=${root}/temp
+
+ncpu=$(cat /proc/cpuinfo | grep name | wc -l)
 
 if [ ! -d ${pkg} ] ; then
   mkdir -pv ${pkg}
@@ -24,4 +27,4 @@ done
 
 installSystemPackages
 
-setup_modules
+check_modules
