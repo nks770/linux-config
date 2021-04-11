@@ -5,15 +5,22 @@
 function modulesInstalled() {
 test=$(module avail 2>&1 | grep use.own | wc -l)
 
-if [ ${test} -lt 1 ] || [ ! -d ${modpath} ]; then
+if [ ${test} -lt 1 ] ; then
   source /etc/profile.d/modules.sh
-  test=$(module avail 2>&1 | grep use.own | wc -l)
-  if [ ${test} -lt 1 ] || [ ! -d ${modpath} ]; then
-    return 1
-  fi
 fi
 
-return 0
+test=$(module avail 2>&1 | grep use.own | wc -l)
+
+if [ ${test} -lt 1 ] ; then
+  return 1
+elif [ -z "${MODULEPATH}" ] ; then
+  return 1
+elif [ ! -d "${MODULEPATH}" ] ; then
+  return 1
+else
+  return 0
+fi
+
 }
 
 function check_modules() {
@@ -76,5 +83,8 @@ fi
 
 cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
 ln -sv /opt/Modules/${modules_v} /opt/Modules/default
+
+cd ${root}
+rm -rf ${tmp}/modules-${modules_v}
 
 }

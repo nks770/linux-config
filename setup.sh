@@ -27,4 +27,5 @@ done
 
 installSystemPackages
 
-check_modules
+#check_modules
+check_vim 8.2
