@@ -3,10 +3,14 @@
 # Functions for detecting and building Environment Modules
 
 function modulesInstalled() {
-test=$(modufe avail 2>&1 | grep use.own | wc -l)
+test=$(module avail 2>&1 | grep use.own | wc -l)
 
 if [ ${test} -lt 1 ] || [ ! -d ${modpath} ]; then
-  return 1
+  source /etc/profile.d/modules.sh
+  test=$(module avail 2>&1 | grep use.own | wc -l)
+  if [ ${test} -lt 1 ] || [ ! -d ${modpath} ]; then
+    return 1
+  fi
 fi
 
 return 0
@@ -40,8 +44,8 @@ esac
 
 echo "Installing Environment Modules version ${modules_v}..."
 
-#check_tcl ${tcl_tk_ver}
-check_tk ${tcl_tk_ver}
+check_tcl ${tcl_tk_ver}
+#check_tk ${tcl_tk_ver}
 
 downloadPackage modules-${modules_v}.tar.gz
 
@@ -61,5 +65,16 @@ cd ${tmp}/modules-${modules_v}
 #            --with-tclx=/opt/tcl-${2}/lib \
 #            --with-tclx-ver=${tcl_tk_ver%.*}
 #            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
+
+# DUSE_INTERP_ERRORLINE is for modules 3.x when compilation against tcl 8.6 fails
+
+make && make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+
+cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
+ln -sv /opt/Modules/${modules_v} /opt/Modules/default
 
 }
