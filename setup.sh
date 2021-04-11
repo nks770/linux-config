@@ -27,5 +27,5 @@ done
 
 installSystemPackages
 
-#check_modules
 check_vim 8.2
+check_python 3.9.4
