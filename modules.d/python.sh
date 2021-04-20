@@ -99,6 +99,6 @@ eof
 #prereq gcc/${python_gcc_ver}
 
 cd ${root}
-rm -rf ${tmp}/${vim_srcdir}
+rm -rf ${tmp}/Python-${python_v}
 
 }

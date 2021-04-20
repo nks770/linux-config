@@ -29,3 +29,4 @@ installSystemPackages
 
 check_vim 8.2
 check_python 3.9.4
+check_screen 4.8.0

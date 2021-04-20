@@ -5,6 +5,9 @@ modules-4.7.0.tar.gz=https://pilotfiber.dl.sourceforge.net/project/modules/Modul
 # Python
 Python-3.9.4.tgz=https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz
 
+# Screen
+screen-4.8.0.tar.gz=http://ftp.gnu.org/gnu/screen/screen-4.8.0.tar.gz
+
 # Tcl/Tk
 tcl8.6.11-src.tar.gz=https://phoenixnap.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tcl8.6.11-src.tar.gz
 tk8.6.11.1-src.tar.gz=https://iweb.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tk8.6.11.1-src.tar.gz

@@ -20,4 +20,9 @@ function downloadPackage() {
     wget --no-check-certificate "${url}" -O ${pkg}/${1}
   fi
 
+  if [ ! -f ${pkg}/${1} ] ; then
+    echo "ERROR: Could not get ${1}!"
+    exit 1
+  fi
+
 }
