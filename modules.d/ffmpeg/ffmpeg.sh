@@ -44,6 +44,8 @@ case ${1} in
    ffmpeg_nasm_ver=2.13.03
    ffmpeg_libaom_ver=1.0.0
    ffmpeg_libass_ver=0.14.0
+   ffmpeg_lame_ver=3.100
+   ffmpeg_xvidcore_ver=1.3.6
   ;;
 esac
 
@@ -51,11 +53,15 @@ check_modules
 check_nasm ${ffmpeg_nasm_ver}
 check_libaom ${ffmpeg_libaom_ver}
 check_libass ${ffmpeg_libass_ver}
+check_lame ${ffmpeg_lame_ver}
+check_xvidcore ${ffmpeg_xvidcore_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
             libaom/${ffmpeg_libaom_ver} \
-            libass/${ffmpeg_libass_ver}
+            libass/${ffmpeg_libass_ver} \
+            lame/${ffmpeg_lame_ver} \
+            xvidcore/${ffmpeg_xvidcore_ver}
 module list
 
 exit 4
