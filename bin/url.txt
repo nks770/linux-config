@@ -1,6 +1,24 @@
 
+# cmake
+cmake-3.9.6.tar.gz=https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
+cmake-3.11.4.tar.gz=https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
+
+# doxygen
+doxygen-1.8.14.src.tar.gz=https://cfhcable.dl.sourceforge.net/project/doxygen/rel-1.8.14/doxygen-1.8.14.src.tar.gz
+
 # Environment Modules
 modules-4.7.0.tar.gz=https://pilotfiber.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz
+
+# FFmpeg
+ffmpeg-4.2.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.gz
+ffmpeg-4.2.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.4.tar.gz
+
+# libaom
+# https://aomedia.googlesource.com/aom/+refs
+libaom-1.0.0.tar.gz=https://aomedia.googlesource.com/aom/+archive/d14c5bb4f336ef1842046089849dee4a301fbbf0.tar.gz
+
+# nasm
+nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
 
 # Python
 Python-3.9.4.tgz=https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz
@@ -14,3 +32,6 @@ tk8.6.11.1-src.tar.gz=https://iweb.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tk8
 
 # Vim
 vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2
+
+# yasm
+yasm-1.3.0.tar.gz=http://www.tortall.net/projects/yasm/releases/yasm-1.3.0.tar.gz

@@ -13,6 +13,12 @@ fi
 if [ ! -f "$(which gcc 2>&1)" ] ; then
   packages="${packages} gcc"
 fi
+if [ ! -f "$(which g++ 2>&1)" ] ; then
+  packages="${packages} gcc-c++"
+fi
+if [ ! -f "$(which patch 2>&1)" ] ; then
+  packages="${packages} patch"
+fi
 if [ ! -f "$(which bzip2 2>&1)" ] ; then
   packages="${packages} bzip2"
 fi

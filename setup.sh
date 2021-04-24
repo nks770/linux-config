@@ -23,6 +23,9 @@ source bin/system.sh
 for module in $(ls modules.d/*.sh) ; do
   source ${module}
 done
+for module in $(ls modules.d/*/*.sh) ; do
+  source ${module}
+done
 
 
 installSystemPackages
@@ -30,3 +33,4 @@ installSystemPackages
 check_vim 8.2
 check_python 3.9.4
 check_screen 4.8.0
+check_ffmpeg 4.2.2

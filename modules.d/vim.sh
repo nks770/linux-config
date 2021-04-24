@@ -47,8 +47,6 @@ esac
 echo "Installing vim ${vim_v}..."
 
 check_modules
-#check_tcl ${tcl_tk_ver}
-#check_tk ${tcl_tk_ver}
 
 downloadPackage vim-${vim_v}.tar.bz2
 
