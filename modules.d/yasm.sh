@@ -70,7 +70,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${yasm_v}
-set PKG /opt/yasm-\$VER
+set PKG ${opt}/yasm-\$VER
 
 module-whatis   "Loads yasm-${yasm_v}"
 conflict yasm

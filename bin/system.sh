@@ -22,6 +22,15 @@ fi
 if [ ! -f "$(which bzip2 2>&1)" ] ; then
   packages="${packages} bzip2"
 fi
+if [ ! -f "$(which flex 2>&1)" ] ; then
+  packages="${packages} flex"
+fi
+if [ ! -f "$(which bison 2>&1)" ] ; then
+  packages="${packages} bison"
+fi
+if [ ! -f "$(which perl 2>&1)" ] ; then
+  packages="${packages} perl"
+fi
 if [ ! -f "/usr/include/X11/Xlib.h" ] ; then
   # X11/Xlib.h header file needed to build Tk
   packages="${packages} libX11-devel"
@@ -49,6 +58,18 @@ fi
 if [ ! -f "/usr/include/openssl/ssl.h" ] ; then
   # openssl header file (optionally) needed to build Python
   packages="${packages} openssl-devel"
+fi
+if [ ! -f "/usr/include/freetype2/freetype/freetype.h" ] ; then
+  # freetype2 is needed to build libass (for ffmpeg)
+  packages="${packages} freetype-devel"
+fi
+if [ ! -f "/usr/include/fribidi/fribidi.h" ] ; then
+  # fribidi is needed to build libass (for ffmpeg)
+  packages="${packages} fribidi-devel"
+fi
+if [ ! -f "/usr/include/fontconfig/fontconfig.h" ] ; then
+  # fontconfig is needed to build libass (for ffmpeg)
+  packages="${packages} fontconfig-devel"
 fi
 
 if [ ! -z "${packages}" ] ; then

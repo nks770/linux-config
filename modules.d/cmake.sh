@@ -71,7 +71,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${cmake_v}
-set PKG /opt/cmake-\$VER
+set PKG ${opt}/cmake-\$VER
 
 module-whatis   "Loads cmake-${cmake_v}"
 conflict cmake

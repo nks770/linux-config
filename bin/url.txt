@@ -17,10 +17,15 @@ ffmpeg-4.2.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.4.tar.gz
 # https://aomedia.googlesource.com/aom/+refs
 libaom-1.0.0.tar.gz=https://aomedia.googlesource.com/aom/+archive/d14c5bb4f336ef1842046089849dee4a301fbbf0.tar.gz
 
+# libass
+# https://github.com/libass/libass
+libass-0.14.0.tar.gz=https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.gz
+
 # nasm
 nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
 
 # Python
+Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
 Python-3.9.4.tgz=https://www.python.org/ftp/python/3.9.4/Python-3.9.4.tgz
 
 # Screen

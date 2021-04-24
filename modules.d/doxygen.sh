@@ -41,13 +41,16 @@ echo "Installing doxygen ${doxygen_v}..."
 case ${1} in
   1.8.14)
    doxygen_cmake_ver=3.9.6
+   doxygen_python_ver=3.9.4
   ;;
 esac
 
 check_modules
 check_cmake ${doxygen_cmake_ver}
+check_python ${doxygen_python_ver}
 module purge
-module load cmake/${doxygen_cmake_ver}
+module load cmake/${doxygen_cmake_ver} \
+            Python/${doxygen_python_ver}
 module list
 
 downloadPackage doxygen-${doxygen_v}.src.tar.gz
@@ -63,42 +66,37 @@ cd ${tmp}/${doxygen_srcdir}
 
 cmake -G "Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=Release \
+      -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
 
-exit 4
-#make -j ${ncpu} && make install
-#if [ ! $? -eq 0 ] ; then
-#  exit 4
-#fi
-#
-## Create the environment module
-#if [ -z "${MODULEPATH}" ] ; then
-#  source /etc/profile.d/modules.sh
-#fi
-#mkdir -pv ${MODULEPATH}/doxygen
-#cat << eof > ${MODULEPATH}/doxygen/${doxygen_v}
-##%Module
-#
-#proc ModulesHelp { } {
-#   puts stderr "Puts doxygen-${doxygen_v} into your environment"
-#}
-#
-#set VER ${doxygen_v}
-#set PKG /opt/doxygen-\$VER
-#
-#module-whatis   "Loads doxygen-${doxygen_v}"
-#conflict doxygen
-#
-#prepend-path CPATH \$PKG/include
-#prepend-path C_INCLUDE_PATH \$PKG/include
-#prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-#prepend-path LD_LIBRARY_PATH \$PKG/lib
-#prepend-path PATH \$PKG/bin
-#prepend-path MANPATH \$PKG/share/man
-#
-#eof
-#
-#cd ${root}
-#rm -rf ${tmp}/${doxygen_srcdir}
+make -j ${ncpu} && make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+
+# Create the environment module
+if [ -z "${MODULEPATH}" ] ; then
+  source /etc/profile.d/modules.sh
+fi
+mkdir -pv ${MODULEPATH}/doxygen
+cat << eof > ${MODULEPATH}/doxygen/${doxygen_v}
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "Puts doxygen-${doxygen_v} into your environment"
+}
+
+set VER ${doxygen_v}
+set PKG ${opt}/doxygen-\$VER
+
+module-whatis   "Loads doxygen-${doxygen_v}"
+conflict doxygen
+
+prepend-path PATH \$PKG/bin
+
+eof
+
+cd ${root}
+rm -rf ${tmp}/${doxygen_srcdir}
 
 }

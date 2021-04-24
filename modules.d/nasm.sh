@@ -93,7 +93,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${nasm_v}
-set PKG /opt/nasm-\$VER
+set PKG ${opt}/nasm-\$VER
 
 module-whatis   "Loads nasm-${nasm_v}"
 conflict nasm

@@ -85,7 +85,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${screen_v}
-set PKG /opt/screen-\$VER
+set PKG ${opt}/screen-\$VER
 
 module-whatis   "Loads screen-${screen_v}"
 conflict screen

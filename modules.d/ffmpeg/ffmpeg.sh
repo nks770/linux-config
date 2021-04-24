@@ -40,19 +40,25 @@ ffmpeg_srcdir=ffmpeg-${ffmpeg_v}
 echo "Installing ffmpeg ${ffmpeg_v}..."
 
 case ${1} in
-  4.2.2)
+  4.2.2) # 2019-12-31 23:58
    ffmpeg_nasm_ver=2.13.03
    ffmpeg_libaom_ver=1.0.0
+   ffmpeg_libass_ver=0.14.0
   ;;
 esac
 
 check_modules
 check_nasm ${ffmpeg_nasm_ver}
 check_libaom ${ffmpeg_libaom_ver}
+check_libass ${ffmpeg_libass_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
-            libaom/${ffmpeg_libaom_ver}
+            libaom/${ffmpeg_libaom_ver} \
+            libass/${ffmpeg_libass_ver}
+module list
+
+exit 4
 
 downloadPackage ffmpeg-${ffmpeg_v}.tar.gz
 

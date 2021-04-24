@@ -82,7 +82,7 @@ if [ ! $? -eq 0 ] ; then
 fi
 
 cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
-ln -sv /opt/Modules/${modules_v} /opt/Modules/default
+ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
 
 cd ${root}
 rm -rf ${tmp}/modules-${modules_v}

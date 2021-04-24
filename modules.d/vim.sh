@@ -83,7 +83,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${vim_v}
-set PKG /opt/vim-\$VER
+set PKG ${opt}/vim-\$VER
 
 module-whatis   "Loads vim-${vim_v}"
 conflict vim

@@ -47,6 +47,7 @@ fi
 echo "Installing Python ${python_v}..."
 
 check_modules
+module purge
 
 downloadPackage Python-${python_v}.tgz
 
@@ -58,7 +59,7 @@ fi
 
 tar xvfz ${pkg}/Python-${python_v}.tgz
 cd ${tmp}/Python-${python_v}
-./configure --prefix=/opt/Python-${python_v} \
+./configure --prefix=${opt}/Python-${python_v} \
             --enable-shared \
             --enable-optimizations
 
@@ -67,6 +68,10 @@ make -j ${ncpu} && make install
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
+
+# Create a symlink to the executable
+cd ${opt}/Python-${python_v}/bin
+ln -sv python${python_v%.*} python
 
 # Create the environment module
 if [ -z "${MODULEPATH}" ] ; then
@@ -81,7 +86,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${python_v}
-set PKG /opt/Python-\$VER
+set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
