@@ -31,6 +31,10 @@ fi
 if [ ! -f "$(which perl 2>&1)" ] ; then
   packages="${packages} perl"
 fi
+if [ ! -f "$(which ant 2>&1)" ] ; then
+  # ant needed to install libbluray (for ffmpeg)
+  packages="${packages} ant"
+fi
 if [ ! -f "/usr/include/X11/Xlib.h" ] ; then
   # X11/Xlib.h header file needed to build Tk
   packages="${packages} libX11-devel"
@@ -70,6 +74,10 @@ fi
 if [ ! -f "/usr/include/fontconfig/fontconfig.h" ] ; then
   # fontconfig is needed to build libass (for ffmpeg)
   packages="${packages} fontconfig-devel"
+fi
+if [ ! -f "/usr/include/libxml2/libxml/parser.h" ] ; then
+  # libxml2 is needed to build libbluray (for ffmpeg)
+  packages="${packages} libxml2-devel"
 fi
 
 if [ ! -z "${packages}" ] ; then

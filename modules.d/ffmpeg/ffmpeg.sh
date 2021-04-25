@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Functions for detecting and building the Vim text editor
+# Functions for detecting and building FFmpeg
 
 function ffmpegInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -46,6 +46,7 @@ case ${1} in
    ffmpeg_libass_ver=0.14.0
    ffmpeg_lame_ver=3.100
    ffmpeg_xvidcore_ver=1.3.6
+   ffmpeg_libbluray_ver=1.1.2
   ;;
 esac
 
@@ -55,13 +56,15 @@ check_libaom ${ffmpeg_libaom_ver}
 check_libass ${ffmpeg_libass_ver}
 check_lame ${ffmpeg_lame_ver}
 check_xvidcore ${ffmpeg_xvidcore_ver}
+check_libbluray ${ffmpeg_libbluray_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
             libaom/${ffmpeg_libaom_ver} \
             libass/${ffmpeg_libass_ver} \
             lame/${ffmpeg_lame_ver} \
-            xvidcore/${ffmpeg_xvidcore_ver}
+            xvidcore/${ffmpeg_xvidcore_ver} \
+            libbluray/${ffmpeg_libbluray_ver}
 module list
 
 exit 4

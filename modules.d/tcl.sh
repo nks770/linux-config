@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Functions for detecting and building Environment Modules
+# Functions for detecting and building Tcl
 
 function tclInstalled() {
 

@@ -25,6 +25,11 @@ libaom-1.0.0.tar.gz=https://aomedia.googlesource.com/aom/+archive/d14c5bb4f336ef
 # https://github.com/libass/libass
 libass-0.14.0.tar.gz=https://github.com/libass/libass/releases/download/0.14.0/libass-0.14.0.tar.gz
 
+# libbluray
+# http://download.videolan.org/pub/videolan/libbluray/
+libbluray-1.0.2.tar.bz2=http://download.videolan.org/pub/videolan/libbluray/1.0.2/libbluray-1.0.2.tar.bz2
+libbluray-1.1.2.tar.bz2=http://download.videolan.org/pub/videolan/libbluray/1.1.2/libbluray-1.1.2.tar.bz2
+
 # nasm
 nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
 

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Functions for detecting and building the Vim text editor
+# Functions for detecting and building NASM
 
 function nasmInstalled() {
 # Cannot evaulate if we dont have modules installed

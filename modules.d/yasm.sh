@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Functions for detecting and building the Vim text editor
+# Functions for detecting and building yasm
 
 function yasmInstalled() {
 # Cannot evaulate if we dont have modules installed
