@@ -53,6 +53,9 @@ case ${1} in
    ffmpeg_libogg_ver=1.3.4
    ffmpeg_libvorbis_ver=1.3.7
    ffmpeg_libtheora_ver=1.1.1 # 2009 October 1
+   ffmpeg_libbs2b_ver=3.1.0
+   ffmpeg_kvazaar_ver=1.3.0 # Jul 9, 2019
+   ffmpeg_libilbc_ver=2.0.2
   ;;
 esac
 
@@ -69,6 +72,9 @@ check_x265 ${ffmpeg_x265_ver}
 check_libogg ${ffmpeg_libogg_ver}
 check_libvorbis ${ffmpeg_libvorbis_ver}
 check_libtheora ${ffmpeg_libtheora_ver}
+check_libbs2b ${ffmpeg_libbs2b_ver}
+check_kvazaar ${ffmpeg_kvazaar_ver}
+check_libilbc ${ffmpeg_libilbc_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
@@ -82,7 +88,10 @@ module load nasm/${ffmpeg_nasm_ver} \
             x265/${ffmpeg_x265_ver} \
             libogg/${ffmpeg_libogg_ver} \
             libvorbis/${ffmpeg_libvorbis_ver} \
-            libtheora/${ffmpeg_libtheora_ver}
+            libtheora/${ffmpeg_libtheora_ver} \
+            libbs2b/${ffmpeg_libbs2b_ver} \
+            kvazaar/${ffmpeg_kvazaar_ver} \
+            libilbc/${ffmpeg_libilbc_ver}
 module list
 
 exit 4

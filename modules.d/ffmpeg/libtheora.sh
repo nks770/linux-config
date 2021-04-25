@@ -120,6 +120,10 @@ set PKG ${opt}/libtheora-\$VER
 
 module-whatis   "Loads libtheora-${libtheora_v}"
 conflict libtheora
+module load libogg/${libtheora_libogg_ver}
+module load libvorbis/${libtheora_libvorbis_ver}
+prereq libogg/${libtheora_libogg_ver}
+prereq libvorbis/${libtheora_libvorbis_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

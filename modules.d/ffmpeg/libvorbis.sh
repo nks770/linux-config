@@ -87,6 +87,8 @@ set PKG ${opt}/libvorbis-\$VER
 
 module-whatis   "Loads libvorbis-${libvorbis_v}"
 conflict libvorbis
+module load libogg/${libvorbis_libogg_ver}
+prereq libogg/${libvorbis_libogg_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
