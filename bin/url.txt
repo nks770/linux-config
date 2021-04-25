@@ -2,6 +2,7 @@
 # cmake
 cmake-3.9.6.tar.gz=https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
 cmake-3.11.4.tar.gz=https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
+cmake-3.13.4.tar.gz=https://cmake.org/files/v3.13/cmake-3.13.4.tar.gz
 cmake-3.14.7.tar.gz=https://cmake.org/files/v3.14/cmake-3.14.7.tar.gz
 
 # doxygen
@@ -73,6 +74,10 @@ nasm-2.14.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14
 # openh264
 # https://github.com/cisco/openh264
 openh264-2.0.0.tar.gz=https://github.com/cisco/openh264/archive/refs/tags/v2.0.0.tar.gz
+
+# openjpeg
+# https://github.com/uclouvain/openjpeg
+openjpeg-2.3.1.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.3.1.tar.gz
 
 # Python
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
