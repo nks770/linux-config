@@ -62,6 +62,10 @@ case ${1} in
    ffmpeg_twolame_ver=0.4.0  # 2019-10-11
    ffmpeg_opus_ver=1.3.1     # Apr 12, 2019
    ffmpeg_speex_ver=1.2.0    # December 7, 2016
+   ffmpeg_opencoreamr_ver=0.1.5 # 2017-03-16
+   ffmpeg_voamrwbenc_ver=0.1.3  # 2013-07-27
+   ffmpeg_libwebp_ver=1.0.3      # Sat Jul 13 07:23:45 2019
+   ffmpeg_libvpx_ver=1.8.2   # Dec 19, 2019
   ;;
 esac
 
@@ -87,6 +91,10 @@ check_wavpack ${ffmpeg_wavpack_ver}
 check_twolame ${ffmpeg_twolame_ver}
 check_opus ${ffmpeg_opus_ver}
 check_speex ${ffmpeg_speex_ver}
+check_opencoreamr ${ffmpeg_opencoreamr_ver}
+check_voamrwbenc ${ffmpeg_voamrwbenc_ver}
+check_libwebp ${ffmpeg_libwebp_ver}
+check_libvpx ${ffmpeg_libvpx_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
@@ -109,7 +117,11 @@ module load nasm/${ffmpeg_nasm_ver} \
             wavpack/${ffmpeg_wavpack_ver} \
             twolame/${ffmpeg_twolame_ver} \
             opus/${ffmpeg_opus_ver} \
-            speex/${ffmpeg_speex_ver}
+            speex/${ffmpeg_speex_ver} \
+            opencore-amr/${ffmpeg_opencoreamr_ver} \
+            vo-amrwbenc/${ffmpeg_voamrwbenc_ver} \
+            libwebp/${ffmpeg_libwebp_ver} \
+            libvpx/${ffmpeg_libvpx_ver}
 module list
 
 exit 4
