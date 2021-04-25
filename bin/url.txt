@@ -9,6 +9,9 @@ doxygen-1.8.14.src.tar.gz=https://cfhcable.dl.sourceforge.net/project/doxygen/re
 # Environment Modules
 modules-4.7.0.tar.gz=https://pilotfiber.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz
 
+# Fraunhofer FDK AAC
+fdk-aac-2.0.1.tar.gz=https://codeload.github.com/mstorsjo/fdk-aac/tar.gz/refs/tags/v2.0.1
+
 # FFmpeg
 ffmpeg-4.2.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.gz
 ffmpeg-4.2.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.4.tar.gz
@@ -32,6 +35,7 @@ libbluray-1.1.2.tar.bz2=http://download.videolan.org/pub/videolan/libbluray/1.1.
 
 # nasm
 nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
+nasm-2.14.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz
 
 # Python
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
@@ -46,6 +50,10 @@ tk8.6.11.1-src.tar.gz=https://iweb.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tk8
 
 # Vim
 vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2
+
+# x264
+# https://www.videolan.org/developers/x264.html
+x264-20191125.tar.gz=https://code.videolan.org/videolan/x264/-/archive/1771b556ee45207f8711744ccbd5d42a3949b14c/x264-1771b556ee45207f8711744ccbd5d42a3949b14c.tar.gz
 
 # xvidcore
 # https://labs.xvid.com/

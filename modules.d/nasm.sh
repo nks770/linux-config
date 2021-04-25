@@ -52,6 +52,7 @@ tar xvfz ${pkg}/nasm-${nasm_v}.tar.gz
 cd ${tmp}/${nasm_srcdir}
 
 # Patch to enable compilation with GCC 8
+if [ "${nasm_v}" == "2.13.03" ] ; then
 cat << eof > nasmlib.patch
 Index: include/nasmlib.h
 ===================================================================
@@ -72,6 +73,7 @@ eof
 patch -N -Z -b -p0 < nasmlib.patch
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
 fi
 
 ./configure --prefix=${opt}/nasm-${nasm_v}

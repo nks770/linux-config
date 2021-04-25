@@ -19,6 +19,15 @@ fi
 if [ ! -f "$(which patch 2>&1)" ] ; then
   packages="${packages} patch"
 fi
+if [ ! -f "$(which autoreconf 2>&1)" ] ; then
+  packages="${packages} autoconf"
+fi
+if [ ! -f "$(which aclocal 2>&1)" ] ; then
+  packages="${packages} automake"
+fi
+if [ ! -f "$(which libtool 2>&1)" ] ; then
+  packages="${packages} libtool"
+fi
 if [ ! -f "$(which bzip2 2>&1)" ] ; then
   packages="${packages} bzip2"
 fi

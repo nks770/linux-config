@@ -47,6 +47,8 @@ case ${1} in
    ffmpeg_lame_ver=3.100
    ffmpeg_xvidcore_ver=1.3.6
    ffmpeg_libbluray_ver=1.1.2
+   ffmpeg_fdkaac_ver=2.0.1
+   ffmpeg_x264_ver=20191125
   ;;
 esac
 
@@ -57,6 +59,8 @@ check_libass ${ffmpeg_libass_ver}
 check_lame ${ffmpeg_lame_ver}
 check_xvidcore ${ffmpeg_xvidcore_ver}
 check_libbluray ${ffmpeg_libbluray_ver}
+check_fdkaac ${ffmpeg_fdkaac_ver}
+check_x264 ${ffmpeg_x264_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
@@ -64,7 +68,9 @@ module load nasm/${ffmpeg_nasm_ver} \
             libass/${ffmpeg_libass_ver} \
             lame/${ffmpeg_lame_ver} \
             xvidcore/${ffmpeg_xvidcore_ver} \
-            libbluray/${ffmpeg_libbluray_ver}
+            libbluray/${ffmpeg_libbluray_ver} \
+            fdk-aac/${ffmpeg_fdkaac_ver} \
+            x264/${ffmpeg_x264_ver}
 module list
 
 exit 4
