@@ -2,6 +2,7 @@
 # cmake
 cmake-3.9.6.tar.gz=https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
 cmake-3.11.4.tar.gz=https://cmake.org/files/v3.11/cmake-3.11.4.tar.gz
+cmake-3.14.7.tar.gz=https://cmake.org/files/v3.14/cmake-3.14.7.tar.gz
 
 # doxygen
 doxygen-1.8.14.src.tar.gz=https://cfhcable.dl.sourceforge.net/project/doxygen/rel-1.8.14/doxygen-1.8.14.src.tar.gz
@@ -54,6 +55,10 @@ vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2
 # x264
 # https://www.videolan.org/developers/x264.html
 x264-20191125.tar.gz=https://code.videolan.org/videolan/x264/-/archive/1771b556ee45207f8711744ccbd5d42a3949b14c/x264-1771b556ee45207f8711744ccbd5d42a3949b14c.tar.gz
+
+# x265
+# https://github.com/videolan/x265
+x265-3.2.1.tar.gz=https://codeload.github.com/videolan/x265/tar.gz/refs/tags/3.2.1
 
 # xvidcore
 # https://labs.xvid.com/
