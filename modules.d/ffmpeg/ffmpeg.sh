@@ -56,6 +56,7 @@ case ${1} in
    ffmpeg_libbs2b_ver=3.1.0
    ffmpeg_kvazaar_ver=1.3.0 # Jul 9, 2019
    ffmpeg_libilbc_ver=2.0.2
+   ffmpeg_openh264_ver=2.0.0 # May 8, 2019
   ;;
 esac
 
@@ -75,6 +76,7 @@ check_libtheora ${ffmpeg_libtheora_ver}
 check_libbs2b ${ffmpeg_libbs2b_ver}
 check_kvazaar ${ffmpeg_kvazaar_ver}
 check_libilbc ${ffmpeg_libilbc_ver}
+check_openh264 ${ffmpeg_openh264_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
@@ -91,7 +93,8 @@ module load nasm/${ffmpeg_nasm_ver} \
             libtheora/${ffmpeg_libtheora_ver} \
             libbs2b/${ffmpeg_libbs2b_ver} \
             kvazaar/${ffmpeg_kvazaar_ver} \
-            libilbc/${ffmpeg_libilbc_ver}
+            libilbc/${ffmpeg_libilbc_ver} \
+            openh264/${ffmpeg_openh264_ver}
 module list
 
 exit 4
