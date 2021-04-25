@@ -58,6 +58,10 @@ case ${1} in
    ffmpeg_libilbc_ver=2.0.2
    ffmpeg_openh264_ver=2.0.0 # May 8, 2019
    ffmpeg_openjpeg_ver=2.3.1 # Apr 2, 2019
+   ffmpeg_wavpack_ver=5.2.0  # December 15, 2019
+   ffmpeg_twolame_ver=0.4.0  # 2019-10-11
+   ffmpeg_opus_ver=1.3.1     # Apr 12, 2019
+   ffmpeg_speex_ver=1.2.0    # December 7, 2016
   ;;
 esac
 
@@ -79,6 +83,10 @@ check_kvazaar ${ffmpeg_kvazaar_ver}
 check_libilbc ${ffmpeg_libilbc_ver}
 check_openh264 ${ffmpeg_openh264_ver}
 check_openjpeg ${ffmpeg_openjpeg_ver}
+check_wavpack ${ffmpeg_wavpack_ver}
+check_twolame ${ffmpeg_twolame_ver}
+check_opus ${ffmpeg_opus_ver}
+check_speex ${ffmpeg_speex_ver}
 
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
@@ -97,7 +105,11 @@ module load nasm/${ffmpeg_nasm_ver} \
             kvazaar/${ffmpeg_kvazaar_ver} \
             libilbc/${ffmpeg_libilbc_ver} \
             openh264/${ffmpeg_openh264_ver} \
-            openjpeg/${ffmpeg_openjpeg_ver}
+            openjpeg/${ffmpeg_openjpeg_ver} \
+            wavpack/${ffmpeg_wavpack_ver} \
+            twolame/${ffmpeg_twolame_ver} \
+            opus/${ffmpeg_opus_ver} \
+            speex/${ffmpeg_speex_ver}
 module list
 
 exit 4
