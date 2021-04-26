@@ -74,7 +74,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${voamrwbenc_v}
-set PKG ${opt}/voamrwbenc-\$VER
+set PKG ${opt}/vo-amrwbenc-\$VER
 
 module-whatis   "Loads vo-amrwbenc-${voamrwbenc_v}"
 conflict voamrwbenc

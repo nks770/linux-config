@@ -78,7 +78,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${fdkaac_v}
-set PKG ${opt}/fdkaac-\$VER
+set PKG ${opt}/fdk-aac-\$VER
 
 module-whatis   "Loads fdk-aac-${fdkaac_v}"
 conflict fdkaac

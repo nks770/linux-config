@@ -74,7 +74,7 @@ proc ModulesHelp { } {
 }
 
 set VER ${opencoreamr_v}
-set PKG ${opt}/opencoreamr-\$VER
+set PKG ${opt}/opencore-amr-\$VER
 
 module-whatis   "Loads opencore-amr-${opencoreamr_v}"
 conflict opencoreamr

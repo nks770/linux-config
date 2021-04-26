@@ -105,8 +105,8 @@ prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
+prepend-path LD_LIBRARY_PATH \$PKG/lib64
+prepend-path PKG_CONFIG_PATH \$PKG/lib64/pkgconfig
 
 eof
 

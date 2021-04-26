@@ -41,7 +41,7 @@ lame-3.100.tar.gz=https://versaweb.dl.sourceforge.net/project/lame/lame/3.100/la
 
 # libaom
 # https://aomedia.googlesource.com/aom/+refs
-libaom-1.0.0.tar.gz=https://aomedia.googlesource.com/aom/+archive/d14c5bb4f336ef1842046089849dee4a301fbbf0.tar.gz
+libaom-1.0.0.tar.gz=https://aomedia.googlesource.com/aom/+archive/4eb1e7795b9700d532af38a2d9489458a8038233.tar.gz
 
 # libass
 # https://github.com/libass/libass

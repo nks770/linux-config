@@ -41,7 +41,7 @@ echo "Installing ffmpeg ${ffmpeg_v}..."
 
 case ${1} in
   4.2.2) # 2019-12-31 23:58
-   ffmpeg_nasm_ver=2.13.03
+   ffmpeg_nasm_ver=2.14.02   # 2018-12-26
    ffmpeg_libaom_ver=1.0.0
    ffmpeg_libass_ver=0.14.0
    ffmpeg_lame_ver=3.100
@@ -124,8 +124,6 @@ module load nasm/${ffmpeg_nasm_ver} \
             libvpx/${ffmpeg_libvpx_ver}
 module list
 
-exit 4
-
 downloadPackage ffmpeg-${ffmpeg_v}.tar.gz
 
 cd ${tmp}
@@ -136,8 +134,126 @@ fi
 
 tar xvfz ${pkg}/ffmpeg-${ffmpeg_v}.tar.gz
 cd ${tmp}/${ffmpeg_srcdir}
+./configure --prefix=${opt}/ffmpeg-${ffmpeg_v} \
+            --enable-gpl \
+            --enable-version3 \
+            --enable-nonfree \
+            --enable-shared \
+            --enable-openssl \
+            --enable-libaom \
+            --enable-libfontconfig \
+            --enable-libfreetype \
+            --enable-libfribidi \
+            --enable-libxml2 \
+            --enable-libfdk-aac \
+            --enable-libbluray \
+            --enable-libass \
+            --enable-libmp3lame \
+            --enable-libxvid \
+            --enable-libvorbis \
+            --enable-libtheora \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-libbs2b \
+            --enable-libkvazaar \
+            --enable-libilbc \
+            --enable-libopencore-amrnb \
+            --enable-libopencore-amrwb \
+            --enable-libopenh264 \
+            --enable-libopus \
+            --enable-libopenjpeg \
+            --enable-libspeex \
+            --enable-libvo-amrwbenc \
+            --enable-libwavpack \
+            --enable-libwebp \
+            --enable-libvpx \
+            --enable-libtwolame \
+            --extra-cflags="-I${opt}/lame-${ffmpeg_lame_ver}/include -I${opt}/libtheora-${ffmpeg_libtheora_ver}/include -I${opt}/libogg-${ffmpeg_libogg_ver}/include -I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include -I${opt}/libilbc-${ffmpeg_libilbc_ver}/include -I${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/include -I${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/include -I${opt}/wavpack-${ffmpeg_wavpack_ver}/include -I${opt}/twolame-${ffmpeg_twolame_ver}/include" \
+            --extra-ldflags="-L${opt}/lame-${ffmpeg_lame_ver}/lib -L${opt}/libtheora-${ffmpeg_libtheora_ver}/lib -L${opt}/libogg-${ffmpeg_libogg_ver}/lib -L${opt}/xvidcore-${ffmpeg_xvidcore_ver}/lib -L${opt}/libilbc-${ffmpeg_libilbc_ver}/lib64 -L${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/lib -L${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/lib -L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib -L${opt}/twolame-${ffmpeg_twolame_ver}/lib"
+
+make -j ${ncpu} && make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+
+# Create the environment module
+if [ -z "${MODULEPATH}" ] ; then
+  source /etc/profile.d/modules.sh
+fi 
+mkdir -pv ${MODULEPATH}/ffmpeg
+cat << eof > ${MODULEPATH}/ffmpeg/${ffmpeg_v}
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "Puts ffmpeg-${ffmpeg_v} into your environment"
+}
+
+set VER ${ffmpeg_v}
+set PKG ${opt}/ffmpeg-\$VER
+
+module-whatis   "Loads ffmpeg-${ffmpeg_v}"
+conflict ffmpeg
+module load libaom/${ffmpeg_libaom_ver}
+module load libass/${ffmpeg_libass_ver}
+module load lame/${ffmpeg_lame_ver}
+module load xvidcore/${ffmpeg_xvidcore_ver}
+module load libbluray/${ffmpeg_libbluray_ver}
+module load fdk-aac/${ffmpeg_fdkaac_ver}
+module load x264/${ffmpeg_x264_ver}
+module load x265/${ffmpeg_x265_ver}
+module load libogg/${ffmpeg_libogg_ver}
+module load libvorbis/${ffmpeg_libvorbis_ver}
+module load libtheora/${ffmpeg_libtheora_ver}
+module load libbs2b/${ffmpeg_libbs2b_ver}
+module load kvazaar/${ffmpeg_kvazaar_ver}
+module load libilbc/${ffmpeg_libilbc_ver}
+module load openh264/${ffmpeg_openh264_ver}
+module load openjpeg/${ffmpeg_openjpeg_ver}
+module load wavpack/${ffmpeg_wavpack_ver}
+module load twolame/${ffmpeg_twolame_ver}
+module load opus/${ffmpeg_opus_ver}
+module load speex/${ffmpeg_speex_ver}
+module load opencore-amr/${ffmpeg_opencoreamr_ver}
+module load vo-amrwbenc/${ffmpeg_voamrwbenc_ver}
+module load libwebp/${ffmpeg_libwebp_ver}
+module load libvpx/${ffmpeg_libvpx_ver}
+prereq libaom/${ffmpeg_libaom_ver}
+prereq libass/${ffmpeg_libass_ver}
+prereq lame/${ffmpeg_lame_ver}
+prereq xvidcore/${ffmpeg_xvidcore_ver}
+prereq libbluray/${ffmpeg_libbluray_ver}
+prereq fdk-aac/${ffmpeg_fdkaac_ver}
+prereq x264/${ffmpeg_x264_ver}
+prereq x265/${ffmpeg_x265_ver}
+prereq libogg/${ffmpeg_libogg_ver}
+prereq libvorbis/${ffmpeg_libvorbis_ver}
+prereq libtheora/${ffmpeg_libtheora_ver}
+prereq libbs2b/${ffmpeg_libbs2b_ver}
+prereq kvazaar/${ffmpeg_kvazaar_ver}
+prereq libilbc/${ffmpeg_libilbc_ver}
+prereq openh264/${ffmpeg_openh264_ver}
+prereq openjpeg/${ffmpeg_openjpeg_ver}
+prereq wavpack/${ffmpeg_wavpack_ver}
+prereq twolame/${ffmpeg_twolame_ver}
+prereq opus/${ffmpeg_opus_ver}
+prereq speex/${ffmpeg_speex_ver}
+prereq opencore-amr/${ffmpeg_opencoreamr_ver}
+prereq vo-amrwbenc/${ffmpeg_voamrwbenc_ver}
+prereq libwebp/${ffmpeg_libwebp_ver}
+prereq libvpx/${ffmpeg_libvpx_ver}
+
+prepend-path CPATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path LD_LIBRARY_PATH \$PKG/lib
+prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
+prepend-path PATH \$PKG/bin
+prepend-path MANPATH \$PKG/share/man
+
+eof
 
 cd ${root}
-#rm -rf ${tmp}/${ffmpeg_srcdir}
+rm -rf ${tmp}/${ffmpeg_srcdir}
 
 }

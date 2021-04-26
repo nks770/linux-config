@@ -61,7 +61,10 @@ cd ${tmp}
 tar xvfz ${pkg}/libvpx-${libvpx_v}.tar.gz
 cd ${tmp}/${libvpx_srcdir}
 
-./configure --prefix=${opt}/libvpx-${libvpx_v}
+./configure --prefix=${opt}/libvpx-${libvpx_v} \
+            --enable-shared \
+            --enable-vp8 \
+            --enable-vp9
 make -j ${ncpu} && make install
 
 if [ ! $? -eq 0 ] ; then
