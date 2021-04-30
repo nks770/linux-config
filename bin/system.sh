@@ -90,6 +90,7 @@ if [ ! -f "/usr/include/libxml2/libxml/parser.h" ] ; then
 fi
 
 if [ ! -z "${packages}" ] ; then
+  echo "Installing ${packages}"
   dnf -y install ${packages}
 fi
 
