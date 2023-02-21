@@ -30,6 +30,10 @@ for module in $(ls modules.d/*/*.sh) ; do
   source ${module}
 done
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Modules loaded, press enter to begin.'
+  read k
+fi
 
 #installSystemPackages
 

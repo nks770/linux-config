@@ -43,19 +43,22 @@ fi
 case ${modules_v} in
 4.7.0)
    tcl_tk_ver=8.6.11
+   dejagnu_ver=1.6.3
    ;;
 5.2.0)
    tcl_tk_ver=8.6.13
+   dejagnu_ver=1.6.3
    ;;
 *)
-   tcl_tk_ver=8.6.11
+   tcl_tk_ver=8.6.13
+   dejagnu_ver=1.6.3
    ;;
 esac
-
 
 echo "Installing Environment Modules version ${modules_v}..."
 
 check_tcl ${tcl_tk_ver}
+check_dejagnu ${dejagnu_ver} # DejaGnu is needed for the test suite, specifically the 'runtest' executable
 #check_tk ${tcl_tk_ver}
 
 downloadPackage modules-${modules_v}.tar.gz
@@ -68,10 +71,23 @@ fi
 
 tar xvfz ${pkg}/modules-${modules_v}.tar.gz
 cd ${tmp}/modules-${modules_v}
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo
+  echo ./configure --prefix=${opt}/Modules/${modules_v} \
+            --with-tclsh=${opt}/tcl-${tcl_tk_ver}/bin/tclsh${tcl_tk_ver%.*} \
+            --with-tcl=${opt}/tcl-${tcl_tk_ver}/lib \
+            --with-tcl-ver=${tcl_tk_ver%.*} \
+	    --with-tclinclude=${opt}/tcl-${tcl_tk_ver}/include
+  read k
+fi
+
 ./configure --prefix=${opt}/Modules/${modules_v} \
             --with-tclsh=${opt}/tcl-${tcl_tk_ver}/bin/tclsh${tcl_tk_ver%.*} \
             --with-tcl=${opt}/tcl-${tcl_tk_ver}/lib \
             --with-tcl-ver=${tcl_tk_ver%.*} \
+	    --with-tclinclude=${opt}/tcl-${tcl_tk_ver}/include
 #            --without-tclx \
 #            --with-tclx=/opt/tcl-${2}/lib \
 #            --with-tclx-ver=${tcl_tk_ver%.*}
@@ -80,11 +96,32 @@ cd ${tmp}/modules-${modules_v}
 # DUSE_INTERP_ERRORLINE is for modules 3.x when compilation against tcl 8.6 fails
 
 if [ ${debug} -gt 0 ] ; then
-  echo 'Configure complete'
+  echo '>> Configure complete'
   read k
 fi
 
-make && make install
+make
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  # Requires DejaGnu to work
+  echo export PATH=${PATH}:${opt}/dejagnu-${dejagnu_ver}/bin
+  export PATH=${PATH}:${opt}/tcl-${tcl_tk_ver}/bin:${opt}/dejagnu-${dejagnu_ver}/bin
+  echo runtest: $(which runtest)
+  echo expect: $(which expect)
+  make test
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
 
 if [ ! $? -eq 0 ] ; then
   exit 4
@@ -92,6 +129,11 @@ fi
 
 cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
 ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
+fi
 
 cd ${root}
 rm -rf ${tmp}/modules-${modules_v}

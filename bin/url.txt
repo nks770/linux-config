@@ -10,6 +10,9 @@ cmake-3.18.5.tar.gz=https://cmake.org/files/v3.18/cmake-3.18.5.tar.gz
 cmake-3.23.1.tar.gz=https://cmake.org/files/v3.23/cmake-3.23.1.tar.gz
 cmake-3.24.2.tar.gz=https://cmake.org/files/v3.24/cmake-3.24.2.tar.gz
 
+# DejaGnu
+dejagnu-1.6.3.tar.gz=http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
+
 # doxygen
 doxygen-1.8.14.src.tar.gz=https://cfhcable.dl.sourceforge.net/project/doxygen/rel-1.8.14/doxygen-1.8.14.src.tar.gz
 doxygen-1.9.5.src.tar.gz=https://github.com/doxygen/doxygen/archive/refs/tags/Release_1_9_5.tar.gz
@@ -17,6 +20,9 @@ doxygen-1.9.5.src.tar.gz=https://github.com/doxygen/doxygen/archive/refs/tags/Re
 # Environment Modules
 modules-4.7.0.tar.gz=https://master.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz?viasf=1
 modules-5.2.0.tar.gz=https://gigenet.dl.sourceforge.net/project/modules/Modules/modules-5.2.0/modules-5.2.0.tar.gz
+
+# expect
+expect5.45.4.tar.gz=https://cfhcable.dl.sourceforge.net/project/expect/Expect/5.45.4/expect5.45.4.tar.gz
 
 # Fraunhofer FDK AAC
 # I believe both of these sources are the same, from the same author mstorsjo

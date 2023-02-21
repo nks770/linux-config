@@ -45,17 +45,46 @@ cd ${opt}/tcl-${tcl_v}
 tar xvfz ${pkg}/tcl${tcl_v}-src.tar.gz
 mv -fv tcl${tcl_v} build
 cd ${opt}/tcl-${tcl_v}/build/unix
-./configure --prefix=${opt}/tcl-${tcl_v}
 
 if [ ${debug} -gt 0 ] ; then
-  echo 'Configure complete'
+  ./configure --help
+  echo
+  echo ./configure --prefix=${opt}/tcl-${tcl_v}
   read k
 fi
 
-make -j ${ncpu} && make install
+./configure --prefix=${opt}/tcl-${tcl_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 cd ${root}
