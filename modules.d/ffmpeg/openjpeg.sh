@@ -42,6 +42,9 @@ case ${1} in
   2.3.1) # Apr 2, 2019
    openjpeg_cmake_ver=3.13.4 # 2019-02-01 13:20
   ;;
+  2.5.0) # May 13, 2022
+   openjpeg_cmake_ver=3.23.1 # 2022-04-12 10:55
+  ;;
 esac
 
 check_modules

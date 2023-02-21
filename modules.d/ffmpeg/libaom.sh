@@ -45,6 +45,12 @@ case ${1} in
    libaom_doxygen_ver=1.8.14
    libaom_python_ver=3.9.4
   ;;
+  3.5.0) #Wed Sep 21 12:36:24 2022 -0400
+   libaom_yasm_ver=1.3.0
+   libaom_cmake_ver=3.24.2   # 2022-09-13
+   libaom_doxygen_ver=1.9.5  # 2022-08-26
+   libaom_python_ver=3.10.7  # 2022-09-06
+  ;;
 esac
 
 check_modules

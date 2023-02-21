@@ -5,6 +5,9 @@ opt=/opt
 pkg=${root}/packages
 tmp=${root}/temp
 
+debug=1
+run_tests=1
+
 ncpu=$(cat /proc/cpuinfo | grep name | wc -l)
 
 if [ ! -d ${pkg} ] ; then
@@ -17,7 +20,7 @@ fi
 
 # Load script resources
 source bin/resources.sh
-source bin/system.sh
+#source bin/system.sh
 
 # Load all modules in modules.d
 for module in $(ls modules.d/*.sh) ; do
@@ -28,15 +31,15 @@ for module in $(ls modules.d/*/*.sh) ; do
 done
 
 
-installSystemPackages
+#installSystemPackages
 
 if [ "${1}" == "vim" ] ; then
   check_vim 8.2
 
 elif [ "${1}" == "python" ] ; then
   check_python 3.9.4
-  check_demjson 3.9.4 2.2.4
-  check_bs4 3.9.4 4.9.3
+#  check_demjson 3.9.4 2.2.4
+#  check_bs4 3.9.4 4.9.3
 
 elif [ "${1}" == "screen" ] ; then
   check_screen 4.8.0

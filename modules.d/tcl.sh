@@ -1,13 +1,14 @@
 #!/bin/bash
 
 # Functions for detecting and building Tcl
+echo 'Loading tcl...'
 
 function tclInstalled() {
 
 tcl_vvv=${1}
 
 if [ -z "${tcl_vvv}" ] ; then
-tcl_vvv=8.6.11
+tcl_vvv=8.6.13
 fi
 tcl_vv=${tcl_vvv%.*}
 
@@ -31,7 +32,7 @@ function build_tcl() {
 # Get desired version number to install
 tcl_v=${1}
 if [ -z "${tcl_v}" ] ; then
-  tcl_v=8.6.11
+  tcl_v=8.6.13
 fi
 
 echo "Installing Tcl version ${tcl_v}..."
@@ -45,6 +46,12 @@ tar xvfz ${pkg}/tcl${tcl_v}-src.tar.gz
 mv -fv tcl${tcl_v} build
 cd ${opt}/tcl-${tcl_v}/build/unix
 ./configure --prefix=${opt}/tcl-${tcl_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo 'Configure complete'
+  read k
+fi
+
 make -j ${ncpu} && make install
 
 if [ ! $? -eq 0 ] ; then

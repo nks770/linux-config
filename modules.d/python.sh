@@ -63,7 +63,24 @@ cd ${tmp}/Python-${python_v}
             --enable-shared \
             --enable-optimizations
 
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo 'Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo 'Tests complete'
+  read k
+fi
+
+make install
 
 if [ ! $? -eq 0 ] ; then
   exit 4

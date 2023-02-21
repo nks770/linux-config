@@ -67,6 +67,33 @@ case ${1} in
    ffmpeg_libwebp_ver=1.0.3      # Sat Jul 13 07:23:45 2019
    ffmpeg_libvpx_ver=1.8.2   # Dec 19, 2019
   ;;
+  5.1.2) # 2022-09-25
+   ffmpeg_nasm_ver=2.15.05   # 2020-08-28
+   ffmpeg_libaom_ver=3.5.0   # 2022-09-21
+   ffmpeg_libass_ver=0.16.0  # 2022-05-12
+   ffmpeg_lame_ver=3.100     # 2017-10-13
+   ffmpeg_xvidcore_ver=1.3.7 # 2019-12-28
+   ffmpeg_libbluray_ver=1.3.2 # 2022-07-30
+   ffmpeg_fdkaac_ver=2.0.2   # 2021-04-28
+   ffmpeg_x264_ver=20220601  # Latest stable, 2022-06-01 baee400fa9ced6f5481a728138fed6e867b0ff7f
+   ffmpeg_x265_ver=3.4       # 2020-05-29
+   ffmpeg_libogg_ver=1.3.4
+   ffmpeg_libvorbis_ver=1.3.7
+   ffmpeg_libtheora_ver=1.1.1 # 2009-10-01
+   ffmpeg_libbs2b_ver=3.1.0   # 2009-06-05
+   ffmpeg_kvazaar_ver=2.1.0   # 2021-10-13
+   ffmpeg_libilbc_ver=3.0.4   # 2020-12-31
+   ffmpeg_openh264_ver=2.3.1  # 2022-09-20
+   ffmpeg_openjpeg_ver=2.5.0  # 2022-05-13
+   ffmpeg_wavpack_ver=5.5.0   # 2022-07-08
+   ffmpeg_twolame_ver=0.4.0   # 2019-10-11
+   ffmpeg_opus_ver=1.3.1      # Apr 12, 2019
+   ffmpeg_speex_ver=1.2.1     # 2022-06-16
+   ffmpeg_opencoreamr_ver=0.1.6 # 2022-08-01
+   ffmpeg_voamrwbenc_ver=0.1.3  # 2013-07-27
+   ffmpeg_libwebp_ver=1.2.4   # 2022-08-06
+   ffmpeg_libvpx_ver=1.12.0   # 2022-06-28
+  ;;
 esac
 
 check_modules

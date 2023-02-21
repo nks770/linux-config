@@ -42,6 +42,9 @@ case ${1} in
   4.1.0) # 2019-Nov-03
    tiff_libjpeg_ver=9c # Sun Jan 14 11:48 2018
   ;;
+  4.4.0) # 2022-May-27 14:53
+   tiff_libjpeg_ver=9e # Sun Jan 16 10:30 2022
+  ;;
 esac
 
 check_modules

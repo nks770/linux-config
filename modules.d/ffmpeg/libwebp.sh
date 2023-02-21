@@ -44,6 +44,11 @@ case ${1} in
    libwebp_tiff_ver=4.1.0 # 2019-Nov-03
    libwebp_giflib_ver=5.2.1 # 2019-06-24
   ;;
+  1.2.4) # Sat Aug 06 02:19:15 2022
+   libwebp_libjpeg_ver=9e # Sun Jan 16 10:30 2022
+   libwebp_tiff_ver=4.4.0 # 2022-May-27 14:52
+   libwebp_giflib_ver=5.2.1 # 2019-06-24
+  ;;
 esac
 
 check_modules

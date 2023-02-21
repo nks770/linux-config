@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building Environment Modules
+echo 'Loading modules...'
 
 function modulesInstalled() {
 test=$(module avail 2>&1 | grep use.own | wc -l)
@@ -36,12 +37,15 @@ function build_modules() {
 # Get desired version number to install
 modules_v=${1}
 if [ -z "${modules_v}" ] ; then
-  modules_v=4.7.0
+  modules_v=5.2.0
 fi
 
 case ${modules_v} in
 4.7.0)
    tcl_tk_ver=8.6.11
+   ;;
+5.2.0)
+   tcl_tk_ver=8.6.13
    ;;
 *)
    tcl_tk_ver=8.6.11
@@ -74,6 +78,11 @@ cd ${tmp}/modules-${modules_v}
 #            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
 
 # DUSE_INTERP_ERRORLINE is for modules 3.x when compilation against tcl 8.6 fails
+
+if [ ${debug} -gt 0 ] ; then
+  echo 'Configure complete'
+  read k
+fi
 
 make && make install
 

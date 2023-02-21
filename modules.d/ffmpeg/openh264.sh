@@ -42,6 +42,9 @@ case ${1} in
   2.0.0) # May 8, 2019
    openh264_nasm_ver=2.14.02
   ;;
+  2.3.1) # Sep 20, 2022
+   openh264_nasm_ver=2.15.05 # 2020-08-28 09:08
+  ;;
 esac
 
 check_modules

@@ -40,7 +40,10 @@ echo "Installing libilbc ${libilbc_v}..."
 
 case ${1} in
   2.0.2)
-   libilbc_cmake_ver=3.9.6
+   libilbc_cmake_ver=3.9.6  # 2017-11-10
+  ;;
+  3.0.4) # 2020-12-31
+   libilbc_cmake_ver=3.18.5 # 2020-11-18
   ;;
 esac
 

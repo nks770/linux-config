@@ -42,6 +42,9 @@ case ${1} in
   0.14.0) # Oct 31, 2017
    libass_nasm_ver=2.13.03
   ;;
+  0.16.0) # May 12, 2022
+   libass_nasm_ver=2.15.05 # 2020-08-28
+  ;;
 esac
 
 check_modules
