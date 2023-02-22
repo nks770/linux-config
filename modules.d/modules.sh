@@ -43,14 +43,17 @@ fi
 case ${modules_v} in
 4.7.0)
    tcl_tk_ver=8.6.11
+   expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
 5.2.0)
    tcl_tk_ver=8.6.13
+   expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
 *)
    tcl_tk_ver=8.6.13
+   expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
 esac
@@ -58,6 +61,7 @@ esac
 echo "Installing Environment Modules version ${modules_v}..."
 
 check_tcl ${tcl_tk_ver}
+check_expect ${expect_ver}
 check_dejagnu ${dejagnu_ver} # DejaGnu is needed for the test suite, specifically the 'runtest' executable
 #check_tk ${tcl_tk_ver}
 
@@ -129,6 +133,62 @@ fi
 
 cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
 ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
+
+# Create the environment module for expect
+mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/expect
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/expect/${expect_v}
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "Puts expect-${expect_v} into your environment"
+}
+
+set VER ${expect_v}
+set PKG ${opt}/expect-\$VER
+set TCL ${opt}/tcl-${tcl_tk_ver}
+
+module-whatis   "Loads expect-${expect_v}"
+conflict expect
+
+prepend-path CPATH \$PKG/include
+prepend-path CPATH \$TCL/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$TCL/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$TCL/include
+prepend-path LD_LIBRARY_PATH \$TCL/lib
+prepend-path PATH \$PKG/bin
+prepend-path PATH \$TCL/bin
+prepend-path MANPATH \$PKG/share/man
+prepend-path MANPATH \$TCL/share/man
+prepend-path MANPATH \$TCL/man
+
+eof
+
+# Create the environment module for DejaGnu
+mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/dejagnu
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/dejagnu/${dejagnu_v}
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "Puts DejaGnu-${dejagnu_v} into your environment"
+}
+
+set VER ${dejagnu_v}
+set PKG ${opt}/dejagnu-\$VER
+
+module-whatis   "Loads dejagnu-${dejagnu_v}"
+conflict dejagnu
+module load expect/${expect_v}
+prereq expect/${expect_v}
+
+prepend-path CPATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path PATH \$PKG/bin
+prepend-path MANPATH \$PKG/share/man
+
+eof
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'

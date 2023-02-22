@@ -40,6 +40,15 @@ fi
 if [ "${1}" == "vim" ] ; then
   check_vim 8.2
 
+elif [ "${1}" == "rsnapshot" ] ; then
+  check_rsnapshot 1.4.4
+  check_rsnapshot 1.4.5
+
+elif [ "${1}" == "rar" ] ; then
+  check_rarlinux 6.12
+  check_rarlinux 6.20
+  check_rarlinux 6.21
+
 elif [ "${1}" == "python" ] ; then
   check_python 3.9.4
 #  check_demjson 3.9.4 2.2.4

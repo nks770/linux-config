@@ -74,7 +74,8 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-make -j ${ncpu}
+#make -j ${ncpu}
+make
 
 if [ ! $? -eq 0 ] ; then
   exit 4
