@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building Python
+echo 'Loading Python...'
 
 function pythonInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -35,19 +36,28 @@ if [ -z "${python_v}" ] ; then
   python_v=3.9.4
 fi
 
-#case ${python_v} in
-#3.9.4)
-#   vim_srcdir=vim82
-#   ;;
-#*)
-#   vim_srcdir=vim-${python_v}
-#   ;;
-#esac
+case ${python_v} in
+3.9.4) #2021-04-04
+   bzip2_ver=1.0.8
+   zlib_ver=1.2.13
+   openssl_ver=1.1.1n #2021-03-15
+   ;;
+*)
+   bzip2_ver=1.0.8
+   zlib_ver=1.2.13
+   openssl_ver=3.0.8
+   ;;
+esac
 
 echo "Installing Python ${python_v}..."
 
 check_modules
+check_bzip2 ${bzip2_ver}
+check_zlib ${zlib_ver}
+check_openssl ${openssl_ver}
+
 module purge
+module load bzip2/${bzip2_ver} zlib/${zlib_ver} openssl/${openssl_ver}
 
 downloadPackage Python-${python_v}.tgz
 
@@ -59,12 +69,33 @@ fi
 
 tar xvfz ${pkg}/Python-${python_v}.tgz
 cd ${tmp}/Python-${python_v}
-./configure --prefix=${opt}/Python-${python_v} \
+
+config="./configure --prefix=${opt}/Python-${python_v} \
             --enable-shared \
-            --enable-optimizations
+	    --with-openssl=${opt}/openssl-${openssl_ver} \
+	    --enable-optimizations \
+	    CXX=$(command -v g++)"
+#	    CPPFLAGS=-I/opt/zlib-${zlib_ver}/inblude \
+#	    LDFLAGS=-L/opt/zlib-${zlib_ver}/lib"
+#export CXX="$(command -v g++)"
+export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include"
+export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -lz -lbz2"
 
 if [ ${debug} -gt 0 ] ; then
-  echo 'Configure complete'
+  ./configure --help
+  echo ''
+  module list
+  echo CPPFLAGS="${CPPFLAGS}"
+  echo LDFLAGS="${LDFLAGS}"
+  echo ${config}
+  echo ''
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
   read k
 fi
 
@@ -73,10 +104,14 @@ make -j ${ncpu}
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
 
 if [ ${run_tests} -gt 0 ] ; then
   make test
-  echo 'Tests complete'
+  echo '>> Tests complete'
   read k
 fi
 
@@ -85,10 +120,14 @@ make install
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
+fi
 
-# Create a symlink to the executable
-cd ${opt}/Python-${python_v}/bin
-ln -sv python${python_v%.*} python
+## Create a symlink to the executable
+#cd ${opt}/Python-${python_v}/bin
+#ln -sv python${python_v%.*} python
 
 # Create the environment module
 if [ -z "${MODULEPATH}" ] ; then
@@ -107,6 +146,10 @@ set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
+module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver}
+prereq openssl/${openssl_ver}
+prereq zlib/${zlib_ver}
+prereq bzip2/${bzip2_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
