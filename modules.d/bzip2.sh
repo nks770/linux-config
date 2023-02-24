@@ -269,6 +269,7 @@ set PKG ${opt}/bzip2-\$VER
 module-whatis   "Loads bzip2-${bzip2_v}"
 conflict bzip2
 
+prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
