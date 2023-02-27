@@ -104,6 +104,9 @@ libsndfile-1.0.28.tar.gz=http://www.mega-nerd.com/libsndfile/files/libsndfile-1.
 # https://www.theora.org/
 libtheora-1.1.1.tar.bz2=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
 
+# libuuid
+libuuid-1.0.3.tar.gz=https://versaweb.dl.sourceforge.net/project/libuuid/libuuid-1.0.3.tar.gz
+
 # libvorbis
 # https://xiph.org/vorbis/
 libvorbis-1.3.7.tar.gz=https://downloads.xiph.org/releases/vorbis/libvorbis-1.3.7.tar.gz
@@ -188,6 +191,9 @@ tiff-4.4.0.tar.gz=http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz
 # TwoLAME
 # https://www.twolame.org/
 twolame-0.4.0.tar.gz=https://phoenixnap.dl.sourceforge.net/project/twolame/twolame/0.4.0/twolame-0.4.0.tar.gz
+
+# util-linux
+util-linux-2.38.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.gz
 
 # Vim
 vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2

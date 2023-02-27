@@ -43,6 +43,7 @@ case ${python_v} in
    xz_ver=5.2.10
    openssl_ver=1.1.1n #2021-03-15
    libffi_ver=3.4.4
+   utillinux_ver=2.38.1
    ;;
 *)
    bzip2_ver=1.0.8
@@ -50,6 +51,7 @@ case ${python_v} in
    xz_ver=5.2.10
    openssl_ver=3.0.8
    libffi_ver=3.4.4
+   utillinux_ver=2.38.1
    ;;
 esac
 
@@ -61,9 +63,10 @@ check_zlib ${zlib_ver}
 check_xz ${xz_ver}
 check_openssl ${openssl_ver}
 check_libffi ${libffi_ver}
+check_utillinux ${utillinux_ver}
 
 module purge
-module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver}
+module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver}
 
 downloadPackage Python-${python_v}.tgz
 
@@ -83,9 +86,10 @@ config="./configure --prefix=${opt}/Python-${python_v} \
 	    CXX=$(command -v g++)"
 #	    CPPFLAGS=-I/opt/zlib-${zlib_ver}/inblude \
 #	    LDFLAGS=-L/opt/zlib-${zlib_ver}/lib"
-#export CXX="$(command -v g++)"
-export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include"
-export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -lz -lbz2 -llzma -lffi"
+
+export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid"
+export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib"
+export LIBS="-lz -lbz2 -llzma -lffi -luuid"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -93,6 +97,7 @@ if [ ${debug} -gt 0 ] ; then
   module list
   echo CPPFLAGS="${CPPFLAGS}"
   echo LDFLAGS="${LDFLAGS}"
+  echo LIBS="${LIBS}"
   echo ${config}
   echo ''
   read k
@@ -152,7 +157,7 @@ set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
-module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver}
+module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} libuuid/${libuuid_ver}
 prereq openssl/${openssl_ver}
 prereq zlib/${zlib_ver}
 prereq bzip2/${bzip2_ver}
