@@ -128,6 +128,10 @@ nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13
 nasm-2.14.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz
 nasm-2.15.05.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
 
+# ncurses
+# https://invisible-island.net/ncurses/ncurses.html
+ncurses-6.4.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.4.tar.gz
+
 # opencore-amr
 # https://sourceforge.net/projects/opencore-amr/
 opencore-amr-0.1.5.tar.gz=https://iweb.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.5.tar.gz
@@ -164,6 +168,9 @@ demjson-2.2.4.tar.gz=https://files.pythonhosted.org/packages/96/67/6db789e253315
 rarlinux-x64-612.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-612.tar.gz
 rarlinux-x64-620.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-620.tar.gz
 rarlinux-x64-621.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-621.tar.gz
+
+# readline
+readline-8.2.tar.gz=http://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
 
 # rsnapshot
 rsnapshot-1.4.4.tar.gz=https://github.com/rsnapshot/rsnapshot/releases/download/1.4.4/rsnapshot-1.4.4.tar.gz
