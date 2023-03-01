@@ -46,6 +46,7 @@ case ${python_v} in
    utillinux_ver=2.38.1
    ncurses_ver=6.4
    readline_ver=8.2
+   sqlite_ver=3.41.0
    ;;
 *)
    bzip2_ver=1.0.8
@@ -56,6 +57,7 @@ case ${python_v} in
    utillinux_ver=2.38.1
    ncurses_ver=6.4
    readline_ver=8.2
+   sqlite_ver=3.41.0
    ;;
 esac
 
@@ -70,9 +72,10 @@ check_libffi ${libffi_ver}
 check_utillinux ${utillinux_ver}
 check_ncurses ${ncurses_ver}
 check_readline ${readline_ver}
+check_sqlite ${sqlite_ver}
 
 module purge
-module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver}
+module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver}
 
 downloadPackage Python-${python_v}.tgz
 
@@ -93,9 +96,9 @@ config="./configure --prefix=${opt}/Python-${python_v} \
 #	    CPPFLAGS=-I/opt/zlib-${zlib_ver}/inblude \
 #	    LDFLAGS=-L/opt/zlib-${zlib_ver}/lib"
 
-export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid -I/opt/ncurses-${ncurses_ver}/include/ncurses -I/opt/readline-${readline_ver}/include"
-export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib -L/opt/readline-${readline_ver}/lib"
-export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline"
+export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid -I/opt/ncurses-${ncurses_ver}/include/ncurses -I/opt/readline-${readline_ver}/include -I/opt/sqlite-${sqlite_ver}/include"
+export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib -L/opt/readline-${readline_ver}/lib -L/opt/sqlite-${sqlite_ver}/lib"
+export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline -lsqlite3"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -163,7 +166,7 @@ set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
-module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver}
+module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver}
 prereq openssl/${openssl_ver}
 prereq zlib/${zlib_ver}
 prereq bzip2/${bzip2_ver}
@@ -172,6 +175,7 @@ prereq libffi/${libffi_ver}
 prereq util-linux/${utillinux_ver}
 prereq ncurses/${ncurses_ver}
 prereq readline/${readline_ver}
+prereq sqlite/${sqlite_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
