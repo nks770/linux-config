@@ -41,9 +41,9 @@ case ${gdbm_v} in
    readline_ver=8.1 #2020-12-06
    ncurses_ver=6.2  #2020-02-12
    ;;
-1.23)
-   readline_ver=8.2
-   ncurses_ver=6.4
+1.23) #2022-02-04
+   readline_ver=8.1.2 #2022-01-05
+   ncurses_ver=6.3    #2021-11-08
    ;;
 *)
    readline_ver=8.2

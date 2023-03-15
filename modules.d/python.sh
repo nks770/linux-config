@@ -51,6 +51,62 @@ case ${python_v} in
    tcl_ver=8.6.13
    tk_ver=8.6.13
    ;;
+3.9.16) #2022-12-06
+   gdbm_ver=1.23        #2022-02-04
+   readline_ver=8.1.2   #2022-01-05
+   ncurses_ver=6.3      #2021-11-08
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.2.9         #2022-11-30
+   openssl_ver=1.1.1s   #2022-11-01
+   sqlite_ver=3.40.0    #2022-11-16
+   zlib_ver=1.2.13      #2022-10-12
+   libffi_ver=3.4.4     #2022-10-23
+   utillinux_ver=2.38.1 #2022-08-04
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
+3.10.9) #2022-12-06
+   gdbm_ver=1.23        #2022-02-04
+   readline_ver=8.1.2   #2022-01-05
+   ncurses_ver=6.3      #2021-11-08
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.2.9         #2022-11-30
+   openssl_ver=1.1.1s   #2022-11-01
+   sqlite_ver=3.40.0    #2022-11-16
+   zlib_ver=1.2.13      #2022-10-12
+   libffi_ver=3.4.4     #2022-10-23
+   utillinux_ver=2.38.1 #2022-08-04
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
+3.10.10) #2023-02-08
+   gdbm_ver=1.23        #2022-02-04
+   readline_ver=8.1.2   #2022-01-05
+   ncurses_ver=6.3      #2021-11-08
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.4.1         #2023-01-11
+   openssl_ver=1.1.1t   #2023-02-07
+   sqlite_ver=3.40.1    #2022-12-28
+   zlib_ver=1.2.13      #2022-10-12
+   libffi_ver=3.4.4     #2022-10-23
+   utillinux_ver=2.38.1 #2022-08-04
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
+3.11.2) #2023-02-08
+   gdbm_ver=1.23        #2022-02-04
+   readline_ver=8.1.2   #2022-01-05
+   ncurses_ver=6.3      #2021-11-08
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.4.1         #2023-01-11
+   openssl_ver=1.1.1t   #2023-02-07
+   sqlite_ver=3.40.1    #2022-12-28
+   zlib_ver=1.2.13      #2022-10-12
+   libffi_ver=3.4.4     #2022-10-23
+   utillinux_ver=2.38.1 #2022-08-04
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
 *)
    bzip2_ver=1.0.8
    zlib_ver=1.2.13
@@ -105,8 +161,8 @@ config="./configure --prefix=${opt}/Python-${python_v} \
 #	    CPPFLAGS=-I/opt/zlib-${zlib_ver}/inblude \
 #	    LDFLAGS=-L/opt/zlib-${zlib_ver}/lib"
 
-export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid -I/opt/ncurses-${ncurses_ver}/include/ncurses -I/opt/readline-${readline_ver}/include -I/opt/sqlite-${sqlite_ver}/include -I/opt/gdbm-${gdbm_ver}/include -I/opt/tcl-${tcl_ver}/include -I/opt/tk-${tk_ver}/include"
-export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib -L/opt/readline-${readline_ver}/lib -L/opt/sqlite-${sqlite_ver}/lib -L/opt/gdbm-${gdbm_ver}/lib $(pkg-config --libs tk)"
+export CPPFLAGS="-I${opt}/zlib-${zlib_ver}/include -I${opt}/bzip2-${bzip2_ver}/include -I${opt}/xz-${xz_ver}/include -I${opt}/libffi-${libffi_ver}/include -I${opt}/util-linux-${utillinux_ver}/include/uuid -I${opt}/ncurses-${ncurses_ver}/include/ncurses -I${opt}/readline-${readline_ver}/include -I${opt}/sqlite-${sqlite_ver}/include -I${opt}/gdbm-${gdbm_ver}/include -I${opt}/tcl-${tcl_ver}/include -I${opt}/tk-${tk_ver}/include"
+export LDFLAGS="-L${opt}/zlib-${zlib_ver}/lib -L${opt}/bzip2-${bzip2_ver}/lib -L${opt}/xz-${xz_ver}/lib -L${opt}/libffi-${libffi_ver}/lib -L${opt}/util-linux-${utillinux_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib -L${opt}/readline-${readline_ver}/lib -L${opt}/sqlite-${sqlite_ver}/lib -L${opt}/gdbm-${gdbm_ver}/lib $(pkg-config --libs tk)"
 export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline -lsqlite3"
 
 if [ ${debug} -gt 0 ] ; then

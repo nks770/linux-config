@@ -37,17 +37,25 @@ if [ -z "${openssl_v}" ] ; then
 fi
 
 case ${openssl_v} in
-1.1.1t) # 2023-02-07
-   zlib_ver=1.2.13 # 2022-10-12
-   ;;
 1.1.1k) # 2021-03-25
    zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
    ;;
 1.1.1n) # 2022-03-15
    zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
+1.1.1s) # 2022-11-01
+   zlib_ver=1.2.13 # 2022-10-12
+   cert_error_warn=0
+   ;;
+1.1.1t) # 2023-02-07
+   zlib_ver=1.2.13 # 2022-10-12
+   cert_error_warn=0
    ;;
 *)
    zlib_ver=1.2.13
+   cert_error_warn=0
    ;;
 esac
 
@@ -108,9 +116,11 @@ fi
 
 if [ ${run_tests} -gt 0 ] ; then
   make test
-  echo ''
-  echo 'NOTE: Test 80_teset_ssl_new.t fails due to a known expired certificate.'
-  # make test TESTS='test_ssl_new' V=1
+  if [ ${cert_error_warn} -gt 0 ]; then
+    echo ''
+    echo 'NOTE: Test 80_teset_ssl_new.t fails due to a known expired certificate.'
+    # make test TESTS='test_ssl_new' V=1
+  fi
   echo '>> Tests complete'
   read k
 fi
