@@ -37,8 +37,8 @@ if [ -z "${readline_v}" ] ; then
 fi
 
 case ${readline_v} in
-3.9.4) #2021-04-04
-   ncurses_ver=6.4
+8.1) #2020-12-06
+   ncurses_ver=6.2  # 2020-02-12
    ;;
 *)
    ncurses_ver=6.4
@@ -63,11 +63,13 @@ fi
 tar xvfz ${pkg}/readline-${readline_v}.tar.gz
 cd ${tmp}/readline-${readline_v}
 
-config="./configure --prefix=${opt}/readline-${readline_v} --with-curses"
+config="./configure --prefix=${opt}/readline-${readline_v} --with-curses CFLAGS=-I${opt}/ncurses-${ncurses_ver}/include LDFLAGS=-L${opt}/ncurses-${ncurses_ver}/lib"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
+  module list
+  echo ''
   echo ${config}
   read k
 fi

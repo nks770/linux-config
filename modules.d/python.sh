@@ -38,16 +38,18 @@ fi
 
 case ${python_v} in
 3.9.4) #2021-04-04
-   bzip2_ver=1.0.8
-   zlib_ver=1.2.13
-   xz_ver=5.2.10
-   openssl_ver=1.1.1n #2021-03-15
-   libffi_ver=3.4.4
-   utillinux_ver=2.38.1
-   ncurses_ver=6.4
-   readline_ver=8.2
-   sqlite_ver=3.41.0
-   gdbm_ver=1.23
+   gdbm_ver=1.19        #2020-12-23
+   readline_ver=8.1     #2020-12-06
+   ncurses_ver=6.2      #2020-02-12
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.2.5         #2020-03-17
+   openssl_ver=1.1.1k   #2021-03-25
+   sqlite_ver=3.35.4    #2021-04-02
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.3       #2019-11-23
+   utillinux_ver=2.36.2 #2021-02-12
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
    ;;
 *)
    bzip2_ver=1.0.8
@@ -60,6 +62,8 @@ case ${python_v} in
    readline_ver=8.2
    sqlite_ver=3.41.0
    gdbm_ver=1.23
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
    ;;
 esac
 
@@ -76,9 +80,11 @@ check_ncurses ${ncurses_ver}
 check_readline ${readline_ver}
 check_sqlite ${sqlite_ver}
 check_gdbm ${gdbm_ver}
+check_tcl ${tcl_ver}
+check_tk ${tk_ver}
 
 module purge
-module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver}
+module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver} tk/${tk_ver}
 
 downloadPackage Python-${python_v}.tgz
 
@@ -99,8 +105,8 @@ config="./configure --prefix=${opt}/Python-${python_v} \
 #	    CPPFLAGS=-I/opt/zlib-${zlib_ver}/inblude \
 #	    LDFLAGS=-L/opt/zlib-${zlib_ver}/lib"
 
-export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid -I/opt/ncurses-${ncurses_ver}/include/ncurses -I/opt/readline-${readline_ver}/include -I/opt/sqlite-${sqlite_ver}/include -I/opt/gdbm-${gdbm_ver}/include"
-export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib -L/opt/readline-${readline_ver}/lib -L/opt/sqlite-${sqlite_ver}/lib -L/opt/gdbm-${gdbm_ver}/lib"
+export CPPFLAGS="-I/opt/zlib-${zlib_ver}/include -I/opt/bzip2-${bzip2_ver}/include -I/opt/xz-${xz_ver}/include -I/opt/libffi-${libffi_ver}/include -I/opt/util-linux-${utillinux_ver}/include/uuid -I/opt/ncurses-${ncurses_ver}/include/ncurses -I/opt/readline-${readline_ver}/include -I/opt/sqlite-${sqlite_ver}/include -I/opt/gdbm-${gdbm_ver}/include -I/opt/tcl-${tcl_ver}/include -I/opt/tk-${tk_ver}/include"
+export LDFLAGS="-L/opt/zlib-${zlib_ver}/lib -L/opt/bzip2-${bzip2_ver}/lib -L/opt/xz-${xz_ver}/lib -L/opt/libffi-${libffi_ver}/lib -L/opt/util-linux-${utillinux_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib -L/opt/readline-${readline_ver}/lib -L/opt/sqlite-${sqlite_ver}/lib -L/opt/gdbm-${gdbm_ver}/lib $(pkg-config --libs tk)"
 export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline -lsqlite3"
 
 if [ ${debug} -gt 0 ] ; then
@@ -134,6 +140,12 @@ fi
 
 if [ ${run_tests} -gt 0 ] ; then
   make test
+  echo ''
+  echo 'NOTE: With Python 3.9.4 and Debian 11.5, I have observed that test_curses fails.'
+  echo '      It seems there is a failure in test_background due to unexpected behavior'
+  echo '      of the win.bkgd() function from libncurses.  This probably needs more investigation'
+  echo '      but it might be fine.'
+  echo ''
   echo '>> Tests complete'
   read k
 fi
@@ -169,7 +181,7 @@ set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
-module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver}
+module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver} tk/${tk_ver}
 prereq openssl/${openssl_ver}
 prereq zlib/${zlib_ver}
 prereq bzip2/${bzip2_ver}
@@ -180,6 +192,7 @@ prereq ncurses/${ncurses_ver}
 prereq readline/${readline_ver}
 prereq sqlite/${sqlite_ver}
 prereq gdbm/${gdbm_ver}
+prereq tk/${tk_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

@@ -46,14 +46,16 @@ tar xvfz ${pkg}/tcl${tcl_v}-src.tar.gz
 mv -fv tcl${tcl_v} build
 cd ${opt}/tcl-${tcl_v}/build/unix
 
+config="./configure --prefix=${opt}/tcl-${tcl_v}"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo
-  echo ./configure --prefix=${opt}/tcl-${tcl_v}
+  echo ${config}
   read k
 fi
 
-./configure --prefix=${opt}/tcl-${tcl_v}
+${config}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'

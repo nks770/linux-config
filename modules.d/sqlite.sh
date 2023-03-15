@@ -37,6 +37,10 @@ if [ -z "${sqlite_v}" ] ; then
 fi
 
 case ${sqlite_v} in
+3.35.4) # 2021-04-02
+   sql_srcdir=sqlite-autoconf-3350400
+   zlib_ver=1.2.11 # 2017-01-15
+   ;;
 3.41.0)
    sql_srcdir=sqlite-autoconf-3410000
    zlib_ver=1.2.13

@@ -42,17 +42,17 @@ fi
 
 case ${modules_v} in
 4.7.0)
-   tcl_tk_ver=8.6.11
+   tcl_ver=8.6.11
    expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
 5.2.0)
-   tcl_tk_ver=8.6.13
+   tcl_ver=8.6.13
    expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
 *)
-   tcl_tk_ver=8.6.13
+   tcl_ver=8.6.13
    expect_ver=5.45.4
    dejagnu_ver=1.6.3
    ;;
@@ -60,10 +60,9 @@ esac
 
 echo "Installing Environment Modules version ${modules_v}..."
 
-check_tcl ${tcl_tk_ver}
+check_tcl ${tcl_ver}
 check_expect ${expect_ver}
 check_dejagnu ${dejagnu_ver} # DejaGnu is needed for the test suite, specifically the 'runtest' executable
-#check_tk ${tcl_tk_ver}
 
 downloadPackage modules-${modules_v}.tar.gz
 
@@ -80,21 +79,21 @@ if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo
   echo ./configure --prefix=${opt}/Modules/${modules_v} \
-            --with-tclsh=${opt}/tcl-${tcl_tk_ver}/bin/tclsh${tcl_tk_ver%.*} \
-            --with-tcl=${opt}/tcl-${tcl_tk_ver}/lib \
-            --with-tcl-ver=${tcl_tk_ver%.*} \
-	    --with-tclinclude=${opt}/tcl-${tcl_tk_ver}/include
+            --with-tclsh=${opt}/tcl-${tcl_ver}/bin/tclsh${tcl_ver%.*} \
+            --with-tcl=${opt}/tcl-${tcl_ver}/lib \
+            --with-tcl-ver=${tcl_ver%.*} \
+	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
   read k
 fi
 
 ./configure --prefix=${opt}/Modules/${modules_v} \
-            --with-tclsh=${opt}/tcl-${tcl_tk_ver}/bin/tclsh${tcl_tk_ver%.*} \
-            --with-tcl=${opt}/tcl-${tcl_tk_ver}/lib \
-            --with-tcl-ver=${tcl_tk_ver%.*} \
-	    --with-tclinclude=${opt}/tcl-${tcl_tk_ver}/include
+            --with-tclsh=${opt}/tcl-${tcl_ver}/bin/tclsh${tcl_ver%.*} \
+            --with-tcl=${opt}/tcl-${tcl_ver}/lib \
+            --with-tcl-ver=${tcl_ver%.*} \
+	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
 #            --without-tclx \
 #            --with-tclx=/opt/tcl-${2}/lib \
-#            --with-tclx-ver=${tcl_tk_ver%.*}
+#            --with-tclx-ver=${tcl_ver%.*}
 #            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
 
 # DUSE_INTERP_ERRORLINE is for modules 3.x when compilation against tcl 8.6 fails
@@ -117,7 +116,7 @@ fi
 if [ ${run_tests} -gt 0 ] ; then
   # Requires DejaGnu to work
   echo export PATH=${PATH}:${opt}/dejagnu-${dejagnu_ver}/bin
-  export PATH=${PATH}:${opt}/tcl-${tcl_tk_ver}/bin:${opt}/dejagnu-${dejagnu_ver}/bin
+  export PATH=${PATH}:${opt}/tcl-${tcl_ver}/bin:${opt}/dejagnu-${dejagnu_ver}/bin
   echo runtest: $(which runtest)
   echo expect: $(which expect)
   make test
@@ -134,6 +133,32 @@ fi
 cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
 ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
 
+# Create the environment module for tcl
+mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/tcl
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/tcl/${tcl_ver}
+#%Module
+
+proc ModulesHelp { } {
+   puts stderr "Puts tcl-${tcl_ver} into your environment"
+}
+
+set VER ${tcl_ver}
+set PKG ${opt}/tcl-\$VER
+
+module-whatis   "Loads tcl-${tcl_v}"
+conflict tcl
+
+prepend-path PATH \$PKG/bin
+prepend-path CPATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path LD_LIBRARY_PATH \$PKG/lib
+prepend-path MANPATH \$PKG/share/man
+prepend-path MANPATH \$PKG/man
+prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
+
+eof
+
 # Create the environment module for expect
 mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/expect
 cat << eof > ${opt}/Modules/${modules_v}/modulefiles/expect/${expect_v}
@@ -145,23 +170,17 @@ proc ModulesHelp { } {
 
 set VER ${expect_v}
 set PKG ${opt}/expect-\$VER
-set TCL ${opt}/tcl-${tcl_tk_ver}
 
 module-whatis   "Loads expect-${expect_v}"
 conflict expect
+module load tcl/${tcl_ver}
+prereq tcl/${tcl_ver}
 
-prepend-path CPATH \$PKG/include
-prepend-path CPATH \$TCL/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$TCL/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$TCL/include
-prepend-path LD_LIBRARY_PATH \$TCL/lib
 prepend-path PATH \$PKG/bin
-prepend-path PATH \$TCL/bin
+prepend-path CPATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
 prepend-path MANPATH \$PKG/share/man
-prepend-path MANPATH \$TCL/share/man
-prepend-path MANPATH \$TCL/man
 
 eof
 
