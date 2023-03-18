@@ -50,13 +50,13 @@ elif [ "${1}" == "rar" ] ; then
   check_rarlinux 6.21
 
 elif [ "${1}" == "python" ] ; then
-  check_python 3.9.4
-  check_python 3.9.16
-  check_python 3.10.9
-  check_python 3.10.10
-  check_python 3.11.2
-#  check_demjson 3.9.4 2.2.4
-#  check_bs4 3.9.4 4.9.3
+  for pv in 3.9.4 3.9.16 3.10.{9..10} 3.11.2 ; do
+    check_python ${pv}
+    check_p3wheel ${pv} soupsieve 2.4
+    check_p3wheel ${pv} beautifulsoup4 4.11.2
+    check_p3wheel ${pv} mutagen 1.46.0
+    check_p3wheel ${pv} demjson 2.2.4
+  done
 
 elif [ "${1}" == "screen" ] ; then
   check_screen 4.8.0
