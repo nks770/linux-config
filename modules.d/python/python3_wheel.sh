@@ -69,7 +69,7 @@ else
 fi
 
 mode=whl
-if [ "${wheel_name}" == "demjson" ] ; then
+if [ "${wheel_name}" == "demjson" ] || [ "${wheel_name}" == "demjson3" ] ; then
   wfile=${wheel_name}-${wheel_v}.tar.gz
   mode=tgz
 else
