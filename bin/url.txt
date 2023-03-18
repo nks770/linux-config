@@ -135,6 +135,7 @@ nasm-2.15.05.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15
 
 # ncurses
 # https://invisible-island.net/ncurses/ncurses.html
+ncurses-6.1.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.1.tar.gz
 ncurses-6.2.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.2.tar.gz
 ncurses-6.3.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.3.tar.gz
 ncurses-6.4.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.4.tar.gz

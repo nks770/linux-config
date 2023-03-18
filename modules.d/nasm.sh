@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building NASM
+echo 'Loading nasm...'
 
 function nasmInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -51,8 +52,15 @@ fi
 tar xvfz ${pkg}/nasm-${nasm_v}.tar.gz
 cd ${tmp}/${nasm_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 # Patch to enable compilation with GCC 8
-if [ "${nasm_v}" == "2.13.03" ] ; then
+touch nasmlib.patch
+
+if [ "${nasm_v}" == "xxx2.13.03" ] ; then
 cat << eof > nasmlib.patch
 Index: include/nasmlib.h
 ===================================================================
@@ -75,11 +83,72 @@ if [ ! $? -eq 0 ] ; then
   exit 4
 fi
 fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 
-./configure --prefix=${opt}/nasm-${nasm_v}
-make -j ${ncpu} && make install
+config="./configure --prefix=${opt}/nasm-${nasm_v}"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
+
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo ''
+  echo "NOTE: You are probably seeing a lot of errors like \"Can't compare at <...> file stdout\""
+  echo 'Per online at https://bugzilla.opensuse.org/show_bug.cgi?id=1084631 :'
+cat << eof
+> is this OK?
+
+Short answer: Yes.
+
+Long answer: NASM unit tests are mostly focused on regression detection. What they are suppose to be used for,
+
+1. make
+2. make golden
+3. <do changes here>
+4. make
+5. make test
+
+The \`make test\` then compares output of the "golden" output with the test run. If there are any changes, it *could* indicate a regression that need to be investigated.
+
+The "golden" directory of binaries is not shipped by upstream that's why it's complaining. But nasm is called before the attempted comparison so if there is some major nasm failure on execution, like segfault, I think we would see it in the log.
+eof
+  echo ''
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

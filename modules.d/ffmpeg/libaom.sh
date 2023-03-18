@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libaom
+echo 'Loading libaom...'
 
 function libaomInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -40,8 +41,8 @@ echo "Installing libaom ${libaom_v}..."
 
 case ${1} in
   1.0.0) #Mon Jun 25 07:54:59 2018 -0700
-   libaom_yasm_ver=1.3.0
-   libaom_cmake_ver=3.11.4
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_cmake_ver=3.11.4   # 2018-06-14
    libaom_doxygen_ver=1.8.14
    libaom_python_ver=3.9.4
   ;;
@@ -82,11 +83,45 @@ cd ${tmp}/${libaom_srcdir}
 tar xvfz ${pkg}/libaom-${libaom_v}.tar.gz
 cd ${tmp}/${libaom_srcdir}_build
 
+if [ ${debug} -gt 0 ] ; then
+  echo ''
+  module list
+  echo cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ../${libaom_srcdir}
+  echo ''
+  read k
+fi
+
 cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ../${libaom_srcdir}
-make -j ${ncpu} && make install
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

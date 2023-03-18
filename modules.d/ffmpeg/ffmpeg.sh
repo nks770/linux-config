@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building FFmpeg
+echo 'Loading ffmpeg...'
 
 function ffmpegInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -41,7 +42,7 @@ echo "Installing ffmpeg ${ffmpeg_v}..."
 
 case ${1} in
   4.2.2) # 2019-12-31 23:58
-   ffmpeg_nasm_ver=2.14.02   # 2018-12-26
+   ffmpeg_nasm_ver=2.14.02     # 2018-12-26
    ffmpeg_libaom_ver=1.0.0
    ffmpeg_libass_ver=0.14.0
    ffmpeg_lame_ver=3.100
@@ -161,6 +162,16 @@ fi
 
 tar xvfz ${pkg}/ffmpeg-${ffmpeg_v}.tar.gz
 cd ${tmp}/${ffmpeg_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo '>> Press enter to run configure command...'
+  echo ''
+  read k
+fi
+
 ./configure --prefix=${opt}/ffmpeg-${ffmpeg_v} \
             --enable-gpl \
             --enable-version3 \
@@ -198,10 +209,36 @@ cd ${tmp}/${ffmpeg_srcdir}
             --extra-cflags="-I${opt}/lame-${ffmpeg_lame_ver}/include -I${opt}/libtheora-${ffmpeg_libtheora_ver}/include -I${opt}/libogg-${ffmpeg_libogg_ver}/include -I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include -I${opt}/libilbc-${ffmpeg_libilbc_ver}/include -I${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/include -I${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/include -I${opt}/wavpack-${ffmpeg_wavpack_ver}/include -I${opt}/twolame-${ffmpeg_twolame_ver}/include" \
             --extra-ldflags="-L${opt}/lame-${ffmpeg_lame_ver}/lib -L${opt}/libtheora-${ffmpeg_libtheora_ver}/lib -L${opt}/libogg-${ffmpeg_libogg_ver}/lib -L${opt}/xvidcore-${ffmpeg_xvidcore_ver}/lib -L${opt}/libilbc-${ffmpeg_libilbc_ver}/lib64 -L${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/lib -L${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/lib -L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib -L${opt}/twolame-${ffmpeg_twolame_ver}/lib"
 
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo ''
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
