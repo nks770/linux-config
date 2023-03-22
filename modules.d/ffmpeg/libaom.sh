@@ -40,31 +40,37 @@ libaom_srcdir=libaom-${libaom_v}
 echo "Installing libaom ${libaom_v}..."
 
 case ${1} in
-  1.0.0) #Mon Jun 25 07:54:59 2018 -0700
-   libaom_yasm_ver=1.3.0     # 2014-08-10
-   libaom_cmake_ver=3.11.4   # 2018-06-14
-   libaom_doxygen_ver=1.8.14
-   libaom_python_ver=3.9.4
+  1.0.0)              #Mon Jun 25 07:54:59 2018 -0700
+   yasm_ver=1.3.0     # 2014-08-10
+   cmake_ver=3.11.4   # 2018-06-14
+   doxygen_ver=1.8.14 # 2017-12-25
+   python_ver=3.6.5   # 2018-03-28
+  ;;
+  1.0.0-errata1-avif) #Thu Dec 12 10:50:24 2019 -0800
+   yasm_ver=1.3.0     # 2014-08-10
+   cmake_ver=3.15.5   # 2019-10-30
+   doxygen_ver=1.8.16 # 2019-08-08
+   python_ver=3.8.0   # 2019-10-14
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
-   libaom_yasm_ver=1.3.0
-   libaom_cmake_ver=3.24.2   # 2022-09-13
-   libaom_doxygen_ver=1.9.5  # 2022-08-26
-   libaom_python_ver=3.10.7  # 2022-09-06
+   yasm_ver=1.3.0
+   cmake_ver=3.24.2   # 2022-09-13
+   doxygen_ver=1.9.5  # 2022-08-26
+   python_ver=3.10.7  # 2022-09-06
   ;;
 esac
 
 check_modules
-check_yasm ${libaom_yasm_ver}
-check_cmake ${libaom_cmake_ver}
-check_doxygen ${libaom_doxygen_ver}
-check_python ${libaom_python_ver}
+check_yasm ${yasm_ver}
+check_cmake ${cmake_ver}
+check_doxygen ${doxygen_ver}
+check_python ${python_ver}
 
 module purge
-module load yasm/${libaom_yasm_ver} \
-            cmake/${libaom_cmake_ver} \
-            doxygen/${libaom_doxygen_ver} \
-            Python/${libaom_python_ver}
+module load yasm/${yasm_ver} \
+            cmake/${cmake_ver} \
+            doxygen/${doxygen_ver} \
+            Python/${python_ver}
 module list
 
 downloadPackage libaom-${libaom_v}.tar.gz

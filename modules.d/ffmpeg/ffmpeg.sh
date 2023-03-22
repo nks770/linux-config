@@ -42,9 +42,9 @@ echo "Installing ffmpeg ${ffmpeg_v}..."
 
 case ${1} in
   4.2.2) # 2019-12-31 23:58
-   ffmpeg_nasm_ver=2.14.02     # 2018-12-26
-   ffmpeg_libaom_ver=1.0.0
-   ffmpeg_libass_ver=0.14.0
+   nasm_ver=2.14.02               # 2018-12-26
+   libaom_ver=1.0.0-errata1-avif  # 2019-12-12
+   libass_ver=0.14.0       # 2017-10-31
    ffmpeg_lame_ver=3.100
    ffmpeg_xvidcore_ver=1.3.6
    ffmpeg_libbluray_ver=1.1.2
@@ -69,9 +69,9 @@ case ${1} in
    ffmpeg_libvpx_ver=1.8.2   # Dec 19, 2019
   ;;
   5.1.2) # 2022-09-25
-   ffmpeg_nasm_ver=2.15.05   # 2020-08-28
-   ffmpeg_libaom_ver=3.5.0   # 2022-09-21
-   ffmpeg_libass_ver=0.16.0  # 2022-05-12
+   nasm_ver=2.15.05   # 2020-08-28
+   libaom_ver=3.5.0   # 2022-09-21
+   libass_ver=0.16.0  # 2022-05-12
    ffmpeg_lame_ver=3.100     # 2017-10-13
    ffmpeg_xvidcore_ver=1.3.7 # 2019-12-28
    ffmpeg_libbluray_ver=1.3.2 # 2022-07-30
@@ -98,9 +98,9 @@ case ${1} in
 esac
 
 check_modules
-check_nasm ${ffmpeg_nasm_ver}
-check_libaom ${ffmpeg_libaom_ver}
-check_libass ${ffmpeg_libass_ver}
+check_nasm ${nasm_ver}
+check_libaom ${libaom_ver}
+check_libass ${libass_ver}
 check_lame ${ffmpeg_lame_ver}
 check_xvidcore ${ffmpeg_xvidcore_ver}
 check_libbluray ${ffmpeg_libbluray_ver}
@@ -125,9 +125,9 @@ check_libwebp ${ffmpeg_libwebp_ver}
 check_libvpx ${ffmpeg_libvpx_ver}
 
 module purge
-module load nasm/${ffmpeg_nasm_ver} \
-            libaom/${ffmpeg_libaom_ver} \
-            libass/${ffmpeg_libass_ver} \
+module load nasm/${nasm_ver} \
+            libaom/${libaom_ver} \
+            libass/${libass_ver} \
             lame/${ffmpeg_lame_ver} \
             xvidcore/${ffmpeg_xvidcore_ver} \
             libbluray/${ffmpeg_libbluray_ver} \
@@ -258,8 +258,8 @@ set PKG ${opt}/ffmpeg-\$VER
 
 module-whatis   "Loads ffmpeg-${ffmpeg_v}"
 conflict ffmpeg
-module load libaom/${ffmpeg_libaom_ver}
-module load libass/${ffmpeg_libass_ver}
+module load libaom/${libaom_ver}
+module load libass/${libass_ver}
 module load lame/${ffmpeg_lame_ver}
 module load xvidcore/${ffmpeg_xvidcore_ver}
 module load libbluray/${ffmpeg_libbluray_ver}
@@ -282,8 +282,8 @@ module load opencore-amr/${ffmpeg_opencoreamr_ver}
 module load vo-amrwbenc/${ffmpeg_voamrwbenc_ver}
 module load libwebp/${ffmpeg_libwebp_ver}
 module load libvpx/${ffmpeg_libvpx_ver}
-prereq libaom/${ffmpeg_libaom_ver}
-prereq libass/${ffmpeg_libass_ver}
+prereq libaom/${libaom_ver}
+prereq libass/${libass_ver}
 prereq lame/${ffmpeg_lame_ver}
 prereq xvidcore/${ffmpeg_xvidcore_ver}
 prereq libbluray/${ffmpeg_libbluray_ver}

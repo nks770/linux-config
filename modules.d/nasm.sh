@@ -78,7 +78,7 @@ Index: include/nasmlib.h
 
  /*
 eof
-patch -N -Z -b -p0 < nasmlib.patch
+patch -Z -b -p0 < nasmlib.patch
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi

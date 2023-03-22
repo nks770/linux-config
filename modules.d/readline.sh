@@ -37,6 +37,9 @@ if [ -z "${readline_v}" ] ; then
 fi
 
 case ${readline_v} in
+7.0) #2016-09-15
+   ncurses_ver=6.0  # 2015-08-08
+   ;;
 8.1) #2020-12-06
    ncurses_ver=6.2  # 2020-02-12
    ;;
@@ -44,7 +47,8 @@ case ${readline_v} in
    ncurses_ver=6.3  # 2021-11-08
    ;;
 *)
-   ncurses_ver=6.4
+   echo "ERROR: Review needed for readline ${1}"
+   exit 4
    ;;
 esac
 

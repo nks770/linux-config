@@ -37,6 +37,34 @@ if [ -z "${python_v}" ] ; then
 fi
 
 case ${python_v} in
+3.6.5) # 2018-03-28
+   gdbm_ver=1.14.1      #2018-01-03
+   readline_ver=7.0     #2016-09-15
+   ncurses_ver=6.0      #2015-08-08
+   bzip2_ver=1.0.6      #2010-09-20
+   xz_ver=5.2.3         #2016-12-30
+   openssl_ver=1.1.0h   #2018-03-27
+   sqlite_ver=3.22.0    #2018-01-22
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.2.1     #2014-11-12
+   utillinux_ver=2.32   #2018-03-21
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
+3.7.4) #2019-07-08
+   gdbm_ver=1.18.1      #2018-10-27
+   readline_ver=7.0     #2016-09-15
+   ncurses_ver=6.0      #2015-08-08
+   bzip2_ver=1.0.7      #2019-06-27
+   xz_ver=5.2.4         #2018-04-29
+   openssl_ver=1.1.1c   #2019-05-28
+   sqlite_ver=3.28.0    #2019-04-16
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.2.1     #2014-11-12
+   utillinux_ver=2.34   #2019-06-14
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
 3.9.4) #2021-04-04
    gdbm_ver=1.19        #2020-12-23
    readline_ver=8.1     #2020-12-06
@@ -108,18 +136,8 @@ case ${python_v} in
    tk_ver=8.6.13
    ;;
 *)
-   bzip2_ver=1.0.8
-   zlib_ver=1.2.13
-   xz_ver=5.2.10
-   openssl_ver=3.0.8
-   libffi_ver=3.4.4
-   utillinux_ver=2.38.1
-   ncurses_ver=6.4
-   readline_ver=8.2
-   sqlite_ver=3.41.0
-   gdbm_ver=1.23
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   echo "ERROR: Need review for Python ${1}"
+   exit 4
    ;;
 esac
 

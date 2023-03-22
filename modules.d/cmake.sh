@@ -38,11 +38,21 @@ fi
 cmake_srcdir=cmake-${cmake_v}
 
 case ${cmake_v} in
+3.10.1) # 2017-12-14
+   ncurses_ver=6.0  # 2015-08-08
+   ;;
 3.11.4) # 2018-06-14
    ncurses_ver=6.1  # 2018-01-27
    ;;
-*)
+3.15.2) # 2019-08-07
    ncurses_ver=6.1  # 2018-01-27
+   ;;
+3.15.5) # 2019-10-30
+   ncurses_ver=6.1  # 2018-01-27
+   ;;
+*)
+   echo "ERROR: Review needed for cmake ${1}"
+   exit 4 # Need to review
    ;;
 esac
 
@@ -97,11 +107,39 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+
 if [ ${run_tests} -gt 0 ] ; then
+  # Patch to enable avoid a testsuite failure when compiled with newer GCC
+  # I borrowed this update from referencing cmake 3.11.4 (slightly newer)
+  # This is for test # "34 - CompileFeatures"
+  if [ "${cmake_v}" == "3.10.1" ] ; then
+    cat << eof > testsuite.patch
+Index: Tests/CompileFeatures/default_dialect.c
+===================================================================
+--- Tests/CompileFeatures/default_dialect.c        2017-12-13 07:25:23.000000000 -0600
++++ Tests/CompileFeatures/default_dialect.c        2018-06-14 07:57:32.000000000 -0500
+@@ -1,6 +1,6 @@
+
+ #if DEFAULT_C11
+-#if __STDC_VERSION__ != 201112L
++#if __STDC_VERSION__ < 201112L
+ #error Unexpected value for __STDC_VERSION__.
+ #endif
+ #elif DEFAULT_C99
+eof
+    patch -Z -b -p0 < testsuite.patch
+    if [ ! $? -eq 0 ] ; then
+      exit 4
+    fi
+    if [ ${debug} -gt 0 ] ; then
+      echo '>> Testsuite patching complete'
+      read k
+    fi
+  fi
   make test
   echo ''
-  echo 'NOTE: There is probably a failed test for "kwsys.testSystemTools"'
-  echo 'The further details indicate the part that failed is:'
+  echo 'NOTE: You are probably seeing a failed test for "kwsys.testSystemTools"'
+  echo 'Looking further into the matter, the specific error message is:'
   echo 'TestFileAccess incorrectly indicated that this is a writable file: ...'
   echo ''
   echo 'If the testsuite is run as root, this is an expected failure'
@@ -109,6 +147,7 @@ if [ ${run_tests} -gt 0 ] ; then
   echo 'https://gitlab.kitware.com/utils/kwsys/-/merge_requests/251'
   echo ''
   echo '>> Press enter for more info on failed tests (if applicable)'
+  read k
   echo ''
   ./bin/ctest -V --rerun-failed
   echo ''

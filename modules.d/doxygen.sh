@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building doxygen
+echo 'Loading doxygen...'
 
 function doxygenInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -39,18 +40,26 @@ doxygen_srcdir=doxygen-${doxygen_v}
 echo "Installing doxygen ${doxygen_v}..."
 
 case ${1} in
-  1.8.14)
-   doxygen_cmake_ver=3.9.6
-   doxygen_python_ver=3.9.4
+  1.8.14) # 2017-12-25
+   cmake_ver=3.10.1 # 2017-12-14
+   python_ver=3.6.4 # 2017-12-19
+  ;;
+  1.8.16) # 2019-08-08
+   cmake_ver=3.15.2 # 2019-08-07
+   python_ver=3.7.4 # 2019-07-08
+  ;;
+  *) # 2017-12-25
+   echo "ERROR: Review needed for doxygen ${1}"
+   exit 4 # Please review
   ;;
 esac
 
 check_modules
-check_cmake ${doxygen_cmake_ver}
-check_python ${doxygen_python_ver}
+check_cmake ${cmake_ver}
+check_python ${python_ver}
 module purge
-module load cmake/${doxygen_cmake_ver} \
-            Python/${doxygen_python_ver}
+module load cmake/${cmake_ver} \
+            Python/${python_ver}
 module list
 
 downloadPackage doxygen-${doxygen_v}.src.tar.gz
@@ -64,14 +73,43 @@ fi
 tar xvfz ${pkg}/doxygen-${doxygen_v}.src.tar.gz
 cd ${tmp}/${doxygen_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  echo cmake -G \"Unix Makefiles\" \
+      -DCMAKE_BUILD_TYPE=Release \
+      -Dbuild_doc=OFF \
+      -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
+  read k
+fi
+
 cmake -G "Unix Makefiles" \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
 
-make -j ${ncpu} && make install
+make -j ${ncpu}
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

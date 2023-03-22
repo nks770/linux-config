@@ -37,6 +37,10 @@ if [ -z "${gdbm_v}" ] ; then
 fi
 
 case ${gdbm_v} in
+1.14.1) #2018-01-03
+   readline_ver=7.0 #2016-09-15
+   ncurses_ver=6.0  #2015-08-08
+   ;;
 1.19) #2020-12-23
    readline_ver=8.1 #2020-12-06
    ncurses_ver=6.2  #2020-02-12
@@ -46,8 +50,8 @@ case ${gdbm_v} in
    ncurses_ver=6.3    #2021-11-08
    ;;
 *)
-   readline_ver=8.2
-   ncurses_ver=6.4
+   echo "ERROR: Need review for gdbm ${1}"
+   exit 4
    ;;
 esac
 echo "Installing gdbm ${gdbm_v}..."
