@@ -57,6 +57,14 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+
+if [ "${bzip2_v}" == "1.0.7" ] ; then
+  minorpatch=7
+fi
+if [ "${bzip2_v}" == "1.0.8" ] ; then
+  minorpatch=8
+fi
+
 # This patch is mostly based on a Debian diff on the Makefile
 # https://packages.debian.org/sid/bzip2
 # It solves a couple of problems:
@@ -66,7 +74,9 @@ fi
 # bunzip2 and bzcat are just the same as bzip2
 # The Debian patch makes them hard links (ln)
 # I changed it to make them symlinks (ln -s -f)
+touch makefile.patch
 
+if [ ! -z "${minorpatch}" ] ; then
 cat << eof > makefile.patch
 --- a/Makefile
 +++ b/Makefile
@@ -75,7 +85,7 @@ cat << eof > makefile.patch
  # ------------------------------------------------------------------
  
 +somajor=1.0
-+sominor=\$(somajor).8
++sominor=\$(somajor).${minorpatch}
  SHELL=/bin/sh
  
  # To assist in cross-compiling
@@ -196,6 +206,7 @@ cat << eof > makefile.patch
  distclean: clean
  	rm -f manual.ps manual.html manual.pdf
 eof
+fi
 patch -p1 -b < makefile.patch
 
 if [ ${debug} -gt 0 ] ; then

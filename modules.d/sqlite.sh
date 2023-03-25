@@ -41,6 +41,10 @@ case ${sqlite_v} in
    sql_srcdir=sqlite-autoconf-3220000
    zlib_ver=1.2.11 # 2017-01-15
    ;;
+3.28.0) # 2019-04-16
+   sql_srcdir=sqlite-autoconf-3280000
+   zlib_ver=1.2.11 # 2017-01-15
+   ;;
 3.35.4) # 2021-04-02
    sql_srcdir=sqlite-autoconf-3350400
    zlib_ver=1.2.11 # 2017-01-15

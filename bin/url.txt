@@ -1,4 +1,5 @@
 # bz2
+bzip2-1.0.7.tar.gz=https://sourceware.org/pub/bzip2/bzip2-1.0.7.tar.gz
 bzip2-1.0.8.tar.gz=https://sourceware.org/pub/bzip2/bzip2-1.0.8.tar.gz
 
 # cmake
@@ -49,6 +50,7 @@ ffmpeg-5.1.2.tar.gz=https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.gz
 flac-1.3.3.tar.xz=https://ftp.osuosl.org/pub/xiph/releases/flac/flac-1.3.3.tar.xz
 
 # gdbm
+gdbm-1.18.1.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.18.1.tar.gz
 gdbm-1.19.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.19.tar.gz
 gdbm-1.23.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz
 
@@ -163,6 +165,7 @@ openjpeg-2.3.1.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2
 openjpeg-2.5.0.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.0.tar.gz
 
 # OpenSSL
+openssl-1.1.1c.tar.gz=https://www.openssl.org/source/openssl-1.1.1c.tar.gz
 openssl-1.1.1k.tar.gz=https://www.openssl.org/source/openssl-1.1.1k.tar.gz
 openssl-1.1.1n.tar.gz=https://www.openssl.org/source/openssl-1.1.1n.tar.gz
 openssl-1.1.1s.tar.gz=https://www.openssl.org/source/openssl-1.1.1s.tar.gz
@@ -209,6 +212,7 @@ rarlinux-x64-620.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-620.tar.gz
 rarlinux-x64-621.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-621.tar.gz
 
 # readline
+readline-7.0.tar.gz=http://ftp.gnu.org/gnu/readline/readline-7.0.tar.gz
 readline-8.1.tar.gz=http://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz
 readline-8.1.2.tar.gz=http://ftp.gnu.org/gnu/readline/readline-8.1.2.tar.gz
 readline-8.2.tar.gz=http://ftp.gnu.org/gnu/readline/readline-8.2.tar.gz
@@ -226,6 +230,7 @@ speex-1.2.0.tar.gz=http://downloads.us.xiph.org/releases/speex/speex-1.2.0.tar.g
 speex-1.2.1.tar.gz=http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz
 
 # sqlite
+sqlite-autoconf-3280000.tar.gz=https://sqlite.org/2019/sqlite-autoconf-3280000.tar.gz
 sqlite-autoconf-3350400.tar.gz=https://sqlite.org/2021/sqlite-autoconf-3350400.tar.gz
 sqlite-autoconf-3400000.tar.gz=https://sqlite.org/2022/sqlite-autoconf-3400000.tar.gz
 sqlite-autoconf-3400100.tar.gz=https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz
@@ -247,6 +252,7 @@ tiff-4.4.0.tar.gz=http://download.osgeo.org/libtiff/tiff-4.4.0.tar.gz
 twolame-0.4.0.tar.gz=https://phoenixnap.dl.sourceforge.net/project/twolame/twolame/0.4.0/twolame-0.4.0.tar.gz
 
 # util-linux
+util-linux-2.34.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.34/util-linux-2.34.tar.gz
 util-linux-2.36.2.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/util-linux-2.36.2.tar.gz
 util-linux-2.38.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.gz
 
@@ -280,6 +286,7 @@ xvidcore-1.3.6.tar.gz=https://downloads.xvid.com/downloads/xvidcore-1.3.6.tar.gz
 xvidcore-1.3.7.tar.gz=https://downloads.xvid.com/downloads/xvidcore-1.3.7.tar.gz
 
 # xz
+xz-5.2.4.tar.gz=https://tukaani.org/xz/xz-5.2.4.tar.gz
 xz-5.2.5.tar.gz=https://tukaani.org/xz/xz-5.2.5.tar.gz
 xz-5.2.9.tar.gz=https://tukaani.org/xz/xz-5.2.9.tar.gz
 xz-5.2.10.tar.gz=https://tukaani.org/xz/xz-5.2.10.tar.gz

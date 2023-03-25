@@ -40,14 +40,22 @@ case ${gdbm_v} in
 1.14.1) #2018-01-03
    readline_ver=7.0 #2016-09-15
    ncurses_ver=6.0  #2015-08-08
+   parseopt_patch=0
+   ;;
+1.18.1) #2018-10-27
+   readline_ver=7.0 #2016-09-15
+   ncurses_ver=6.0  #2015-08-08
+   parseopt_patch=1
    ;;
 1.19) #2020-12-23
    readline_ver=8.1 #2020-12-06
    ncurses_ver=6.2  #2020-02-12
+   parseopt_patch=0
    ;;
 1.23) #2022-02-04
    readline_ver=8.1.2 #2022-01-05
    ncurses_ver=6.3    #2021-11-08
+   parseopt_patch=0
    ;;
 *)
    echo "ERROR: Need review for gdbm ${1}"
@@ -72,6 +80,42 @@ fi
 
 tar xvfz ${pkg}/gdbm-${gdbm_v}.tar.gz
 cd ${tmp}/gdbm-${gdbm_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+# Patch to enable compilation with GCC 8
+# https://bugs.gentoo.org/705898
+if [ "${gdbm_v}" == "1.18.1" ] ; then
+
+cat << eof > parseopt.patch
+--- src/parseopt.c  2018-05-30 04:39:15.000000000 -0500
++++ src/parseopt.c  2023-03-21 23:42:41.797112817 -0500
+@@ -255,8 +255,6 @@
+ }
+eof
+echo -e ' \f' >> parseopt.patch
+cat << eof >> parseopt.patch
+ char *parseopt_program_name;
+-char *parseopt_program_doc;
+-char *parseopt_program_args;
+ const char *program_bug_address = "<" PACKAGE_BUGREPORT ">";
+ void (*parseopt_help_hook) (FILE *stream);
+eof
+echo -e ' \f' >> parseopt.patch
+
+patch -Z -b -p0 < parseopt.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
 
 config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat CPPFLAGS=-I/opt/readline-${readline_ver}/include"
 export LDFLAGS="-L/opt/readline-${readline_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib"

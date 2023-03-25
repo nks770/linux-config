@@ -41,6 +41,10 @@ case ${openssl_v} in
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
+1.1.1c) # 2019-05-28
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
 1.1.1k) # 2021-03-25
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
@@ -58,8 +62,8 @@ case ${openssl_v} in
    cert_error_warn=0
    ;;
 *)
-   zlib_ver=1.2.13
-   cert_error_warn=0
+   echo "ERROR: Review needed for openssl ${1}"
+   exit 4
    ;;
 esac
 
@@ -122,7 +126,7 @@ if [ ${run_tests} -gt 0 ] ; then
   make test
   if [ ${cert_error_warn} -gt 0 ]; then
     echo ''
-    echo 'NOTE: Test 80_teset_ssl_new.t fails due to a known expired certificate.'
+    echo 'NOTE: Test 80_test_ssl_new.t fails due to a known expired certificate.'
     # make test TESTS='test_ssl_new' V=1
   fi
   echo '>> Tests complete'
