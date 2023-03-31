@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Functions for detecting and building zlib
-echo 'Loading zlib...'
+# Functions for detecting and building flex
+echo 'Loading flex...'
 
-function zlibInstalled() {
+function flexInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then
   return 1
@@ -12,50 +12,63 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-# If modules is OK, then check zlib
-if [ ! -f ${MODULEPATH}/zlib/${1} ] ; then
+# If modules is OK, then check flex
+if [ ! -f ${MODULEPATH}/flex/${1} ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_zlib() {
-if zlibInstalled ${1}; then
-  echo "zlib ${1} is installed."
+function check_flex() {
+if flexInstalled ${1}; then
+  echo "flex ${1} is installed."
 else
-  build_zlib ${1}
+  build_flex ${1}
 fi
 }
 
-function build_zlib() {
+function build_flex() {
 
 # Get desired version number to install
-zlib_v=${1}
-if [ -z "${zlib_v}" ] ; then
-  zlib_v=1.2.13
+flex_v=${1}
+if [ -z "${flex_v}" ] ; then
+  flex_v=2.6.4
 fi
 
-echo "Installing zlib ${zlib_v}..."
+case ${flex_v} in
+2.6.4) #2017-05-06
+   m4_ver=1.4.18 #2016-12-31
+   ;;
+*)
+   echo "ERROR: Need review for flex ${1}"
+   exit 4
+   ;;
+esac
+echo "Installing flex ${flex_v}..."
 
 check_modules
+check_m4 ${m4_ver}
 module purge
+module load m4/${m4_ver}
 
-downloadPackage zlib-${zlib_v}.tar.gz
+downloadPackage flex-${flex_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/zlib-${zlib_v} ] ; then
-  rm -rf ${tmp}/zlib-${zlib_v}
+if [ -d ${tmp}/flex-${flex_v} ] ; then
+  rm -rf ${tmp}/flex-${flex_v}
 fi
 
-tar xvfz ${pkg}/zlib-${zlib_v}.tar.gz
-cd ${tmp}/zlib-${zlib_v}
+tar xvfz ${pkg}/flex-${flex_v}.tar.gz
+cd ${tmp}/flex-${flex_v}
 
-config="./configure --prefix=${opt}/zlib-${zlib_v}"
+config="./configure --prefix=${opt}/flex-${flex_v}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
+  echo ''
+  module list
   echo ''
   echo ${config}
   read k
@@ -79,8 +92,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make test
-  # Note 'make check' also works
+  make check
   echo '>> Tests complete'
   read k
 fi
@@ -99,20 +111,21 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-mkdir -pv ${MODULEPATH}/zlib
-cat << eof > ${MODULEPATH}/zlib/${zlib_v}
+mkdir -pv ${MODULEPATH}/flex
+cat << eof > ${MODULEPATH}/flex/${flex_v}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts zlib-${zlib_v} into your environment"
+   puts stderr "Puts flex-${flex_v} into your environment"
 }
 
-set VER ${zlib_v}
-set PKG ${opt}/zlib-\$VER
+set VER ${flex_v}
+set PKG ${opt}/flex-\$VER
 
-module-whatis   "Loads zlib-${zlib_v}"
-conflict zlib
+module-whatis   "Loads flex-${flex_v}"
+conflict flex
 
+prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
@@ -123,6 +136,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/zlib-${zlib_v}
+rm -rf ${tmp}/flex-${flex_v}
 
 }

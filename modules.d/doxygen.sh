@@ -45,8 +45,9 @@ case ${1} in
    python_ver=3.6.4 # 2017-12-19
   ;;
   1.8.16) # 2019-08-08
-   cmake_ver=3.15.2 # 2019-08-07
-   python_ver=3.7.4 # 2019-07-08
+   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   flex_ver=2.6.4    # 2017-05-06
   ;;
   *) # 2017-12-25
    echo "ERROR: Review needed for doxygen ${1}"
@@ -55,10 +56,12 @@ case ${1} in
 esac
 
 check_modules
+check_flex ${flex_ver}
 check_cmake ${cmake_ver}
 check_python ${python_ver}
 module purge
-module load cmake/${cmake_ver} \
+module load flex/${flex_ver} \
+            cmake/${cmake_ver} \
             Python/${python_ver}
 module list
 
@@ -71,12 +74,14 @@ if [ -d ${tmp}/${doxygen_srcdir} ] ; then
 fi
 
 tar xvfz ${pkg}/doxygen-${doxygen_v}.src.tar.gz
-cd ${tmp}/${doxygen_srcdir}
+mkdir -v ${tmp}/${doxygen_srcdir}/build
+cd ${tmp}/${doxygen_srcdir}/build
 
 if [ ${debug} -gt 0 ] ; then
-  ./configure --help
+  cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
   echo ''
   echo cmake -G \"Unix Makefiles\" \
+      -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
@@ -84,6 +89,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 cmake -G "Unix Makefiles" \
+      -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}

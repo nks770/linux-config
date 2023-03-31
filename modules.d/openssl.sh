@@ -45,6 +45,14 @@ case ${openssl_v} in
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
+1.1.1d) # 2019-09-10
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
+1.1.1i) # 2020-12-08
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
 1.1.1k) # 2021-03-25
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
@@ -85,6 +93,61 @@ fi
 
 tar xvfz ${pkg}/openssl-${openssl_v}.tar.gz
 cd ${tmp}/openssl-${openssl_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+# Patch to fix an issue in OpenSSL 1.1.1d with zlib, which causes
+# the test 20-test_enc.t to fail.  Apparently, "this filter was
+# lacking support to check if there's any more pending dzta,
+# which may result in the last zlib block being lost."
+# https://github.com/openssl/openssl/pull/9876
+# The below patch is copied from commit 6beb8b39ba8e4cb005c1fcd2586ba19e17f04b95
+if [ "${openssl_v}" == "1.1.1d" ] ; then
+cat << eof > c_zlib.patch
+--- crypto/comp/c_zlib.c        2019-09-10 08:13:07.000000000 -0500
++++ crypto/comp/c_zlib.c        2019-09-12 10:12:49.649139378 -0500
+@@ -598,6 +598,28 @@
+         BIO_copy_next_retry(b);
+         break;
+
++    case BIO_CTRL_WPENDING:
++        if (ctx->obuf == NULL)
++            return 0;
++
++        if (ctx->odone) {
++            ret = ctx->ocount;
++        } else {
++            ret = ctx->ocount;
++            if (ret == 0)
++                /* Unknown amount pending but we are not finished */
++                ret = 1;
++        }
++        if (ret == 0)
++            ret = BIO_ctrl(next, cmd, num, ptr);
++        break;
++
++    case BIO_CTRL_PENDING:
++        ret = ctx->zin.avail_in;
++        if (ret == 0)
++            ret = BIO_ctrl(next, cmd, num, ptr);
++        break;
++
+     default:
+         ret = BIO_ctrl(next, cmd, num, ptr);
+         break;
+eof
+patch -Z -b -p0 < c_zlib.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
 
 config="./config -v --prefix=${opt}/openssl-${openssl_v} \
 	    --openssldir=${opt}/openssl-${openssl_v}/etc/ssl \
@@ -127,7 +190,9 @@ if [ ${run_tests} -gt 0 ] ; then
   if [ ${cert_error_warn} -gt 0 ]; then
     echo ''
     echo 'NOTE: Test 80_test_ssl_new.t fails due to a known expired certificate.'
-    # make test TESTS='test_ssl_new' V=1
+    echo '      For more detailed info, try: `make test TESTS=test_ssl_new V=1`'
+    echo '      This produces a lot of text...'
+    # make TESTS='test_ssl_new' V=1 test
   fi
   echo '>> Tests complete'
   read k

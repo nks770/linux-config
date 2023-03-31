@@ -65,6 +65,20 @@ case ${python_v} in
    tcl_ver=8.6.13
    tk_ver=8.6.13
    ;;
+3.7.10) #2021-02-15
+   gdbm_ver=1.19        #2020-12-23
+   readline_ver=8.1     #2020-12-06
+   ncurses_ver=6.2      #2020-02-12
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.2.5         #2020-03-17
+   openssl_ver=1.1.1i   #2020-12-08
+   sqlite_ver=3.34.1    #2021-01-20
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.3       #2019-11-23
+   utillinux_ver=2.36.2 #2021-02-12
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
 3.9.4) #2021-04-04
    gdbm_ver=1.19        #2020-12-23
    readline_ver=8.1     #2020-12-06
@@ -170,6 +184,58 @@ fi
 
 tar xvfz ${pkg}/Python-${python_v}.tgz
 cd ${tmp}/Python-${python_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+# Patch to fix an issue where test_faulthandler hangs indefinitely
+# when Python is compiled with GCC10. This is caused by a compiler
+# feature called tail call optimization, causing the resulting code
+# to be an infinite loop.  This patch prevents tail call optimization
+# from being applied to this code segment.
+# https://github.com/python/cpython/pull/17467/files
+if [ "${python_v}" == "3.7.4" ] ; then
+cat << eof > faulthandler.patch
+--- Modules/faulthandler.c      2019-07-08 13:03:50.000000000 -0500
++++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0500
+@@ -1094,18 +1094,15 @@
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+ #define FAULTHANDLER_STACK_OVERFLOW
+
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-uintptr_t
++static uintptr_t
+ stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     uintptr_t sp = (uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+eof
+patch -Z -b -p0 < faulthandler.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
 
 config="./configure --prefix=${opt}/Python-${python_v} \
             --enable-shared \
