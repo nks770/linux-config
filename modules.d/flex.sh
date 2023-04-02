@@ -40,6 +40,8 @@ case ${flex_v} in
 2.6.4) #2017-05-06
    m4_ver=1.4.18       # 2016-12-31
    help2man_ver=1.47.4 # 2016-05-09
+#   bison_ver=3.0.4     # 2015-01-23 bison testsuite requires flex, but bison is not a strict prerequisite for flex
+   texinfo_ver=6.3     # 2016-09-10
    ;;
 *)
    echo "ERROR: Need review for flex ${1}"
@@ -51,9 +53,13 @@ echo "Installing flex ${flex_v}..."
 check_modules
 check_m4 ${m4_ver}
 check_help2man ${help2man_ver}
+#check_bison ${bison_ver}
+check_texinfo ${texinfo_ver}
 module purge
 module load m4/${m4_ver}
 module load help2man/${help2man_ver}
+#module load bison/${bison_ver}
+module load texinfo/${texinfo_ver}
 
 downloadPackage flex-${flex_v}.tar.gz
 
@@ -134,7 +140,6 @@ prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
 prepend-path LD_LIBRARY_PATH \$PKG/lib
 prepend-path MANPATH \$PKG/share/man
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
 
