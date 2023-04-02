@@ -1,6 +1,7 @@
 # bison
 # https://www.gnu.org/software/bison/
 bison-3.0.4.tar.gz=https://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.gz
+bison-3.4.1.tar.gz=https://ftp.gnu.org/gnu/bison/bison-3.4.1.tar.gz
 
 # bz2
 bzip2-1.0.7.tar.gz=https://sourceware.org/pub/bzip2/bzip2-1.0.7.tar.gz
@@ -149,6 +150,11 @@ libvpx-1.12.0.tar.gz=https://github.com/webmproject/libvpx/archive/refs/tags/v1.
 # https://chromium.googlesource.com/webm/libwebp/
 libwebp-1.0.3.tar.gz=https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.0.3.tar.gz
 libwebp-1.2.4.tar.gz=https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-1.2.4.tar.gz
+
+# libxml2
+# https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
+libxml2-2.9.9.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz
+libxml2-2.9.11.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.11.tar.gz
 
 # m4
 # https://www.gnu.org/software/m4/

@@ -50,7 +50,8 @@ case ${1} in
    yasm_ver=1.3.0     # 2014-08-10
    cmake_ver=3.15.5   # 2019-10-30
    doxygen_ver=1.8.16 # 2019-08-08
-   python_ver=3.8.0   # 2019-10-14
+#   python_ver=3.8.0   # 2019-10-14
+   python_ver=3.7.10  # 2021-02-15 -- to be compatible with doxygen 1.8.16
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    yasm_ver=1.3.0
@@ -66,13 +67,6 @@ check_cmake ${cmake_ver}
 check_doxygen ${doxygen_ver}
 check_python ${python_ver}
 
-module purge
-module load yasm/${yasm_ver} \
-            cmake/${cmake_ver} \
-            doxygen/${doxygen_ver} \
-            Python/${python_ver}
-module list
-
 downloadPackage libaom-${libaom_v}.tar.gz
 
 cd ${tmp}
@@ -84,20 +78,27 @@ if [ -d ${tmp}/${libaom_srcdir}_build ] ; then
   rm -rf ${tmp}/${libaom_srcdir}_build
 fi
 
-mkdir -pv ${tmp}/${libaom_srcdir} ${tmp}/${libaom_srcdir}_build
+mkdir -pv ${tmp}/${libaom_srcdir}/build
 cd ${tmp}/${libaom_srcdir}
 tar xvfz ${pkg}/libaom-${libaom_v}.tar.gz
-cd ${tmp}/${libaom_srcdir}_build
+cd ${tmp}/${libaom_srcdir}/build
+
+module purge
+module load yasm/${yasm_ver}
+module load cmake/${cmake_ver}
+module load doxygen/${doxygen_ver}
+module load Python/${python_ver}
+module list
 
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
-  echo cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ../${libaom_srcdir}
+  echo cmake -L -G \"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
   echo ''
   read k
 fi
 
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ../${libaom_srcdir}
+cmake -L -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'

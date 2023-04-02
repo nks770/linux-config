@@ -48,6 +48,9 @@ case ${1} in
    cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
    python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    flex_ver=2.6.4    # 2017-05-06
+   bison_ver=3.4.1   # 2019-05-22
+#   libxml2_ver=2.9.9 # 2019-01-03
+   libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
   ;;
   *) # 2017-12-25
    echo "ERROR: Review needed for doxygen ${1}"
@@ -59,11 +62,14 @@ check_modules
 check_flex ${flex_ver}
 check_cmake ${cmake_ver}
 check_python ${python_ver}
+check_bison ${bison_ver}
+check_libxml2 ${libxml2_ver} # Needed only for testsuite
 module purge
 module load flex/${flex_ver} \
             cmake/${cmake_ver} \
-            Python/${python_ver}
-module list
+            Python/${python_ver} \
+	    bison/${bison_ver} \
+	    libxml2/${libxml2_ver}
 
 downloadPackage doxygen-${doxygen_v}.src.tar.gz
 
@@ -78,23 +84,31 @@ mkdir -v ${tmp}/${doxygen_srcdir}/build
 cd ${tmp}/${doxygen_srcdir}/build
 
 if [ ${debug} -gt 0 ] ; then
-  cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
+  #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
   echo ''
-  echo cmake -G \"Unix Makefiles\" \
+  module list
+  echo ''
+  echo cmake -L -G \"Unix Makefiles\" \
       -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
-      -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
+      -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v} ..
   read k
 fi
 
-cmake -G "Unix Makefiles" \
+cmake -L -G "Unix Makefiles" \
       -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
-      -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v}
+      -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v} ..
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
 
 make -j ${ncpu}
+
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
@@ -104,7 +118,13 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make check
+#  make test
+  make tests
+  if [ "${doxygen_v}" == "1.8.16" ] ; then
+    echo ''
+    echo 'NOTE: One test, 012_cite.dox, is known to fail.'
+  fi
+  echo ''
   echo '>> Tests complete'
   read k
 fi
@@ -137,6 +157,7 @@ module-whatis   "Loads doxygen-${doxygen_v}"
 conflict doxygen
 
 prepend-path PATH \$PKG/bin
+prepend-path MANPATH \$PKG/share/man
 
 eof
 

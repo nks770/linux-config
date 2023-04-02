@@ -40,6 +40,11 @@ case ${bison_v} in
 3.0.4) #2015-01-23
 #   m4_ver=1.4.17 # 2013-09-22
    m4_ver=1.4.18  # Using m4 1.4.18 because 1.4.17 has some testsuite failures
+   flex_ver=2.5.39 # 2014-03-26
+   ;;
+3.4.1) #2019-05-22
+   m4_ver=1.4.18  # 2016-12-31
+   flex_ver=2.6.4 # 2017-05-06
    ;;
 *)
    echo "ERROR: Need review for bison ${1}"
@@ -50,8 +55,10 @@ echo "Installing bison ${bison_v}..."
 
 check_modules
 check_m4 ${m4_ver}
+check_flex ${flex_ver}
 module purge
 module load m4/${m4_ver}
+module load flex/${flex_ver}
 
 downloadPackage bison-${bison_v}.tar.gz
 
@@ -179,12 +186,8 @@ set PKG ${opt}/bison-\$VER
 module-whatis   "Loads bison-${bison_v}"
 conflict bison
 
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
+prepend-path PATH \$PKG/bin
 prepend-path MANPATH \$PKG/share/man
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
 
