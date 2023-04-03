@@ -79,6 +79,20 @@ case ${python_v} in
    tcl_ver=8.6.13
    tk_ver=8.6.13
    ;;
+3.8.0) #2019-10-14
+   gdbm_ver=1.18.1      #2018-10-27
+   readline_ver=7.0     #2016-09-15
+   ncurses_ver=6.0      #2015-08-08
+   bzip2_ver=1.0.8      #2019-07-13
+   xz_ver=5.2.4         #2018-04-29
+   openssl_ver=1.1.1d   #2019-09-10
+   sqlite_ver=3.30.1    #2019-10-10
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.2.1     #2014-11-12
+   utillinux_ver=2.34   #2019-06-14
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   ;;
 3.9.4) #2021-04-04
    gdbm_ver=1.19        #2020-12-23
    readline_ver=8.1     #2020-12-06
@@ -201,6 +215,47 @@ cat << eof > faulthandler.patch
 --- Modules/faulthandler.c      2019-07-08 13:03:50.000000000 -0500
 +++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0500
 @@ -1094,18 +1094,15 @@
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+ #define FAULTHANDLER_STACK_OVERFLOW
+
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-uintptr_t
++static uintptr_t
+ stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     uintptr_t sp = (uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+eof
+patch -Z -b -p0 < faulthandler.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+if [ "${python_v}" == "3.8.0" ] ; then
+cat << eof > faulthandler.patch
+--- Modules/faulthandler.b      2019-10-14 08:34:47.000000000 -0500
++++ Modules/faulthandler.c      2023-04-02 18:05:40.932981391 -0500
+@@ -1097,18 +1097,15 @@
  #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
  #define FAULTHANDLER_STACK_OVERFLOW
 

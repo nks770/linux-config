@@ -48,10 +48,12 @@ case ${1} in
   ;;
   1.0.0-errata1-avif) #Thu Dec 12 10:50:24 2019 -0800
    yasm_ver=1.3.0     # 2014-08-10
-   cmake_ver=3.15.5   # 2019-10-30
    doxygen_ver=1.8.16 # 2019-08-08
+#   cmake_ver=3.15.5   # 2019-10-30
 #   python_ver=3.8.0   # 2019-10-14
-   python_ver=3.7.10  # 2021-02-15 -- to be compatible with doxygen 1.8.16
+   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   libdir=lib # Directory where installed libraries go
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    yasm_ver=1.3.0
@@ -115,11 +117,14 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-if [ ${run_tests} -gt 0 ] ; then
-  make test
-  echo '>> Tests complete'
-  read k
-fi
+# Disabling the unit tests for now
+# Running 'make runtests' downloads test data from the internet
+# and then takes a long time to run them all
+#if [ ${run_tests} -gt 0 ] ; then
+#  make runtests
+#  echo '>> Tests complete'
+#  read k
+#fi
 
 make install
 
@@ -153,13 +158,12 @@ prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib64
-prepend-path PKG_CONFIG_PATH \$PKG/lib64/pkgconfig
+prepend-path LD_LIBRARY_PATH \$PKG/${libdir}
+prepend-path PKG_CONFIG_PATH \$PKG/${libdir}/pkgconfig
 
 eof
 
 cd ${root}
 rm -rf ${tmp}/${libaom_srcdir}
-rm -rf ${tmp}/${libaom_srcdir}_build
 
 }

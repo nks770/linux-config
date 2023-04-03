@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libass
+echo 'Loading libass...'
 
 function libassInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -40,18 +41,18 @@ echo "Installing libass ${libass_v}..."
 
 case ${1} in
   0.14.0) # Oct 31, 2017
-   libass_nasm_ver=2.13.03
+   nasm_ver=2.13.03
   ;;
   0.16.0) # May 12, 2022
-   libass_nasm_ver=2.15.05 # 2020-08-28
+   nasm_ver=2.15.05 # 2020-08-28
   ;;
 esac
 
 check_modules
-check_nasm ${libass_nasm_ver}
+check_nasm ${nasm_ver}
 
 module purge
-module load nasm/${libass_nasm_ver}
+module load nasm/${nasm_ver}
 module list
 
 downloadPackage libass-${libass_v}.tar.gz
@@ -66,11 +67,37 @@ cd ${tmp}
 tar xvfz ${pkg}/libass-${libass_v}.tar.gz
 cd ${tmp}/${libass_srcdir}
 
-./configure --prefix=${opt}/libass-${libass_v}
-make -j ${ncpu} && make install
+config="./configure --prefix=${opt}/libass-${libass_v}"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
 fi
 
 # Create the environment module
