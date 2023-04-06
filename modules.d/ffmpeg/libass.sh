@@ -40,19 +40,23 @@ libass_srcdir=libass-${libass_v}
 echo "Installing libass ${libass_v}..."
 
 case ${1} in
-  0.14.0) # Oct 31, 2017
-   nasm_ver=2.13.03
+  0.14.0) # 2017-10-31
+   nasm_ver=2.13.02    # 2017-11-29
+   freetype_ver=2.8.1  # 2017-09-16
   ;;
-  0.16.0) # May 12, 2022
-   nasm_ver=2.15.05 # 2020-08-28
+  0.16.0) # 2022-05-12
+   nasm_ver=2.15.05     # 2020-08-28
+   freetype_ver=2.12.1  # 2022-05-01
   ;;
 esac
 
 check_modules
 check_nasm ${nasm_ver}
+check_freetype_harfbuzz ${freetype_ver}
 
 module purge
 module load nasm/${nasm_ver}
+module load freetype/${freetype_ver}
 module list
 
 downloadPackage libass-${libass_v}.tar.gz
@@ -97,6 +101,15 @@ fi
 if [ ${run_tests} -gt 0 ] ; then
   make check
   echo '>> Tests complete'
+  read k
+fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
   read k
 fi
 

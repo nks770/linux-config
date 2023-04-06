@@ -95,12 +95,16 @@ module list
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
-  echo cmake -L -G \"Unix Makefiles\" -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
+  echo cmake -L -G \"Unix Makefiles\" \
+       -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
+       -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
   echo ''
   read k
 fi
 
-cmake -L -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
+cmake -L -G "Unix Makefiles" \
+-DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
+-DCMAKE_INSTALL_PREFIX=${opt}/libaom-${libaom_v} -DBUILD_SHARED_LIBS=on ..
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'

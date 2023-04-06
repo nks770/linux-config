@@ -58,6 +58,9 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 
+if [ "${bzip2_v}" == "1.0.6" ] ; then
+  minorpatch=6
+fi
 if [ "${bzip2_v}" == "1.0.7" ] ; then
   minorpatch=7
 fi

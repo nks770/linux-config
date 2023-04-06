@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building LAME
+echo 'Loading lame...'
 
 function lameInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -54,11 +55,46 @@ cd ${tmp}
 tar xvfz ${pkg}/lame-${lame_v}.tar.gz
 cd ${tmp}/${lame_srcdir}
 
-./configure --prefix=${opt}/lame-${lame_v}
-make -j ${ncpu} && make install
+config="./configure --prefix=${opt}/lame-${lame_v}"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
