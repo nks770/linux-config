@@ -41,23 +41,26 @@ echo "Installing libass ${libass_v}..."
 
 case ${1} in
   0.14.0) # 2017-10-31
-   nasm_ver=2.13.02    # 2017-11-29
-   freetype_ver=2.8.1  # 2017-09-16
+   nasm_ver=2.13.02      # 2017-11-29
+   freetype_ver=2.8.1    # 2017-09-16
+   fribidi_ver=0.19.7    # 2016-08-06
+   fontconfig_ver=2.12.6 # 2017-09-21
   ;;
   0.16.0) # 2022-05-12
    nasm_ver=2.15.05     # 2020-08-28
    freetype_ver=2.12.1  # 2022-05-01
   ;;
+  *)
+   echo "ERROR: Need review for libass ${1}"
+   exit 4
+   ;;
 esac
 
 check_modules
 check_nasm ${nasm_ver}
 check_freetype_harfbuzz ${freetype_ver}
-
-module purge
-module load nasm/${nasm_ver}
-module load freetype/${freetype_ver}
-module list
+check_fribidi ${fribidi_ver}
+check_fontconfig ${fontconfig_ver}
 
 downloadPackage libass-${libass_v}.tar.gz
 
@@ -70,6 +73,12 @@ fi
 cd ${tmp}
 tar xvfz ${pkg}/libass-${libass_v}.tar.gz
 cd ${tmp}/${libass_srcdir}
+
+module purge
+module load nasm/${nasm_ver}
+module load freetype/${freetype_ver}
+module load fribidi/${fribidi_ver}
+module load fontconfig/${fontconfig_ver}
 
 config="./configure --prefix=${opt}/libass-${libass_v}"
 
@@ -130,6 +139,12 @@ set PKG ${opt}/libass-\$VER
 
 module-whatis   "Loads libass-${libass_v}"
 conflict libass
+module load freetype/${freetype_ver}
+module load fribidi/${fribidi_ver}
+module load fontconfig/${fontconfig_ver}
+prereq freetype/${freetype_ver}
+prereq fribidi/${fribidi_ver}
+prereq fontconfig/${fontconfig_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

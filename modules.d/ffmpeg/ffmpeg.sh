@@ -44,10 +44,10 @@ case ${1} in
   4.2.2) # 2019-12-31 23:58
    nasm_ver=2.14.02               # 2018-12-26
    libaom_ver=1.0.0-errata1-avif  # 2019-12-12
-   libass_ver=0.14.0       # 2017-10-31
-   ffmpeg_lame_ver=3.100
-   ffmpeg_xvidcore_ver=1.3.6
-   ffmpeg_libbluray_ver=1.1.2
+   libass_ver=0.14.0              # 2017-10-31
+   ffmpeg_lame_ver=3.100          # 2017-10-13
+   ffmpeg_xvidcore_ver=1.3.6      # 2019-12-08
+   ffmpeg_libbluray_ver=1.1.2     # 2019-06-07
    ffmpeg_fdkaac_ver=2.0.1
    ffmpeg_x264_ver=20191125
    ffmpeg_x265_ver=3.2.1      # Oct 22, 2019

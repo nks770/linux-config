@@ -39,9 +39,20 @@ xvidcore_srcdir=xvidcore
 
 echo "Installing xvidcore ${xvidcore_v}..."
 
+case ${1} in
+  1.3.6) # 2019-12-08
+#   nasm_ver=2.14.02  # 2018-12-26
+   yasm_ver=1.3.0    # 2014-08-10
+  ;;
+  *)
+   echo "ERROR: Need review for xvidcore ${1}"
+   exit 4
+   ;;
+esac
+
 check_modules
-module purge
-module list
+#check_nasm ${nasm_ver}
+check_yasm ${yasm_ver}
 
 downloadPackage xvidcore-${xvidcore_v}.tar.gz
 
@@ -56,6 +67,10 @@ tar xvfz ${pkg}/xvidcore-${xvidcore_v}.tar.gz
 cd ${tmp}/${xvidcore_srcdir}/build/generic
 
 config="./configure --prefix=${opt}/xvidcore-${xvidcore_v}"
+
+module purge
+#module load nasm/${nasm_ver}
+module load yasm/${yasm_ver}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

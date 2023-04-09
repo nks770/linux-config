@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Functions for detecting and building LAME
-echo 'Loading lame...'
+# Functions for detecting and building fribidi
+echo 'Loading fribidi...'
 
-function lameInstalled() {
+function fribidiInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then
   return 1
@@ -12,55 +12,50 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-# If modules is OK, then check lame
-if [ ! -f ${MODULEPATH}/lame/${1} ] ; then
+# If modules is OK, then check fribidi
+if [ ! -f ${MODULEPATH}/fribidi/${1} ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_lame() {
-if lameInstalled ${1}; then
-  echo "lame ${1} is installed."
+function check_fribidi() {
+if fribidiInstalled ${1}; then
+  echo "fribidi ${1} is installed."
 else
-  build_lame ${1}
+  build_fribidi ${1}
 fi
 }
 
-function build_lame() {
+function build_fribidi() {
 
 # Get desired version number to install
-lame_v=${1}
-if [ -z "${lame_v}" ] ; then
-  lame_v=3.100
+fribidi_v=${1}
+if [ -z "${fribidi_v}" ] ; then
+  fribidi_v=1.2.13
 fi
-lame_srcdir=lame-${lame_v}
 
-echo "Installing lame ${lame_v}..."
+echo "Installing fribidi ${fribidi_v}..."
 
 check_modules
 module purge
-module list
 
-downloadPackage lame-${lame_v}.tar.gz
+downloadPackage fribidi-${fribidi_v}.tar.bz2
 
 cd ${tmp}
 
-if [ -d ${tmp}/${lame_srcdir} ] ; then
-  rm -rf ${tmp}/${lame_srcdir}
+if [ -d ${tmp}/fribidi-${fribidi_v} ] ; then
+  rm -rf ${tmp}/fribidi-${fribidi_v}
 fi
 
-cd ${tmp}
-tar xvfz ${pkg}/lame-${lame_v}.tar.gz
-cd ${tmp}/${lame_srcdir}
+tar xvfj ${pkg}/fribidi-${fribidi_v}.tar.bz2
+cd ${tmp}/fribidi-${fribidi_v}
 
-config="./configure --prefix=${opt}/lame-${lame_v}"
+config="./configure --prefix=${opt}/fribidi-${fribidi_v}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo ''
-  module list
   echo ''
   echo ${config}
   read k
@@ -72,6 +67,7 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
   read k
 fi
+
 make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
@@ -83,12 +79,13 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make test
+  make check
   echo '>> Tests complete'
   read k
 fi
 
 make install
+
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
@@ -101,19 +98,19 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-mkdir -pv ${MODULEPATH}/lame
-cat << eof > ${MODULEPATH}/lame/${lame_v}
+mkdir -pv ${MODULEPATH}/fribidi
+cat << eof > ${MODULEPATH}/fribidi/${fribidi_v}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts lame-${lame_v} into your environment"
+   puts stderr "Puts fribidi-${fribidi_v} into your environment"
 }
 
-set VER ${lame_v}
-set PKG ${opt}/lame-\$VER
+set VER ${fribidi_v}
+set PKG ${opt}/fribidi-\$VER
 
-module-whatis   "Loads lame-${lame_v}"
-conflict lame
+module-whatis   "Loads fribidi-${fribidi_v}"
+conflict fribidi
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
@@ -121,10 +118,11 @@ prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
 prepend-path LD_LIBRARY_PATH \$PKG/lib
 prepend-path MANPATH \$PKG/share/man
+prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
 
 cd ${root}
-rm -rf ${tmp}/${lame_srcdir}
+rm -rf ${tmp}/fribidi-${fribidi_v}
 
 }

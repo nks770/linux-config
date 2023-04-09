@@ -39,9 +39,20 @@ libbluray_srcdir=libbluray-${libbluray_v}
 
 echo "Installing libbluray ${libbluray_v}..."
 
+case ${1} in
+  1.1.2) # 2019-06-07
+   libxml2_ver=2.9.9   # 2019-01-03
+   freetype_ver=2.10.0 # 2019-03-15
+  ;;
+  *)
+   echo "ERROR: Need review for libbluray ${1}"
+   exit 4
+   ;;
+esac
+
 check_modules
-module purge
-module list
+check_libxml2 ${libxml2_ver}
+check_freetype_harfbuzz ${freetype_ver}
 
 downloadPackage libbluray-${libbluray_v}.tar.bz2
 
@@ -56,6 +67,10 @@ tar xvfj ${pkg}/libbluray-${libbluray_v}.tar.bz2
 cd ${tmp}/${libbluray_srcdir}
 
 config="./configure --prefix=${opt}/libbluray-${libbluray_v}"
+
+module purge
+module load libxml2/${libxml2_ver}
+module load freetype/${freetype_ver}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
