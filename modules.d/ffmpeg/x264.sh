@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building x264
+echo 'Loading x264...'
 
 function x264Installed() {
 # Cannot evaulate if we dont have modules installed
@@ -40,20 +41,20 @@ echo "Installing x264 ${x264_v}..."
 case ${1} in
   20191125)
    x264_srcdir=x264-1771b556ee45207f8711744ccbd5d42a3949b14c
-   x264_nasm_ver=2.14.02
+   x264_nasm_ver=2.14.02 # 2018-12-26
   ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
-   x264_nasm_ver=2.14.02 # 2018-12-26 05:46
+   x264_nasm_ver=2.14.02 # 2018-12-26
   ;;
+  *)
+   echo "ERROR: Need review for x264 ${1}"
+   exit 4
+   ;;
 esac
 
 check_modules
 check_nasm ${x264_nasm_ver}
-
-module purge
-module load nasm/${x264_nasm_ver}
-module list
 
 downloadPackage x264-${x264_v}.tar.gz
 
@@ -67,13 +68,56 @@ cd ${tmp}
 tar xvfz ${pkg}/x264-${x264_v}.tar.gz
 cd ${tmp}/${x264_srcdir}
 
-./configure --prefix=${opt}/x264-${x264_v} \
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+config="./configure --prefix=${opt}/x264-${x264_v} \
             --enable-shared \
-            --enable-static
-make -j ${ncpu} && make install
+            --enable-static"
+module purge
+module load nasm/${x264_nasm_ver}
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+# x264 does not have any test suite
+#if [ ${run_tests} -gt 0 ] ; then
+#  make check
+#  echo '>> Tests complete'
+#  read k
+#fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

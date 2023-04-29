@@ -28,7 +28,7 @@ fi
 }
 
 function build_x265() {
-
+exit 4
 # Get desired version number to install
 x265_v=${1}
 if [ -z "${x265_v}" ] ; then

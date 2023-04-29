@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building the Fraunhofer FDK AAC codec
+echo 'Loading fdk-aac...'
 
 function fdkaacInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -54,15 +55,56 @@ cd ${tmp}
 tar xvfz ${pkg}/fdk-aac-${fdkaac_v}.tar.gz
 cd ${tmp}/${fdkaac_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 if [ ! -f configure ] ; then
 ./autogen.sh
 fi
 
-./configure --prefix=${opt}/fdk-aac-${fdkaac_v}
-make -j ${ncpu} && make install
+config="./configure --prefix=${opt}/fdk-aac-${fdkaac_v}"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+# fdk-aac does not have any test suite
+#if [ ${run_tests} -gt 0 ] ; then
+#  make check
+#  echo '>> Tests complete'
+#  read k
+#fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

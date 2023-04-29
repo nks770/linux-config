@@ -48,8 +48,8 @@ case ${1} in
    ffmpeg_lame_ver=3.100          # 2017-10-13
    ffmpeg_xvidcore_ver=1.3.6      # 2019-12-08
    ffmpeg_libbluray_ver=1.1.2     # 2019-06-07
-   ffmpeg_fdkaac_ver=2.0.1
-   ffmpeg_x264_ver=20191125
+   ffmpeg_fdkaac_ver=2.0.1        # 2019-10-08
+   ffmpeg_x264_ver=20191125       # 2019-11-25
    ffmpeg_x265_ver=3.2.1      # Oct 22, 2019
    ffmpeg_libogg_ver=1.3.4
    ffmpeg_libvorbis_ver=1.3.7
