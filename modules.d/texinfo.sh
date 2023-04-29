@@ -40,11 +40,20 @@ case ${texinfo_v} in
 6.3) # 2016-09-10
    ncurses_ver=6.0 # 2015-08-08
    ;;
+7.0) # 2022-11-07
+   ncurses_ver=6.3 # 2021-11-08
+   ;;
 *)
    echo "ERROR: Need review for texinfo ${1}"
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  ncurses_ver=${global_ncurses}
+fi
+
 echo "Installing texinfo ${texinfo_v}..."
 
 check_modules

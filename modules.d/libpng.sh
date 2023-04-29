@@ -51,6 +51,12 @@ case ${libpng_v} in
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  zlib_ver=${global_zlib}
+fi
+
 echo "Installing libpng ${libpng_v}..."
 
 check_modules

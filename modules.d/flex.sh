@@ -48,6 +48,14 @@ case ${flex_v} in
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  m4_ver=${global_m4}
+  help2man_ver=${global_help2man}
+  texinfo_ver=${global_texinfo}
+fi
+
 echo "Installing flex ${flex_v}..."
 
 check_modules

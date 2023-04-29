@@ -50,11 +50,22 @@ case ${bison_v} in
    m4_ver=1.4.18  # 2016-12-31
    flex_ver=2.6.4 # 2017-05-06
    ;;
+3.8.2) #2021-09-25
+   m4_ver=1.4.19  # 2021-05-28
+   flex_ver=2.6.4 # 2017-05-06
+   ;;
 *)
    echo "ERROR: Need review for bison ${1}"
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  m4_ver=${global_m4}
+  flex_ver=${global_flex}
+fi
+
 echo "Installing bison ${bison_v}..."
 
 check_modules

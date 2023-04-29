@@ -10,9 +10,21 @@ run_tests=1
 dependency_strategy=optimized
 
 # Global dependency versions (for optimized strategy)
-global_ncurses=6.4
-global_openssl=1.1.1t
-global_readline=8.2
+global_bison=3.8.2      # 2021-09-25
+global_bzip2=1.0.8      # 2019-07-13
+#global_cmake=3.26.3    # 2023-04-04
+global_flex=2.6.4       # 2017-05-06
+#global_gdbm=1.23        # 2022-02-04
+global_help2man=1.49.3  # 2022-12-15
+global_m4=1.4.19        # 2021-05-28
+global_ncurses=6.4      # 2022-12-31
+global_openssl=1.1.1t   # 2023-02-07
+global_readline=8.2     # 2022-09-26
+global_sqlite=3.41.2    # 2023-03-22
+global_texinfo=7.0      # 2022-11-07
+global_utillinux=2.38.1 # 2022-08-04
+global_xz=5.4.2         # 2023-03-18
+global_zlib=1.2.13      # 2022-10-12
 
 ncpu=$(cat /proc/cpuinfo | grep name | wc -l)
 

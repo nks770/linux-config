@@ -36,6 +36,9 @@ if [ -z "${python_v}" ] ; then
   python_v=3.9.4
 fi
 
+curses_failure=0
+httlib_failure=0
+
 case ${python_v} in
 3.6.5) # 2018-03-28
    gdbm_ver=1.14.1      #2018-01-03
@@ -192,8 +195,15 @@ esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  readline_ver=${global_readline}
+  bzip2_ver=${global_bzip2}
+#  gdbm_ver=${global_gdbm}
   ncurses_ver=${global_ncurses}
+  openssl_ver=${global_openssl}
+  readline_ver=${global_readline}
+  sqlite_ver=${global_sqlite}
+  utillinux_ver=${global_utillinux}
+  xz_ver=${global_xz}
+  zlib_ver=${global_zlib}
 fi
 
 echo "Installing Python ${python_v}..."

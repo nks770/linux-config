@@ -37,8 +37,6 @@ if [ -z "${libaom_v}" ] ; then
 fi
 libaom_srcdir=libaom-${libaom_v}
 
-echo "Installing libaom ${libaom_v}..."
-
 case ${1} in
   1.0.0)              #Mon Jun 25 07:54:59 2018 -0700
    yasm_ver=1.3.0     # 2014-08-10
@@ -61,7 +59,18 @@ case ${1} in
    doxygen_ver=1.9.5  # 2022-08-26
    python_ver=3.10.7  # 2022-09-06
   ;;
+  *)
+   echo "ERROR: Review needed for libaom ${1}"
+   exit 4 # Please review
+  ;;
 esac
+
+## Optimized dependency strategy
+#if [ "${dependency_strategy}" == "optimized" ] ; then
+#  cmake_ver=${global_zlib}
+#fi
+
+echo "Installing libaom ${libaom_v}..."
 
 check_modules
 check_yasm ${yasm_ver}

@@ -54,6 +54,13 @@ case ${libxml2_v} in
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  xz_ver=${global_xz}
+  zlib_ver=${global_zlib}
+fi
+
 echo "Installing libxml2 ${libxml2_v}..."
 
 check_modules

@@ -69,15 +69,24 @@ case ${sqlite_v} in
    sql_srcdir=sqlite-autoconf-3400100
    zlib_ver=1.2.13 # 2022-10-12
    ;;
-3.41.0)
+3.41.0) # 2023-02-21
    sql_srcdir=sqlite-autoconf-3410000
-   zlib_ver=1.2.13
+   zlib_ver=1.2.13 # 2022-10-12
+   ;;
+3.41.2) # 2023-03-22
+   sql_srcdir=sqlite-autoconf-3410200
+   zlib_ver=1.2.13 # 2022-10-12
    ;;
 *)
    sql_srcdir=unknown
    zlib_ver=1.2.13
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  zlib_ver=${global_zlib}
+fi
 
 echo "Installing sqlite ${sqlite_v}..."
 

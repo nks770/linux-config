@@ -36,8 +36,6 @@ if [ -z "${x265_v}" ] ; then
   x265_v=3.2.1
 fi
 
-echo "Installing x265 ${x265_v}..."
-
 case ${1} in
   3.2.1) # Oct 22, 2019
    cmake_ver=3.14.7 # 2019-10-02 10:48
@@ -52,6 +50,14 @@ case ${1} in
    exit 4
    ;;
 esac
+
+## Optimized dependency strategy
+#if [ "${dependency_strategy}" == "optimized" ] ; then
+#  cmake_ver=${global_cmake}
+#fi
+
+echo "Installing x265 ${x265_v}..."
+
 x265_srcdir=x265-${x265_v}
 
 check_modules

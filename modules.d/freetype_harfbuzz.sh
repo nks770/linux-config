@@ -63,6 +63,12 @@ case ${freetype_v} in
    ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  bzip2_ver=${global_bzip2}
+  zlib_ver=${global_zlib}
+fi
+
 ############
 # freetype #
 ############

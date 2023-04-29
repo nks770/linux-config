@@ -79,6 +79,11 @@ case ${openssl_v} in
    ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  zlib_ver=${global_zlib}
+fi
+
 echo "Installing OpenSSL ${openssl_v}..."
 
 check_modules
@@ -161,9 +166,11 @@ if [ ${debug} -gt 0 ] ; then
   ./config -h
   echo ''
   echo ${config}
-  read k
+  echo ''
   module list
   echo zlib: $(pkg-config --libs zlib)
+  echo ''
+  read k
 fi
 
 ${config}

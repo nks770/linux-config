@@ -37,8 +37,6 @@ if [ -z "${doxygen_v}" ] ; then
 fi
 doxygen_srcdir=doxygen-${doxygen_v}
 
-echo "Installing doxygen ${doxygen_v}..."
-
 case ${1} in
   1.8.14) # 2017-12-25
    cmake_ver=3.10.1 # 2017-12-14
@@ -69,6 +67,15 @@ case ${1} in
    exit 4 # Please review
   ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  bison_ver=${global_bison}
+#  cmake_ver=${global_cmake}
+  flex_ver=${global_flex}
+fi
+
+echo "Installing Doxygen ${doxygen_v}..."
 
 check_modules
 check_flex ${flex_ver}

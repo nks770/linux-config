@@ -36,10 +36,31 @@ if [ -z "${m4_v}" ] ; then
   m4_v=1.4.18
 fi
 
+case ${m4_v} in
+1.4.17) #2013-09-22
+   texinfo_ver=5.1  # 2013-03-12
+   ;;
+1.4.18) #2016-12-31
+   texinfo_ver=6.3  # 2016-09-10
+   ;;
+1.4.19) #2021-05-28
+   texinfo_ver=6.7  # 2019-09-26
+   ;;
+*)
+   echo "ERROR: Review needed for m4 ${1}"
+   exit 4
+   ;;
+esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  texinfo_ver=${global_texinfo}
+fi
+
 echo "Installing m4 ${m4_v}..."
 
 check_modules
-module purge
+check_texinfo ${texinfo_ver}
 
 downloadPackage m4-${m4_v}.tar.gz
 
@@ -175,6 +196,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 fi
+
 if [ "${m4_v}" == "1.4.18" ] ; then
 
 cat << eof > gnulib.patch
@@ -299,10 +321,44 @@ if [ ${debug} -gt 0 ] ; then
 fi
 fi
 
+# Known issue, and due to a bug in the testsuite and not in m4 itself.
+# It will be fixed for 1.4.20.
+if [ "${m4_v}" == "1.4.19" ] ; then
+cat << eof > testsuite.patch
+--- doc/m4.texi	2021-05-28 09:41:47.000000000 -0500
++++ doc/m4.texi	2023-04-29 15:20:12.147316920 -0500
+@@ -6756,7 +6756,7 @@
+ ')m4exit(\`77')')dnl
+ changequote(\`[', \`]')
+ @result{}
+-syscmd([/bin/sh -c 'kill -9 \$\$'; st=\$?; test \$st = 137 || test \$st = 265])
++syscmd([@{ /bin/sh -c 'kill -9 \$\$'; @} 2>/dev/null; st=\$?; test \$st = 137 || test \$st = 265])
+ @result{}
+ ifelse(sysval, [0], , [errprint([ skipping: shell does not send signal 9
+ ])m4exit([77])])dnl
+eof
+
+patch -Z -b -p0 < testsuite.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+module purge
+module load texinfo/${texinfo_ver}
+# texinfo (makeinfo) is needed if you modify a .texi file (for example the 1.4.19 patch above)
+
 config="./configure --prefix=${opt}/m4-${m4_v}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
+  echo ''
+  module list
   echo ''
   echo ${config}
   read k
