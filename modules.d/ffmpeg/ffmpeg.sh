@@ -51,9 +51,9 @@ case ${1} in
    ffmpeg_fdkaac_ver=2.0.1        # 2019-10-08
    ffmpeg_x264_ver=20191125       # 2019-11-25
    ffmpeg_x265_ver=3.2.1          # 2019-10-22
-   ffmpeg_libogg_ver=1.3.4
-   ffmpeg_libvorbis_ver=1.3.7
-   ffmpeg_libtheora_ver=1.1.1 # 2009 October 1
+   ffmpeg_libogg_ver=1.3.4        # 2019-08-30
+   ffmpeg_libvorbis_ver=1.3.6     # 2018-03-16
+   ffmpeg_libtheora_ver=1.1.1     # 2009-10-01
    ffmpeg_libbs2b_ver=3.1.0
    ffmpeg_kvazaar_ver=1.3.0 # Jul 9, 2019
    ffmpeg_libilbc_ver=2.0.2

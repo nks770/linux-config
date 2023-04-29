@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libogg
+echo 'Loading libogg...'
 
 function liboggInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -28,7 +29,6 @@ fi
 }
 
 function build_libogg() {
-exit 4
 
 # Get desired version number to install
 libogg_v=${1}
@@ -61,11 +61,45 @@ cd ${tmp}
 tar xvfz ${pkg}/libogg-${libogg_v}.tar.gz
 cd ${tmp}/${libogg_srcdir}
 
-./configure --prefix=${opt}/libogg-${libogg_v}
-make -j ${ncpu} && make install
+config="./configure --prefix=${opt}/libogg-${libogg_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

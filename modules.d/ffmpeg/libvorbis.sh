@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libvorbis
+echo 'Loading libvorbis...'
 
 function libvorbisInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -39,17 +40,23 @@ libvorbis_srcdir=libvorbis-${libvorbis_v}
 echo "Installing libvorbis ${libvorbis_v}..."
 
 case ${1} in
-  1.3.7) # 2020-07-04
-   libvorbis_libogg_ver=1.3.4
+  1.3.6)              # 2018-03-16
+   libogg_ver=1.3.3   # 2017-11-07
+   doxygen_ver=1.8.14 # 2017-12-25
+  ;;
+  1.3.7)              # 2020-07-04
+   libogg_ver=1.3.4   # 2019-08-30
+   doxygen_ver=1.8.17 # 2019-12-27
+  ;;
+  *)
+   echo "ERROR: Review needed for libvorbis ${1}"
+   exit 4 # Please review
   ;;
 esac
 
 check_modules
-check_libogg ${libvorbis_libogg_ver}
-
-module purge
-module load libogg/${libvorbis_libogg_ver}
-module list
+check_libogg ${libogg_ver}
+check_doxygen ${doxygen_ver}
 
 downloadPackage libvorbis-${libvorbis_v}.tar.gz
 
@@ -63,11 +70,51 @@ cd ${tmp}
 tar xvfz ${pkg}/libvorbis-${libvorbis_v}.tar.gz
 cd ${tmp}/${libvorbis_srcdir}
 
-./configure --prefix=${opt}/libvorbis-${libvorbis_v}
-make -j ${ncpu} && make install
+module purge
+module load libogg/${libogg_ver}
+module load doxygen/${doxygen_ver}
+
+config="./configure --prefix=${opt}/libvorbis-${libvorbis_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
@@ -87,8 +134,8 @@ set PKG ${opt}/libvorbis-\$VER
 
 module-whatis   "Loads libvorbis-${libvorbis_v}"
 conflict libvorbis
-module load libogg/${libvorbis_libogg_ver}
-prereq libogg/${libvorbis_libogg_ver}
+module load libogg/${libogg_ver}
+prereq libogg/${libogg_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

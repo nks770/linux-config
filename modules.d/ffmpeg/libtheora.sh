@@ -28,6 +28,7 @@ fi
 }
 
 function build_libtheora() {
+exit 4
 
 # Get desired version number to install
 libtheora_v=${1}

@@ -43,6 +43,9 @@ case ${1} in
   1.8.14) # 2017-12-25
    cmake_ver=3.10.1 # 2017-12-14
    python_ver=3.6.4 # 2017-12-19
+   flex_ver=2.6.4    # 2017-05-06
+   bison_ver=3.0.4   # 2015-01-23
+   libxml2_ver=2.9.7 # 2017-11-02
   ;;
   1.8.15) # 2018-12-27
 #   cmake_ver=3.13.2  # 2018-12-13
@@ -61,7 +64,7 @@ case ${1} in
 #   libxml2_ver=2.9.9 # 2019-01-03
    libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
   ;;
-  *) # 2017-12-25
+  *)
    echo "ERROR: Review needed for doxygen ${1}"
    exit 4 # Please review
   ;;

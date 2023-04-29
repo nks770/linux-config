@@ -41,11 +41,11 @@ echo "Installing x264 ${x264_v}..."
 case ${1} in
   20191125)
    x264_srcdir=x264-1771b556ee45207f8711744ccbd5d42a3949b14c
-   x264_nasm_ver=2.14.02 # 2018-12-26
+   nasm_ver=2.14.02 # 2018-12-26
   ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
-   x264_nasm_ver=2.14.02 # 2018-12-26
+   nasm_ver=2.14.02 # 2018-12-26
   ;;
   *)
    echo "ERROR: Need review for x264 ${1}"
@@ -54,7 +54,7 @@ case ${1} in
 esac
 
 check_modules
-check_nasm ${x264_nasm_ver}
+check_nasm ${nasm_ver}
 
 downloadPackage x264-${x264_v}.tar.gz
 
@@ -77,7 +77,7 @@ config="./configure --prefix=${opt}/x264-${x264_v} \
             --enable-shared \
             --enable-static"
 module purge
-module load nasm/${x264_nasm_ver}
+module load nasm/${nasm_ver}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
