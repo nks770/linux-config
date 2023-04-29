@@ -44,6 +44,18 @@ case ${1} in
    expat_ver=2.2.4    # 2017-08-19
    gperf_ver=3.1      # 2017-01-05
   ;;
+  2.13.1) # 2018-08-30
+   freetype_ver=2.9.1   # 2018-05-02
+   expat_ver=2.2.6      # 2018-08-15
+   gperf_ver=3.1        # 2017-01-05
+   utillinux_ver=2.32.1 # 2018-07-16
+  ;;
+  2.13.91) # 2019-06-10
+   freetype_ver=2.10.0  # 2019-03-15
+   expat_ver=2.2.6      # 2018-08-15
+   gperf_ver=3.1        # 2017-01-05
+   utillinux_ver=2.33.2 # 2019-04-09
+  ;;
   *)
    echo "ERROR: Need review for fontconfig ${1}"
    exit 4
@@ -54,6 +66,9 @@ check_modules
 check_freetype_harfbuzz ${freetype_ver}
 check_expat ${expat_ver}
 check_gperf ${gperf_ver}
+if [ ! -z "${utillinux_ver}" ] ; then
+  check_utillinux ${utillinux_ver}
+fi
 
 downloadPackage fontconfig-${fontconfig_v}.tar.gz
 
@@ -72,6 +87,9 @@ module purge
 module load freetype/${freetype_ver}
 module load expat/${expat_ver}
 module load gperf/${gperf_ver}
+if [ ! -z "${utillinux_ver}" ] ; then
+  module load util-linux/${utillinux_ver}
+fi
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -136,6 +154,13 @@ module load freetype/${freetype_ver}
 module load expat/${expat_ver}
 prereq freetype/${freetype_ver}
 prereq expat/${expat_ver}
+eof
+if [ ! -z "${utillinux_ver}" ] ; then
+  echo "module load util-linux/${utillinux_ver}" >> ${MODULEPATH}/fontconfig/${fontconfig_v}
+  echo "prereq util-linux/${utillinux_ver}" >> ${MODULEPATH}/fontconfig/${fontconfig_v}
+fi
+
+cat << eof >> ${MODULEPATH}/fontconfig/${fontconfig_v}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include

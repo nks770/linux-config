@@ -40,8 +40,14 @@ case ${libpng_v} in
 1.5.29) # 2017-08-24
    zlib_ver=1.2.11   #2017-01-15
    ;;
+1.6.34) # 2017-09-29
+   zlib_ver=1.2.11   #2017-01-15
+   ;;
+1.6.36) # 2018-12-02
+   zlib_ver=1.2.11   #2017-01-15
+   ;;
 *)
-   echo "ERROR: Need review for freetype ${1}"
+   echo "ERROR: Need review for libpng ${1}"
    exit 4
    ;;
 esac

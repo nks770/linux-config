@@ -42,6 +42,10 @@ case ${bison_v} in
    m4_ver=1.4.18  # Using m4 1.4.18 because 1.4.17 has some testsuite failures
    flex_ver=2.5.39 # 2014-03-26
    ;;
+3.2.4) #2018-12-24
+   m4_ver=1.4.18  # 2016-12-31
+   flex_ver=2.6.4 # 2017-05-06
+   ;;
 3.4.1) #2019-05-22
    m4_ver=1.4.18  # 2016-12-31
    flex_ver=2.6.4 # 2017-05-06

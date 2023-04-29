@@ -51,6 +51,21 @@ case ${python_v} in
    tcl_ver=8.6.13
    tk_ver=8.6.13
    ;;
+3.7.2) #2018-12-24
+   gdbm_ver=1.18.1      #2018-10-27
+   readline_ver=7.0     #2016-09-15
+   ncurses_ver=6.0      #2015-08-08
+   bzip2_ver=1.0.6      #2010-09-20
+   xz_ver=5.2.4         #2018-04-29
+   openssl_ver=1.1.1a   #2018-11-20
+   sqlite_ver=3.26.0    #2018-12-01
+   zlib_ver=1.2.11      #2017-01-15
+   libffi_ver=3.2.1     #2014-11-12
+   utillinux_ver=2.33   #2018-11-06
+   tcl_ver=8.6.13
+   tk_ver=8.6.13
+   httlib_failure=1
+   ;;
 3.7.4) #2019-07-08
    gdbm_ver=1.18.1      #2018-10-27
    readline_ver=7.0     #2016-09-15
@@ -92,6 +107,7 @@ case ${python_v} in
    utillinux_ver=2.34   #2019-06-14
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 3.9.4) #2021-04-04
    gdbm_ver=1.19        #2020-12-23
@@ -106,6 +122,7 @@ case ${python_v} in
    utillinux_ver=2.36.2 #2021-02-12
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 3.9.16) #2022-12-06
    gdbm_ver=1.23        #2022-02-04
@@ -120,6 +137,7 @@ case ${python_v} in
    utillinux_ver=2.38.1 #2022-08-04
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 3.10.9) #2022-12-06
    gdbm_ver=1.23        #2022-02-04
@@ -134,6 +152,7 @@ case ${python_v} in
    utillinux_ver=2.38.1 #2022-08-04
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 3.10.10) #2023-02-08
    gdbm_ver=1.23        #2022-02-04
@@ -148,6 +167,7 @@ case ${python_v} in
    utillinux_ver=2.38.1 #2022-08-04
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 3.11.2) #2023-02-08
    gdbm_ver=1.23        #2022-02-04
@@ -162,6 +182,7 @@ case ${python_v} in
    utillinux_ver=2.38.1 #2022-08-04
    tcl_ver=8.6.13
    tk_ver=8.6.13
+   curses_failure=1
    ;;
 *)
    echo "ERROR: Need review for Python ${1}"
@@ -210,6 +231,152 @@ fi
 # to be an infinite loop.  This patch prevents tail call optimization
 # from being applied to this code segment.
 # https://github.com/python/cpython/pull/17467/files
+#
+# bpo-35998: Avoid TimeoutError in test_asyncio: test_start_tls_server_1()
+#
+if [ "${python_v}" == "3.7.2" ] ; then
+cat << eof > multiple.patch
+--- Modules/faulthandler.c      2018-12-23 15:37:36.000000000 -0600
++++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0600
+@@ -1094,18 +1094,15 @@
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+ #define FAULTHANDLER_STACK_OVERFLOW
+
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-uintptr_t
++static uintptr_t
+ stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     uintptr_t sp = (uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+--- Lib/test/test_asyncio/test_sslproto.py	2018-12-23 15:37:36.000000000 -0600
++++ Lib/test/test_asyncio/test_sslproto.py	2023-04-26 00:01:45.137154555 -0500
+@@ -424,17 +424,14 @@
+ 
+     def test_start_tls_server_1(self):
+         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
++        ANSWER = b'answer'
+ 
+         server_context = test_utils.simple_server_sslcontext()
+         client_context = test_utils.simple_client_sslcontext()
+-        if sys.platform.startswith('freebsd'):
+-            # bpo-35031: Some FreeBSD buildbots fail to run this test
+-            # as the eof was not being received by the server if the payload
+-            # size is not big enough. This behaviour only appears if the
+-            # client is using TLS1.3.
+-            client_context.options |= ssl.OP_NO_TLSv1_3
++        answer = None
+ 
+         def client(sock, addr):
++            nonlocal answer
+             sock.settimeout(self.TIMEOUT)
+ 
+             sock.connect(addr)
+@@ -443,33 +440,36 @@
+ 
+             sock.start_tls(client_context)
+             sock.sendall(HELLO_MSG)
+-
+-            sock.shutdown(socket.SHUT_RDWR)
++            answer = sock.recv_all(len(ANSWER))
+             sock.close()
+ 
+         class ServerProto(asyncio.Protocol):
+-            def __init__(self, on_con, on_eof, on_con_lost):
++            def __init__(self, on_con, on_con_lost):
+                 self.on_con = on_con
+-                self.on_eof = on_eof
+                 self.on_con_lost = on_con_lost
+                 self.data = b''
++                self.transport = None
+ 
+             def connection_made(self, tr):
++                self.transport = tr
+                 self.on_con.set_result(tr)
+ 
++            def replace_transport(self, tr):
++                self.transport = tr
++
+             def data_received(self, data):
+                 self.data += data
+-
+-            def eof_received(self):
+-                self.on_eof.set_result(1)
++                if len(self.data) >= len(HELLO_MSG):
++                    self.transport.write(ANSWER)
+ 
+             def connection_lost(self, exc):
++                self.transport = None
+                 if exc is None:
+                     self.on_con_lost.set_result(None)
+                 else:
+                     self.on_con_lost.set_exception(exc)
+ 
+-        async def main(proto, on_con, on_eof, on_con_lost):
++        async def main(proto, on_con, on_con_lost):
+             tr = await on_con
+             tr.write(HELLO_MSG)
+ 
+@@ -480,16 +480,16 @@
+                 server_side=True,
+                 ssl_handshake_timeout=self.TIMEOUT)
+ 
+-            await on_eof
++            proto.replace_transport(new_tr)
++
+             await on_con_lost
+             self.assertEqual(proto.data, HELLO_MSG)
+             new_tr.close()
+ 
+         async def run_main():
+             on_con = self.loop.create_future()
+-            on_eof = self.loop.create_future()
+             on_con_lost = self.loop.create_future()
+-            proto = ServerProto(on_con, on_eof, on_con_lost)
++            proto = ServerProto(on_con, on_con_lost)
+ 
+             server = await self.loop.create_server(
+                 lambda: proto, '127.0.0.1', 0)
+@@ -498,11 +498,12 @@
+             with self.tcp_client(lambda sock: client(sock, addr),
+                                  timeout=self.TIMEOUT):
+                 await asyncio.wait_for(
+-                    main(proto, on_con, on_eof, on_con_lost),
++                    main(proto, on_con, on_con_lost),
+                     loop=self.loop, timeout=self.TIMEOUT)
+ 
+             server.close()
+             await server.wait_closed()
++            self.assertEqual(answer, ANSWER)
+ 
+         self.loop.run_until_complete(run_main())
+ 
+eof
+patch -Z -b -p0 < multiple.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
 if [ "${python_v}" == "3.7.4" ] ; then
 cat << eof > faulthandler.patch
 --- Modules/faulthandler.c      2019-07-08 13:03:50.000000000 -0500
@@ -336,11 +503,20 @@ fi
 if [ ${run_tests} -gt 0 ] ; then
   make test
   echo ''
-  echo 'NOTE: With Python 3.9.4 and Debian 11.5, I have observed that test_curses fails.'
-  echo '      It seems there is a failure in test_background due to unexpected behavior'
-  echo '      of the win.bkgd() function from libncurses.  This probably needs more investigation'
-  echo '      but it might be fine.'
-  echo ''
+  if [ ${curses_failure} -gt 0 ]; then
+    echo 'NOTE: With Python 3.9.4 and Debian 11.5, I have observed that test_curses fails.'
+    echo '      It seems there is a failure in test_background due to unexpected behavior'
+    echo '      of the win.bkgd() function from libncurses.  This probably needs more investigation'
+    echo '      but it might be fine.'
+    echo ''
+  fi
+  if [ ${httlib_failure} -gt 0 ]; then
+    echo ''
+    echo 'NOTE: test_httlib fails in this version of Python with something about a self-signed'
+    echo '      certificate not being accepted.  This may be related to OpenSSL 1.1.1'
+    echo '      compatibility, but in any case is probably fine.'
+    # make TESTS='test_ssl_new' V=1 test
+  fi
   echo '>> Tests complete'
   read k
 fi

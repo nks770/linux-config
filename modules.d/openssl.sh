@@ -41,6 +41,10 @@ case ${openssl_v} in
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
+1.1.1a) # 2018-11-20
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
 1.1.1c) # 2019-05-28
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1

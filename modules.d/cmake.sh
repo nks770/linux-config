@@ -45,7 +45,19 @@ case ${cmake_v} in
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
+3.10.2) # 2018-01-18
+   ncurses_ver=6.0  # 2015-08-08
+   kwsys_warning=1
+   ;;
+3.10.3) # 2018-03-16
+   ncurses_ver=6.1  # 2018-01-27
+   kwsys_warning=1
+   ;;
 3.11.4) # 2018-06-14
+   ncurses_ver=6.1  # 2018-01-27
+   kwsys_warning=1
+   ;;
+3.13.2) # 2018-12-13
    ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
@@ -159,6 +171,32 @@ eof
       read k
     fi
   fi
+
+  if [ "${cmake_v}" == "3.10.2" ] ; then
+    cat << eof > testsuite.patch
+Index: Tests/CompileFeatures/default_dialect.c
+===================================================================
+--- Tests/CompileFeatures/default_dialect.c        2018-01-18 08:48:43.000000000 -0600
++++ Tests/CompileFeatures/default_dialect.c        2018-06-14 07:57:32.000000000 -0500
+@@ -1,6 +1,6 @@
+
+ #if DEFAULT_C11
+-#if __STDC_VERSION__ != 201112L
++#if __STDC_VERSION__ < 201112L
+ #error Unexpected value for __STDC_VERSION__.
+ #endif
+ #elif DEFAULT_C99
+eof
+    patch -Z -b -p0 < testsuite.patch
+    if [ ! $? -eq 0 ] ; then
+      exit 4
+    fi
+    if [ ${debug} -gt 0 ] ; then
+      echo '>> Testsuite patching complete'
+      read k
+    fi
+  fi
+
   make test
   echo ''
   if [ ${kwsys_warning} -gt 0 ] ; then

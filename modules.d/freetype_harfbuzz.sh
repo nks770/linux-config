@@ -45,6 +45,18 @@ case ${freetype_v} in
    libpng_ver=1.5.29  #2017-08-24
    harfbuzz_v=1.5.1   #2017-09-05
    ;;
+2.9.1) # 2018-05-02
+   zlib_ver=1.2.11    #2017-01-15
+   bzip2_ver=1.0.6    #2010-09-20
+   libpng_ver=1.6.34  #2017-09-29
+   harfbuzz_v=1.7.6   #2018-03-07
+   ;;
+2.10.0) # 2019-03-15
+   zlib_ver=1.2.11    #2017-01-15
+   bzip2_ver=1.0.6    #2010-09-20
+   libpng_ver=1.6.36  #2018-12-02
+   harfbuzz_v=2.3.1   #2019-01-30
+   ;;
 *)
    echo "ERROR: Need review for freetype ${1}"
    exit 4

@@ -44,6 +44,15 @@ case ${1} in
    cmake_ver=3.10.1 # 2017-12-14
    python_ver=3.6.4 # 2017-12-19
   ;;
+  1.8.15) # 2018-12-27
+#   cmake_ver=3.13.2  # 2018-12-13
+   cmake_ver=3.10.2  # 2018-01-18 # last cmake to use ncurses 6.0 (compatibility with python 3.7.2)
+   python_ver=3.7.2  # 2018-12-24
+   flex_ver=2.6.4    # 2017-05-06
+   bison_ver=3.2.4   # 2018-12-24
+#   libxml2_ver=2.9.8 # 2018-03-05
+   libxml2_ver=2.9.9 # 2019-01-03 # first libxml2 to use xz 5.2.4 (compatibility with python 3.7.2)
+  ;;
   1.8.16) # 2019-08-08
    cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
    python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
@@ -64,12 +73,6 @@ check_cmake ${cmake_ver}
 check_python ${python_ver}
 check_bison ${bison_ver}
 check_libxml2 ${libxml2_ver} # Needed only for testsuite
-module purge
-module load flex/${flex_ver} \
-            cmake/${cmake_ver} \
-            Python/${python_ver} \
-	    bison/${bison_ver} \
-	    libxml2/${libxml2_ver}
 
 downloadPackage doxygen-${doxygen_v}.src.tar.gz
 
@@ -82,6 +85,13 @@ fi
 tar xvfz ${pkg}/doxygen-${doxygen_v}.src.tar.gz
 mkdir -v ${tmp}/${doxygen_srcdir}/build
 cd ${tmp}/${doxygen_srcdir}/build
+
+module purge
+module load flex/${flex_ver} \
+            cmake/${cmake_ver} \
+            Python/${python_ver} \
+	    bison/${bison_ver} \
+	    libxml2/${libxml2_ver}
 
 if [ ${debug} -gt 0 ] ; then
   #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
