@@ -7,6 +7,7 @@ tmp=${root}/temp
 
 debug=1
 run_tests=1
+dependency_strategy=optimized
 
 ncpu=$(cat /proc/cpuinfo | grep name | wc -l)
 
@@ -23,15 +24,15 @@ source bin/resources.sh
 #source bin/system.sh
 
 # Load all modules in modules.d
-for module in $(ls modules.d/*.sh) ; do
+for module in $(ls modules.${dependency_strategy}/*.sh) ; do
   source ${module}
 done
-for module in $(ls modules.d/*/*.sh) ; do
+for module in $(ls modules.${dependency_strategy}/*/*.sh) ; do
   source ${module}
 done
 
 if [ ${debug} -gt 0 ] ; then
-  echo '>> Modules loaded, press enter to begin.'
+  echo ">> Modules (${dependency_strategy}) loaded, press enter to begin."
   read k
 fi
 
