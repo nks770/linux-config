@@ -28,6 +28,7 @@ fi
 }
 
 function build_libogg() {
+exit 4
 
 # Get desired version number to install
 libogg_v=${1}
