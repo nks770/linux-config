@@ -190,6 +190,12 @@ case ${python_v} in
    ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  readline_ver=${global_readline}
+  ncurses_ver=${global_ncurses}
+fi
+
 echo "Installing Python ${python_v}..."
 
 check_modules

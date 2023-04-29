@@ -46,11 +46,19 @@ case ${readline_v} in
 8.1.2) #2022-01-05
    ncurses_ver=6.3  # 2021-11-08
    ;;
+8.2) #2022-09-26
+   ncurses_ver=6.3  # 2021-11-08
+   ;;
 *)
    echo "ERROR: Review needed for readline ${1}"
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  ncurses_ver=${global_ncurses}
+fi
 
 echo "Installing readline ${readline_v}..."
 

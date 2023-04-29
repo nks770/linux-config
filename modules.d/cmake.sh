@@ -89,6 +89,14 @@ case ${cmake_v} in
    ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  ncurses_ver=${global_ncurses}
+  if [ ! -z "${openssl_ver}" ] ; then
+    openssl_ver=${global_openssl}
+  fi
+fi
+
 echo "Installing cmake ${cmake_v}..."
 
 check_modules

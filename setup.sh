@@ -9,6 +9,11 @@ debug=1
 run_tests=1
 dependency_strategy=optimized
 
+# Global dependency versions (for optimized strategy)
+global_ncurses=6.4
+global_openssl=1.1.1t
+global_readline=8.2
+
 ncpu=$(cat /proc/cpuinfo | grep name | wc -l)
 
 if [ ! -d ${pkg} ] ; then
@@ -24,10 +29,10 @@ source bin/resources.sh
 #source bin/system.sh
 
 # Load all modules in modules.d
-for module in $(ls modules.${dependency_strategy}/*.sh) ; do
+for module in $(ls modules.d/*.sh) ; do
   source ${module}
 done
-for module in $(ls modules.${dependency_strategy}/*/*.sh) ; do
+for module in $(ls modules.d/*/*.sh) ; do
   source ${module}
 done
 

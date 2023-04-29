@@ -62,6 +62,13 @@ case ${gdbm_v} in
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  readline_ver=${global_readline}
+  ncurses_ver=${global_ncurses}
+fi
+
 echo "Installing gdbm ${gdbm_v}..."
 
 check_modules
