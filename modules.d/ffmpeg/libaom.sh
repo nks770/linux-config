@@ -47,11 +47,13 @@ case ${1} in
   1.0.0-errata1-avif) #Thu Dec 12 10:50:24 2019 -0800
    yasm_ver=1.3.0     # 2014-08-10
    doxygen_ver=1.8.16 # 2019-08-08
-#   cmake_ver=3.15.5   # 2019-10-30
-#   python_ver=3.8.0   # 2019-10-14
    cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
    python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    libdir=lib # Directory where installed libraries go
+   if [ "${dependency_strategy}" == "optimized" ] ; then
+     cmake_ver=3.15.5   # 2019-10-30
+     python_ver=3.8.0   # 2019-10-14 -- python 3.7.5 could be another option
+   fi
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    yasm_ver=1.3.0

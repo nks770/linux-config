@@ -44,23 +44,35 @@ case ${1} in
    flex_ver=2.6.4    # 2017-05-06
    bison_ver=3.0.4   # 2015-01-23
    libxml2_ver=2.9.7 # 2017-11-02
+   if [ "${dependency_strategy}" == "optimized" ] ; then
+     cmake_ver=3.10.1  # 2017-12-14
+     libxml2_ver=2.9.7 # 2017-11-02
+     python_ver=3.6.4  # 2017-12-19
+   fi
   ;;
   1.8.15) # 2018-12-27
-#   cmake_ver=3.13.2  # 2018-12-13
    cmake_ver=3.10.2  # 2018-01-18 # last cmake to use ncurses 6.0 (compatibility with python 3.7.2)
    python_ver=3.7.2  # 2018-12-24
    flex_ver=2.6.4    # 2017-05-06
    bison_ver=3.2.4   # 2018-12-24
-#   libxml2_ver=2.9.8 # 2018-03-05
    libxml2_ver=2.9.9 # 2019-01-03 # first libxml2 to use xz 5.2.4 (compatibility with python 3.7.2)
+   if [ "${dependency_strategy}" == "optimized" ] ; then
+     cmake_ver=3.13.2  # 2018-12-13
+     libxml2_ver=2.9.8 # 2018-03-05
+     python_ver=3.7.2  # 2018-12-24
+   fi
   ;;
   1.8.16) # 2019-08-08
    cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
    python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    flex_ver=2.6.4    # 2017-05-06
    bison_ver=3.4.1   # 2019-05-22
-#   libxml2_ver=2.9.9 # 2019-01-03
    libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
+   if [ "${dependency_strategy}" == "optimized" ] ; then
+     cmake_ver=3.15.2  # 2019-08-07
+     libxml2_ver=2.9.9 # 2019-01-03
+     python_ver=3.7.4  # 2019-07-08
+   fi
   ;;
   *)
    echo "ERROR: Review needed for doxygen ${1}"

@@ -40,14 +40,17 @@ case ${libxml2_v} in
 2.9.8) # 2018-03-05
    xz_ver=5.2.3    # 2016-12-30
    zlib_ver=1.2.11 # 2017-01-15
+   icu_ver=60.2    # 2017-12-13
    ;;
 2.9.9) # 2019-01-03
    xz_ver=5.2.4    # 2018-04-29
    zlib_ver=1.2.11 # 2017-01-15
+   icu_ver=63.1    # 2018-10-15
    ;;
 2.9.11) # 2021-05-13
    xz_ver=5.2.5    # 2020-03-17
    zlib_ver=1.2.11 # 2017-01-15
+   icu_ver=69.1    # 2021-04-07
    ;;
 *)
    echo "ERROR: Need review for libxml2 ${1}"
@@ -66,9 +69,7 @@ echo "Installing libxml2 ${libxml2_v}..."
 check_modules
 check_xz ${xz_ver}
 check_zlib ${zlib_ver}
-module purge
-module load xz/${xz_ver}
-module load zlib/${zlib_ver}
+check_icu ${icu_ver}
 
 downloadPackage libxml2-${libxml2_v}.tar.gz
 
@@ -193,7 +194,12 @@ if [ ${debug} -gt 0 ] ; then
 fi
 fi
 
-config="./configure --prefix=${opt}/libxml2-${libxml2_v}"
+module purge
+module load xz/${xz_ver}
+module load zlib/${zlib_ver}
+module load icu/${icu_ver}
+
+config="./configure --prefix=${opt}/libxml2-${libxml2_v} --with-icu"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -262,9 +268,10 @@ set PKG ${opt}/libxml2-\$VER
 
 module-whatis   "Loads libxml2-${libxml2_v}"
 conflict libxml2
-module load zlib/${zlib_ver} xz/${xz_ver}
+module load zlib/${zlib_ver} xz/${xz_ver} icu/${icu_ver}
 prereq zlib/${zlib_ver}
 prereq xz/${xz_ver}
+prereq icu/${icu_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include

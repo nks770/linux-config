@@ -38,6 +38,7 @@ fi
 
 curses_failure=0
 httlib_failure=0
+sql_deterministic_chk=1
 
 case ${python_v} in
 3.6.5) # 2018-03-28
@@ -110,7 +111,8 @@ case ${python_v} in
    utillinux_ver=2.34   #2019-06-14
    tcl_ver=8.6.13
    tk_ver=8.6.13
-   curses_failure=1
+   curses_failure=0
+   sql_deterministic_chk=1
    ;;
 3.9.4) #2021-04-04
    gdbm_ver=1.19        #2020-12-23
@@ -200,7 +202,7 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
   ncurses_ver=${global_ncurses}
   openssl_ver=${global_openssl}
   readline_ver=${global_readline}
-  sqlite_ver=${global_sqlite}
+#  sqlite_ver=${global_sqlite}
   utillinux_ver=${global_utillinux}
   xz_ver=${global_xz}
   zlib_ver=${global_zlib}
@@ -532,6 +534,16 @@ if [ ${run_tests} -gt 0 ] ; then
     echo '      certificate not being accepted.  This may be related to OpenSSL 1.1.1'
     echo '      compatibility, but in any case is probably fine.'
     # make TESTS='test_ssl_new' V=1 test
+    echo ''
+  fi
+  if [ ${sql_deterministic_chk} -gt 0 ] && [ "${sqlite_ver}" != "3.30.1" ] ; then
+    echo ''
+    echo 'NOTE: test_sqlite fails in Python 3.8 when linked with a version of Sqlite'
+    echo "      newer than 3.32.0. (You have linked with version ${sqlite_ver}). This appears"
+    echo "      to be a problem with the testsuite, and not a problem with the Python source"
+    echo "      code itself.  Specific failed test: CheckFuncDeterministic"
+    echo "      https://github.com/python/cpython/commit/c610d970f5373b143bf5f5900d4645e6a90fb460"
+    echo ''
   fi
   echo '>> Tests complete'
   read k

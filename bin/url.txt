@@ -117,6 +117,11 @@ harfbuzz-2.3.1.tar.bz2=https://github.com/harfbuzz/harfbuzz/releases/download/2.
 help2man-1.47.4.tar.xz=https://ftp.gnu.org/gnu/help2man/help2man-1.47.4.tar.xz
 help2man-1.49.3.tar.xz=https://ftp.gnu.org/gnu/help2man/help2man-1.49.3.tar.xz
 
+# ICU
+# https://github.com/unicode-org/icu
+icu4c-63_1-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/63.1/icu4c-63_1-src.tgz
+icu4c-69_1-src.tgz=https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+
 ## jdk
 #jdk-7u80-linux-x64.tar.gz=https://download.oracle.com/otn/java/jdk/7u80-b15/jdk-7u80-linux-x64.tar.gz
 

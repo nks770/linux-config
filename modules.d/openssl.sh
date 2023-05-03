@@ -165,10 +165,10 @@ config="./config -v --prefix=${opt}/openssl-${openssl_v} \
 if [ ${debug} -gt 0 ] ; then
   ./config -h
   echo ''
-  echo ${config}
-  echo ''
   module list
   echo zlib: $(pkg-config --libs zlib)
+  echo ''
+  echo ${config}
   echo ''
   read k
 fi
