@@ -44,18 +44,24 @@ case ${freetype_v} in
 #   libpng_ver=1.4.21 #2017-08-24
    libpng_ver=1.5.29  #2017-08-24
    harfbuzz_v=1.5.1   #2017-09-05
+   icu_ver=59.1       #2017-04-14
+   graphite2_ver=1.3.10 #2017-05-05
    ;;
 2.9.1) # 2018-05-02
    zlib_ver=1.2.11    #2017-01-15
    bzip2_ver=1.0.6    #2010-09-20
    libpng_ver=1.6.34  #2017-09-29
    harfbuzz_v=1.7.6   #2018-03-07
+   icu_ver=61.1       #2018-03-26
+   graphite2_ver=1.3.11 #2018-03-04
    ;;
 2.10.0) # 2019-03-15
    zlib_ver=1.2.11    #2017-01-15
    bzip2_ver=1.0.6    #2010-09-20
    libpng_ver=1.6.36  #2018-12-02
    harfbuzz_v=2.3.1   #2019-01-30
+   icu_ver=63.1       #2018-10-15
+   graphite2_ver=1.3.13 #2018-12-20
    ;;
 *)
    echo "ERROR: Need review for freetype ${1}"
@@ -79,6 +85,8 @@ check_modules
 check_zlib ${zlib_ver}
 check_bzip2 ${bzip2_ver}
 check_libpng ${libpng_ver}
+check_icu ${icu_ver}
+check_graphite2 ${graphite2_ver}
 #check_harfbuzz ${harfbuzz_ver}
 
 downloadPackage freetype-${freetype_v}.tar.gz
@@ -159,7 +167,10 @@ fi
 tar xvfj ${pkg}/harfbuzz-${harfbuzz_v}.tar.bz2
 cd ${tmp}/harfbuzz-${harfbuzz_v}
 
-config="./configure --prefix=${opt}/harfbuzz-${harfbuzz_v} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${opt}/freetype-${freetype_v}/lib/pkgconfig"
+module load icu/${icu_ver}
+module load graphite2/${graphite2_ver}
+
+config="./configure --with-graphite2 --prefix=${opt}/harfbuzz-${harfbuzz_v} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${opt}/freetype-${freetype_v}/lib/pkgconfig"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -323,7 +334,11 @@ set PKG ${opt}/harfbuzz-\$VER
 module-whatis   "Loads harfbuzz-${harfbuzz_v}"
 conflict harfbuzz
 module load freetype/${freetype_v}
+module load icu/${icu_ver}
+module load graphite2/${graphite2_ver}
 prereq freetype/${freetype_v}
+prereq icu/${icu_ver}
+prereq graphite2/${graphite2_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include

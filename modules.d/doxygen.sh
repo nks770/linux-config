@@ -37,7 +37,7 @@ if [ -z "${doxygen_v}" ] ; then
 fi
 doxygen_srcdir=doxygen-${doxygen_v}
 
-case ${1} in
+case ${doxygen_v} in
   1.8.14) # 2017-12-25
    cmake_ver=3.10.1 # 2017-12-14
    python_ver=3.6.4 # 2017-12-19
@@ -75,7 +75,7 @@ case ${1} in
    fi
   ;;
   *)
-   echo "ERROR: Review needed for doxygen ${1}"
+   echo "ERROR: Review needed for doxygen ${doxygen_v}"
    exit 4 # Please review
   ;;
 esac

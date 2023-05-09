@@ -41,6 +41,10 @@ kwsys_warning=0
 chmod_warning=0
 
 case ${cmake_v} in
+3.8.1) # 2017-05-02
+   ncurses_ver=6.0  # 2015-08-08
+   kwsys_warning=1
+   ;;
 3.10.1) # 2017-12-14
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
@@ -159,6 +163,29 @@ if [ ${run_tests} -gt 0 ] ; then
   # Patch to enable avoid a testsuite failure when compiled with newer GCC
   # I borrowed this update from referencing cmake 3.11.4 (slightly newer)
   # This is for test # "34 - CompileFeatures"
+  if [ "${cmake_v}" == "3.8.1" ] ; then
+    cat << eof > testsuite.patch
+--- Tests/CompileFeatures/default_dialect.c	2017-05-02 07:59:43.000000000 -0500
++++ Tests/CompileFeatures/default_dialect.c	2023-05-08 22:40:58.051697690 -0500
+@@ -1,6 +1,6 @@
+ 
+ #if DEFAULT_C11
+-#if __STDC_VERSION__ != 201112L
++#if __STDC_VERSION__ < 201112L
+ #error Unexpected value for __STDC_VERSION__.
+ #endif
+ #elif DEFAULT_C99
+eof
+    patch -Z -b -p0 < testsuite.patch
+    if [ ! $? -eq 0 ] ; then
+      exit 4
+    fi
+    if [ ${debug} -gt 0 ] ; then
+      echo '>> Testsuite patching complete'
+      read k
+    fi
+  fi
+
   if [ "${cmake_v}" == "3.10.1" ] ; then
     cat << eof > testsuite.patch
 Index: Tests/CompileFeatures/default_dialect.c

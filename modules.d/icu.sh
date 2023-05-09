@@ -37,6 +37,12 @@ if [ -z "${icu_v}" ] ; then
 fi
 
 case ${icu_v} in
+59.1) #2017-04-14
+   icuarc=icu4c-59_1-src
+   ;;
+61.1) #2018-03-26
+   icuarc=icu4c-61_1-src
+   ;;
 63.1) #2018-10-15
    icuarc=icu4c-63_1-src
    ;;
@@ -59,7 +65,6 @@ esac
 echo "Installing ICU ${icu_v}..."
 
 check_modules
-module purge
 
 downloadPackage ${icuarc}.tgz
 
@@ -70,7 +75,50 @@ if [ -d ${tmp}/icu ] ; then
 fi
 
 tar xvfz ${pkg}/${icuarc}.tgz
+cd ${tmp}/icu
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+# With the release of GLIBC 2.26 in August 2017, the nonstandard header
+# <xlocale.h> has been removed.  Most programs should use <locale.h> instead.
+# https://sourceware.org/legacy-ml/libc-alpha/2017-08/msg00010.html
+if [ "${icu_v}" == "59.1" ] ; then
+cat << eof > glibc.patch
+--- source/i18n/digitlst.cpp	2017-01-19 18:20:31.000000000 -0600
++++ source/i18n/digitlst.cpp	2023-05-06 22:02:48.768451716 -0500
+@@ -60,13 +60,7 @@
+ # endif
+ #endif
+ 
+-#if U_USE_STRTOD_L
+-# if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
+-#   include <locale.h>
+-# else
+-#   include <xlocale.h>
+-# endif
+-#endif
++#include <locale.h>
+ 
+ // ***************************************************************************
+ // class DigitList
+eof
+
+patch -Z -b -p0 < glibc.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
 cd ${tmp}/icu/source
+module purge
 
 config="./configure --prefix=${opt}/icu-${icu_v} --enable-shared"
 
