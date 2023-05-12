@@ -38,7 +38,10 @@ fi
 
 case ${graphite2_v} in
   1.3.10) # 2017-05-05
-   cmake_ver=3.8.1 # 2017-05-02
+   cmake_ver=3.8.1  # 2017-05-02
+  ;;
+  1.3.11) # 2018-03-04
+   cmake_ver=3.10.2 # 2018-01-18
   ;;
   *)
    echo "ERROR: Review needed for Graphite2 ${graphite2_v}"

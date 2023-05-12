@@ -36,8 +36,6 @@ if [ -z "${fontconfig_v}" ] ; then
   fontconfig_v=2.12.6
 fi
 
-echo "Installing fontconfig ${fontconfig_v}..."
-
 case ${1} in
   2.12.6) # 2017-09-21
    freetype_ver=2.8.1 # 2017-09-16
@@ -61,6 +59,15 @@ case ${1} in
    exit 4
    ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  if [ ! -z "${utillinux_ver}" ] ; then
+    utillinux_ver=${global_utillinux}
+  fi
+fi
+
+echo "Installing fontconfig ${fontconfig_v}..."
 
 check_modules
 check_freetype_harfbuzz ${freetype_ver}

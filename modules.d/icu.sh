@@ -89,21 +89,18 @@ if [ "${icu_v}" == "59.1" ] ; then
 cat << eof > glibc.patch
 --- source/i18n/digitlst.cpp	2017-01-19 18:20:31.000000000 -0600
 +++ source/i18n/digitlst.cpp	2023-05-06 22:02:48.768451716 -0500
-@@ -60,13 +60,7 @@
- # endif
+@@ -61,11 +61,7 @@
  #endif
  
--#if U_USE_STRTOD_L
+ #if U_USE_STRTOD_L
 -# if U_PLATFORM_USES_ONLY_WIN32_API || U_PLATFORM == U_PF_CYGWIN
--#   include <locale.h>
+ #   include <locale.h>
 -# else
 -#   include <xlocale.h>
 -# endif
--#endif
-+#include <locale.h>
+ #endif
  
  // ***************************************************************************
- // class DigitList
 eof
 
 patch -Z -b -p0 < glibc.patch
@@ -194,6 +191,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/${icuarc}
+rm -rf ${tmp}/icu
 
 }
