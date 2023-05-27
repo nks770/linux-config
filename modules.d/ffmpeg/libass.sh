@@ -42,9 +42,11 @@ echo "Installing libass ${libass_v}..."
 case ${1} in
   0.14.0) # 2017-10-31
    nasm_ver=2.13.02      # 2017-11-29
-   freetype_ver=2.8.1    # 2017-09-16
+#   freetype_ver=2.8.1    # 2017-09-16
+   freetype_ver=2.9.1    # 2018-05-02
    fribidi_ver=0.19.7    # 2016-08-06
-   fontconfig_ver=2.12.6 # 2017-09-21
+#   fontconfig_ver=2.12.6 # 2017-09-21
+   fontconfig_ver=2.13.1 # 2018-08-30
   ;;
   0.16.0) # 2022-05-12
    nasm_ver=2.15.05     # 2020-08-28

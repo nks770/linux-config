@@ -608,4 +608,8 @@ eof
 cd ${root}
 rm -rf ${tmp}/Python-${python_v}
 
+unset CPPFLAGS
+unset LDFLAGS
+unset LIBS
+
 }

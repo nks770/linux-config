@@ -185,4 +185,6 @@ eof
 cd ${root}
 rm -rf ${tmp}/${sql_srcdir}
 
+unset CPPFLAGS
+
 }

@@ -40,7 +40,8 @@ case ${libxml2_v} in
 2.9.8) # 2018-03-05
    xz_ver=5.2.3    # 2016-12-30
    zlib_ver=1.2.11 # 2017-01-15
-   icu_ver=60.2    # 2017-12-13
+#   icu_ver=60.2    # 2017-12-13
+   icu_ver=61.1    # 2018-03-26 -- for compatibility with freetype 2.9.1
    ;;
 2.9.9) # 2019-01-03
    xz_ver=5.2.4    # 2018-04-29
