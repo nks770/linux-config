@@ -37,8 +37,6 @@ if [ -z "${libvorbis_v}" ] ; then
 fi
 libvorbis_srcdir=libvorbis-${libvorbis_v}
 
-echo "Installing libvorbis ${libvorbis_v}..."
-
 case ${1} in
   1.3.6)              # 2018-03-16
    libogg_ver=1.3.3   # 2017-11-07
@@ -53,6 +51,13 @@ case ${1} in
    exit 4 # Please review
   ;;
 esac
+
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  libogg_ver=${global_libogg}
+fi
+
+echo "Installing libvorbis ${libvorbis_v}..."
 
 check_modules
 check_libogg ${libogg_ver}

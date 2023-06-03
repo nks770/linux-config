@@ -16,6 +16,7 @@ global_bzip2=1.0.8      # 2019-07-13
 global_flex=2.6.4       # 2017-05-06
 #global_gdbm=1.23        # 2022-02-04
 global_help2man=1.49.3  # 2022-12-15
+global_libogg=1.3.5     # 2021-06-03
 global_m4=1.4.19        # 2021-05-28
 global_ncurses=6.4      # 2022-12-31
 global_openssl=1.1.1t   # 2023-02-07

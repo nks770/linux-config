@@ -49,6 +49,9 @@ case ${icu_v} in
 63.1) #2018-10-15
    icuarc=icu4c-63_1-src
    ;;
+65.1) #2019-10-03
+   icuarc=icu4c-65_1-src
+   ;;
 69.1) #2021-04-07
    icuarc=icu4c-69_1-src
    ;;

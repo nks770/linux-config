@@ -77,6 +77,11 @@ case ${cmake_v} in
    ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
+3.16.2) # 2019-12-19
+   ncurses_ver=6.1    # 2018-01-27
+   openssl_ver=1.1.1d # 2019-09-10
+   kwsys_warning=1
+   ;;
 3.16.5) # 2020-03-04
    ncurses_ver=6.2    # 2020-02-12
    openssl_ver=1.1.1d # 2019-09-10

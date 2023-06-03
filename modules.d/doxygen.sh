@@ -74,6 +74,18 @@ case ${doxygen_v} in
      python_ver=3.7.4  # 2019-07-08
    fi
   ;;
+  1.8.17) # 2019-12-27
+   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   flex_ver=2.6.4    # 2017-05-06
+   bison_ver=3.5     # 2019-12-11
+   libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
+   if [ "${dependency_strategy}" == "optimized" ] ; then
+     cmake_ver=3.16.2   # 2019-12-19
+     libxml2_ver=2.9.10 # 2019-10-30
+     python_ver=3.8.1   # 2019-12-18
+   fi
+  ;;
   *)
    echo "ERROR: Review needed for doxygen ${doxygen_v}"
    exit 4 # Please review
