@@ -117,6 +117,100 @@ if [ -d ${tmp}/${doxygen_srcdir} ] ; then
 fi
 
 tar xvfz ${pkg}/doxygen-${doxygen_v}.src.tar.gz
+cd ${tmp}/${doxygen_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+# In Doxygen 1.8.17, the testsuite is broken.  The path doesn't work in the python
+# script as written, at least not on unix platforms.  The python needs to be
+# fixed.  This problem was fixed in the next version of doxygen.
+#
+# Pull Request:
+# https://github.com/doxygen/doxygen/pull/7470/commits/cd9dee013dc749a10bbe019c350e0e62b6635795
+#
+touch runtests.patch
+
+if [ "${doxygen_v}" == "1.8.17" ] ; then
+cat << eof > runtests.patch
+--- testing/runtests.py	2019-12-21 05:24:12.000000000 -0600
++++ testing/runtests.py	2023-06-03 19:38:47.171110936 -0500
+@@ -3,6 +3,7 @@
+ from __future__ import print_function
+ import argparse, glob, itertools, re, shutil, os, sys
+ import subprocess
++import shlex
+ 
+ config_reg = re.compile('.*\/\/\s*(?P<name>\S+):\s*(?P<value>.*)$')
+ 
+@@ -28,10 +29,10 @@
+ 		return os.popen(cmd).read() # Python 2 without encoding
+ 	else:
+ 		if (getStderr):
+-			proc = subprocess.run(cmd1,encoding=encoding,capture_output=True) # Python 3 with encoding
+-			return proc.stderr
++			proc = subprocess.Popen(shlex.split(cmd1),stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding=encoding) # Python 3 with encoding
++			return proc.stderr.read()
+ 		else:
+-			proc = subprocess.Popen(cmd,stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding=encoding) # Python 3 with encoding
++			proc = subprocess.Popen(shlex.split(cmd),stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding=encoding) # Python 3 with encoding
+ 			return proc.stdout.read()
+ 
+ class Tester:
+@@ -137,7 +138,7 @@
+ 				print('GENERATE_DOCBOOK=NO', file=f)
+ 			if (self.args.xhtml):
+ 				print('GENERATE_HTML=YES', file=f)
+-			# HTML_OUTPUT can also be set locally
++			# HTML_OUTPUT can also have been set locally
+ 			print('HTML_OUTPUT=%s/html' % self.test_out, file=f)
+ 			print('HTML_FILE_EXTENSION=.xhtml', file=f)
+ 			if (self.args.pdf):
+@@ -184,7 +185,7 @@
+ 					print('Non-existing file %s after \\'check:\\' statement' % check_file)
+ 					return
+ 				# convert output to canonical form
+-				data = xpopen('%s --format --noblanks --nowarning %s' % (self.args.xmllint,check_file)).read()
++				data = xpopen('%s --format --noblanks --nowarning %s' % (self.args.xmllint,check_file))
+ 				if data:
+ 					# strip version
+ 					data = re.sub(r'xsd" version="[0-9.-]+"','xsd" version=""',data).rstrip('\\n')
+@@ -326,7 +327,7 @@
+ 			tests.append(glob.glob('%s/*.xml' % (docbook_output)))
+ 			tests.append(glob.glob('%s/*/*/*.xml' % (docbook_output)))
+ 			tests = ' '.join(list(itertools.chain.from_iterable(tests))).replace(self.args.outputdir +'/','').replace('\\\\','/')
+-			exe_string = '%s --nonet --postvalid %s' % (self.args.xmllint,tests)
++			exe_string = '%s --noout --nonet --postvalid %s' % (self.args.xmllint,tests)
+ 			exe_string1 = exe_string
+ 			exe_string += ' %s' % (redirx)
+ 			exe_string += ' %s more "%s/temp"' % (separ,docbook_output)
+@@ -346,7 +347,11 @@
+ 				redirx=' 2> %s/temp >nul:'%html_output
+ 			else:
+ 				redirx='2>%s/temp >/dev/null'%html_output
+-			exe_string = '%s --path dtd --nonet --postvalid %s/*xhtml' % (self.args.xmllint,html_output)
++			check_file = []
++			check_file.append(glob.glob('%s/*.xhtml' % (html_output)))
++			check_file.append(glob.glob('%s/*/*/*.xhtml' % (html_output)))
++			check_file = ' '.join(list(itertools.chain.from_iterable(check_file))).replace(self.args.outputdir +'/','').replace('\\\\','/')
++			exe_string = '%s --noout --path dtd --nonet --postvalid %s' % (self.args.xmllint,check_file)
+ 			exe_string1 = exe_string
+ 			exe_string += ' %s' % (redirx)
+ 			exe_string += ' %s more "%s/temp"' % (separ,html_output)
+eof
+patch -Z -b -p0 < runtests.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+fi
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+
 mkdir -v ${tmp}/${doxygen_srcdir}/build
 cd ${tmp}/${doxygen_srcdir}/build
 
