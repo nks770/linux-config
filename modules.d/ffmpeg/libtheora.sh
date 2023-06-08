@@ -78,44 +78,44 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-# Patch needed because png_sizeof() function removed in libpng 1.6+
-# Please use sizeof() insgtead of png_sizeof()
-if [ "${libtheora_v}" == "1.1.1" ] ; then
-cat << eof > png2theora.patch
-Index: examples/png2theora.c
-===================================================================
---- examples/png2theora.c       2009-08-22 18:14:04.000000000 +0000
-+++ examples/png2theora.c       2021-04-25 04:47:25.666263747 +0000
-@@ -462,9 +462,9 @@
-   png_set_strip_alpha(png_ptr);
-
-   row_data = (png_bytep)png_malloc(png_ptr,
--    3*height*width*png_sizeof(*row_data));
-+    3*height*width*sizeof(*row_data));
-   row_pointers = (png_bytep *)png_malloc(png_ptr,
--    height*png_sizeof(*row_pointers));
-+    height*sizeof(*row_pointers));
-   for(y = 0; y < height; y++) {
-     row_pointers[y] = row_data + y*(3*width);
-   }
-eof
-patch -N -Z -b -p0 < png2theora.patch
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-fi
-
-if [ ${debug} -gt 0 ] ; then
-  echo '>> Patching complete'
-  read k
-fi
+## Patch needed because png_sizeof() function removed in libpng 1.6+
+## Please use sizeof() insgtead of png_sizeof()
+#if [ "${libtheora_v}" == "1.1.1" ] ; then
+#cat << eof > png2theora.patch
+#Index: examples/png2theora.c
+#===================================================================
+#--- examples/png2theora.c       2009-08-22 18:14:04.000000000 +0000
+#+++ examples/png2theora.c       2021-04-25 04:47:25.666263747 +0000
+#@@ -462,9 +462,9 @@
+#   png_set_strip_alpha(png_ptr);
+#
+#   row_data = (png_bytep)png_malloc(png_ptr,
+#-    3*height*width*png_sizeof(*row_data));
+#+    3*height*width*sizeof(*row_data));
+#   row_pointers = (png_bytep *)png_malloc(png_ptr,
+#-    height*png_sizeof(*row_pointers));
+#+    height*sizeof(*row_pointers));
+#   for(y = 0; y < height; y++) {
+#     row_pointers[y] = row_data + y*(3*width);
+#   }
+#eof
+#patch -N -Z -b -p0 < png2theora.patch
+#if [ ! $? -eq 0 ] ; then
+#  exit 4
+#fi
+#fi
+#
+#if [ ${debug} -gt 0 ] ; then
+#  echo '>> Patching complete'
+#  read k
+#fi
 
 module purge
 module load libogg/${libogg_ver} \
             libvorbis/${libvorbis_ver} \
             doxygen/${doxygen_ver}
 
-config="./configure --prefix=${opt}/libtheora-${libtheora_v}"
+config="./configure --prefix=${opt}/libtheora-${libtheora_v} --disable-examples"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
