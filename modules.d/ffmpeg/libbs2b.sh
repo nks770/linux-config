@@ -28,7 +28,7 @@ fi
 }
 
 function build_libbs2b() {
-
+exit 4
 # Get desired version number to install
 libbs2b_v=${1}
 if [ -z "${libbs2b_v}" ] ; then

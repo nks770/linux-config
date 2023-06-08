@@ -37,6 +37,10 @@ if [ -z "${sqlite_v}" ] ; then
 fi
 
 case ${sqlite_v} in
+3.21.0) # 2017-10-24
+   sql_srcdir=sqlite-autoconf-3210000
+   zlib_ver=1.2.11 # 2017-01-15
+   ;;
 3.22.0) # 2018-01-22
    sql_srcdir=sqlite-autoconf-3220000
    zlib_ver=1.2.11 # 2017-01-15
@@ -106,8 +110,13 @@ fi
 tar xvfz ${pkg}/${sql_srcdir}.tar.gz
 cd ${tmp}/${sql_srcdir}
 
-config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts3 --enable-fts4 --enable-fts5"
-export CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+if [ "${sqlite_v}" == "3.21.0" ] ; then
+  config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts5"
+  export CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+else
+  config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts3 --enable-fts4 --enable-fts5"
+  export CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+fi
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

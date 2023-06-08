@@ -67,6 +67,7 @@ elif [ "${1}" == "rar" ] ; then
   check_rarlinux 6.12
   check_rarlinux 6.20
   check_rarlinux 6.21
+  check_rarlinux 6.22
 
 elif [ "${1}" == "python" ] ; then
   for pv in 3.9.4 3.9.16 3.10.{9..10} 3.11.2 ; do

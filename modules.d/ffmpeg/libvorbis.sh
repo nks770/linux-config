@@ -79,7 +79,7 @@ module purge
 module load libogg/${libogg_ver}
 module load doxygen/${doxygen_ver}
 
-config="./configure --prefix=${opt}/libvorbis-${libvorbis_v}"
+config="./configure --prefix=${opt}/libvorbis-${libvorbis_v} --enable-docs"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''

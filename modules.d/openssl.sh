@@ -37,7 +37,15 @@ if [ -z "${openssl_v}" ] ; then
 fi
 
 case ${openssl_v} in
+1.1.0g) # 2017-11-02
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
 1.1.0h) # 2018-03-27
+   zlib_ver=1.2.11 # 2017-01-15
+   cert_error_warn=1
+   ;;
+1.1.0l) # 2019-09-10
    zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;

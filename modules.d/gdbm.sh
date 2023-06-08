@@ -37,6 +37,11 @@ if [ -z "${gdbm_v}" ] ; then
 fi
 
 case ${gdbm_v} in
+1.13) #2017-03-11
+   readline_ver=7.0 #2016-09-15
+   ncurses_ver=6.0  #2015-08-08
+   parseopt_patch=0
+   ;;
 1.14.1) #2018-01-03
    readline_ver=7.0 #2016-09-15
    ncurses_ver=6.0  #2015-08-08
@@ -95,8 +100,27 @@ fi
 
 # Patch to enable compilation with GCC 8
 # https://bugs.gentoo.org/705898
-if [ "${gdbm_v}" == "1.18.1" ] ; then
+if [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
 
+if [ "${gdbm_v}" == "1.13" ] ; then
+cat << eof > parseopt.patch
+--- src/parseopt.c  2017-01-02 05:53:22.000000000 -0600
++++ src/parseopt.c  2023-03-21 23:42:41.797112817 -0500
+@@ -252,8 +252,6 @@
+ }
+eof
+echo -e ' \f' >> parseopt.patch
+cat << eof >> parseopt.patch
+ char *parseopt_program_name;
+-char *parseopt_program_doc;
+-char *parseopt_program_args;
+ const char *program_bug_address = "<" PACKAGE_BUGREPORT ">";
+ void (*parseopt_help_hook) (FILE *stream);
+eof
+echo -e ' \f' >> parseopt.patch
+fi
+
+if [ "${gdbm_v}" == "1.18.1" ] ; then
 cat << eof > parseopt.patch
 --- src/parseopt.c  2018-05-30 04:39:15.000000000 -0500
 +++ src/parseopt.c  2023-03-21 23:42:41.797112817 -0500
@@ -112,6 +136,7 @@ cat << eof >> parseopt.patch
  void (*parseopt_help_hook) (FILE *stream);
 eof
 echo -e ' \f' >> parseopt.patch
+fi
 
 patch -Z -b -p0 < parseopt.patch
 
@@ -124,8 +149,14 @@ if [ ${debug} -gt 0 ] ; then
 fi
 fi
 
-config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat CPPFLAGS=-I/opt/readline-${readline_ver}/include"
-export LDFLAGS="-L/opt/readline-${readline_ver}/lib -L/opt/ncurses-${ncurses_ver}/lib"
+if [ "${gdbm_v}" == "1.13" ] ; then
+  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat --enable-gdbm-export CPPFLAGS=-I/opt/readline-${readline_ver}/include"
+  export LDFLAGS="-L${opt}/readline-${readline_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib -L${tmp}/gdbm-${gdbm_v}/src/.libs"
+else
+  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat CPPFLAGS=-I/opt/readline-${readline_ver}/include"
+  export LDFLAGS="-L${opt}/readline-${readline_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib"
+fi
+
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

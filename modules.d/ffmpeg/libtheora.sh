@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libtheora
+echo 'Loading libtheora...'
 
 function libtheoraInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -28,7 +29,6 @@ fi
 }
 
 function build_libtheora() {
-exit 4
 
 # Get desired version number to install
 libtheora_v=${1}
@@ -37,26 +37,29 @@ if [ -z "${libtheora_v}" ] ; then
 fi
 libtheora_srcdir=libtheora-${libtheora_v}
 
-echo "Installing libtheora ${libtheora_v}..."
-
 case ${1} in
   1.1.1) # 2009 October 1
-   libtheora_libogg_ver=1.3.4
-   libtheora_libvorbis_ver=1.3.7
-   libtheora_doxygen_ver=1.8.14
+   libogg_ver=1.3.4
+   libvorbis_ver=1.3.7
+   doxygen_ver=1.8.14
+  ;;
+  *)
+   echo "ERROR: Review needed for libtheora ${1}"
+   exit 4 # Please review
   ;;
 esac
 
-check_modules
-check_libogg ${libtheora_libogg_ver}
-check_libvorbis ${libtheora_libvorbis_ver}
-check_doxygen ${libtheora_doxygen_ver}
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  libogg_ver=${global_libogg}
+fi
 
-module purge
-module load libogg/${libtheora_libogg_ver} \
-            libvorbis/${libtheora_libvorbis_ver} \
-            doxygen/${libtheora_doxygen_ver}
-module list
+echo "Installing libtheora ${libtheora_v}..."
+
+check_modules
+check_libogg ${libogg_ver}
+check_libvorbis ${libvorbis_ver}
+check_doxygen ${doxygen_ver}
 
 downloadPackage libtheora-${libtheora_v}.tar.bz2
 
@@ -69,6 +72,11 @@ fi
 cd ${tmp}
 tar xvfj ${pkg}/libtheora-${libtheora_v}.tar.bz2
 cd ${tmp}/${libtheora_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
 
 # Patch needed because png_sizeof() function removed in libpng 1.6+
 # Please use sizeof() insgtead of png_sizeof()
@@ -97,11 +105,57 @@ if [ ! $? -eq 0 ] ; then
 fi
 fi
 
-./configure --prefix=${opt}/libtheora-${libtheora_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+
+module purge
+module load libogg/${libogg_ver} \
+            libvorbis/${libvorbis_ver} \
+            doxygen/${doxygen_ver}
+
+config="./configure --prefix=${opt}/libtheora-${libtheora_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
@@ -121,10 +175,10 @@ set PKG ${opt}/libtheora-\$VER
 
 module-whatis   "Loads libtheora-${libtheora_v}"
 conflict libtheora
-module load libogg/${libtheora_libogg_ver}
-module load libvorbis/${libtheora_libvorbis_ver}
-prereq libogg/${libtheora_libogg_ver}
-prereq libvorbis/${libtheora_libvorbis_ver}
+module load libogg/${libogg_ver}
+module load libvorbis/${libvorbis_ver}
+prereq libogg/${libogg_ver}
+prereq libvorbis/${libvorbis_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
