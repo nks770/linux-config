@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building FLAC
+echo 'Loading flac...'
 
 function flacInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,25 +35,29 @@ flac_v=${1}
 if [ -z "${flac_v}" ] ; then
   flac_v=1.3.3
 fi
-flac_srcdir=flac-${flac_v}
-
-echo "Installing flac ${flac_v}..."
 
 case ${1} in
   1.3.3) # 4 Aug 2019
-   flac_nasm_ver=2.14.02
-   flac_libogg_ver=1.3.4
+   nasm_ver=2.14.02
+   libogg_ver=1.3.4
+  ;;
+  *)
+   echo "ERROR: Review needed for flac ${1}"
+   exit 4 # Please review
   ;;
 esac
 
-check_modules
-check_nasm ${flac_nasm_ver}
-check_libogg ${flac_libogg_ver}
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  libogg_ver=${global_libogg}
+fi
 
-module purge
-module load nasm/${flac_nasm_ver} \
-            libogg/${flac_libogg_ver}
-module list
+echo "Installing flac ${flac_v}..."
+flac_srcdir=flac-${flac_v}
+
+check_modules
+check_nasm ${nasm_ver}
+check_libogg ${libogg_ver}
 
 downloadPackage flac-${flac_v}.tar.xz
 
@@ -66,13 +71,58 @@ cd ${tmp}
 tar xvfJ ${pkg}/flac-${flac_v}.tar.xz
 cd ${tmp}/${flac_srcdir}
 
-./configure --prefix=${opt}/flac-${flac_v} \
-            --with-ogg=${opt}/libogg-${flac_libogg_ver} \
-            --disable-xmms-plugin
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load nasm/${nasm_ver} \
+            libogg/${libogg_ver}
+
+config="./configure --prefix=${opt}/flac-${flac_v} \
+            --with-ogg=${opt}/libogg-${libogg_ver} \
+            --disable-xmms-plugin"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
@@ -92,8 +142,8 @@ set PKG ${opt}/flac-\$VER
 
 module-whatis   "Loads flac-${flac_v}"
 conflict flac
-module load libogg/${flac_libogg_ver}
-prereq libogg/${flac_libogg_ver}
+module load libogg/${libogg_ver}
+prereq libogg/${libogg_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

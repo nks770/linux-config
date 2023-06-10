@@ -28,7 +28,7 @@ fi
 }
 
 function build_kvazaar() {
-
+exit 4
 # Get desired version number to install
 kvazaar_v=${1}
 if [ -z "${kvazaar_v}" ] ; then
