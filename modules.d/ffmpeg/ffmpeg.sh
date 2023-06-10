@@ -55,8 +55,8 @@ case ${1} in
    ffmpeg_libvorbis_ver=1.3.7     # 2020-07-04
    ffmpeg_libtheora_ver=1.1.1     # 2009-10-01
    ffmpeg_libbs2b_ver=3.1.0-flac1.3.3  # 2009-06-04 / 2019-08-04
-   ffmpeg_kvazaar_ver=1.3.0 # Jul 9, 2019
-   ffmpeg_libilbc_ver=2.0.2
+   ffmpeg_kvazaar_ver=1.3.0       # 2019-07-09
+   ffmpeg_libilbc_ver=2.0.2       # 2014-12-14
    ffmpeg_openh264_ver=2.0.0 # May 8, 2019
    ffmpeg_openjpeg_ver=2.3.1 # Apr 2, 2019
    ffmpeg_wavpack_ver=5.2.0  # December 15, 2019

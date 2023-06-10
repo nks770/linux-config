@@ -41,6 +41,10 @@ kwsys_warning=0
 chmod_warning=0
 
 case ${cmake_v} in
+3.0.2) # 2014-09-11
+   ncurses_ver=5.9  # 2011-04-04
+   kwsys_warning=1
+   ;;
 3.8.1) # 2017-05-02
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1

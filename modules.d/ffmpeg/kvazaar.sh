@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building kvazaar
+echo 'Loading kvazaar...'
 
 function kvazaarInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -28,21 +29,25 @@ fi
 }
 
 function build_kvazaar() {
-exit 4
+
 # Get desired version number to install
 kvazaar_v=${1}
 if [ -z "${kvazaar_v}" ] ; then
   kvazaar_v=1.3.0
 fi
-kvazaar_srcdir=kvazaar-${kvazaar_v}
 
-echo "Installing kvazaar ${kvazaar_v}..."
-
-case ${1} in
+case ${kvazaar_v} in
   1.3.0) # Jul 9, 2019
    kvazaar_yasm_ver=1.3.0
   ;;
+  *)
+   echo "ERROR: Review needed for kvazaar ${kvazaar_v}"
+   exit 4 # Please review
+  ;;
 esac
+
+echo "Installing kvazaar ${kvazaar_v}..."
+kvazaar_srcdir=kvazaar-${kvazaar_v}
 
 check_modules
 # Yasm is optional, but some of the optimization will not be compiled in if it's missing.
@@ -50,7 +55,6 @@ check_yasm ${kvazaar_yasm_ver}
 
 module purge
 module load yasm/${kvazaar_yasm_ver}
-module list
 
 downloadPackage kvazaar-${kvazaar_v}.tar.gz
 
@@ -64,11 +68,54 @@ cd ${tmp}
 tar xvfz ${pkg}/kvazaar-${kvazaar_v}.tar.gz
 cd ${tmp}/${kvazaar_srcdir}
 
-./configure --prefix=${opt}/kvazaar-${kvazaar_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+config="./configure --prefix=${opt}/kvazaar-${kvazaar_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+## There is a testsuite for kvazaar, but it depends on ffmpeg
+## Without ffmpeg, it is useless
+#if [ ${run_tests} -gt 0 ] ; then
+#  make check
+#  echo '>> Tests complete'
+#  read k
+#fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

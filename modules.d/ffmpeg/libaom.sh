@@ -87,9 +87,6 @@ cd ${tmp}
 if [ -d ${tmp}/${libaom_srcdir} ] ; then
   rm -rf ${tmp}/${libaom_srcdir}
 fi
-if [ -d ${tmp}/${libaom_srcdir}_build ] ; then
-  rm -rf ${tmp}/${libaom_srcdir}_build
-fi
 
 mkdir -pv ${tmp}/${libaom_srcdir}/build
 cd ${tmp}/${libaom_srcdir}
@@ -101,7 +98,6 @@ module load yasm/${yasm_ver}
 module load cmake/${cmake_ver}
 module load doxygen/${doxygen_ver}
 module load Python/${python_ver}
-module list
 
 if [ ${debug} -gt 0 ] ; then
   echo ''

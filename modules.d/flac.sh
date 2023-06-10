@@ -36,13 +36,13 @@ if [ -z "${flac_v}" ] ; then
   flac_v=1.3.3
 fi
 
-case ${1} in
+case ${flac_v} in
   1.3.3) # 4 Aug 2019
    nasm_ver=2.14.02
    libogg_ver=1.3.4
   ;;
   *)
-   echo "ERROR: Review needed for flac ${1}"
+   echo "ERROR: Review needed for flac ${flac_v}"
    exit 4 # Please review
   ;;
 esac

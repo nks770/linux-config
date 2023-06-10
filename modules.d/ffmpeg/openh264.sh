@@ -28,7 +28,7 @@ fi
 }
 
 function build_openh264() {
-
+exit 4
 # Get desired version number to install
 openh264_v=${1}
 if [ -z "${openh264_v}" ] ; then
