@@ -47,9 +47,8 @@ case ${libbs2b_v} in
   ;;
 esac
 
-libbs2b_srcdir=libbs2b-${libbs2b_vv}
-
 echo "Installing libbs2b ${libbs2b_v}..."
+libbs2b_srcdir=libbs2b-${libbs2b_vv}
 
 check_modules
 check_libsndfile ${libsndfile_ver}

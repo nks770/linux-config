@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building TwoLAME
+echo 'Loading twolame...'
 
 function twolameInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,20 +35,22 @@ twolame_v=${1}
 if [ -z "${twolame_v}" ] ; then
   twolame_v=0.4.0
 fi
-twolame_srcdir=twolame-${twolame_v}
 
-echo "Installing twolame ${twolame_v}..."
-
-case ${1} in
+case ${twolame_v} in
   0.4.0) # 2019-10-11
-   twolame_libsndfile_ver=1.0.28 # April 2 2017
+   twolame_libsndfile_ver=1.0.28-flac1.3.3 # 2017-04-02 / 2019-08-04
+  ;;
+  *)
+   echo "ERROR: Review needed for twolame ${twolame_v}"
+   exit 4 # Please review
   ;;
 esac
 
+echo "Installing twolame ${twolame_v}..."
+twolame_srcdir=twolame-${twolame_v}
+
 check_modules
-module purge
-module load libsndfile/${twolame_libsndfile_ver}
-module list
+check_libsndfile ${twolame_libsndfile_ver}
 
 downloadPackage twolame-${twolame_v}.tar.gz
 
@@ -61,11 +64,55 @@ cd ${tmp}
 tar xvfz ${pkg}/twolame-${twolame_v}.tar.gz
 cd ${tmp}/${twolame_srcdir}
 
-./configure --prefix=${opt}/twolame-${twolame_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load libsndfile/${twolame_libsndfile_ver}
+
+config="./configure --prefix=${opt}/twolame-${twolame_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libjpeg
+echo 'Loading libjpeg...'
 
 function libjpegInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,9 +35,6 @@ libjpeg_v=${1}
 if [ -z "${libjpeg_v}" ] ; then
   libjpeg_v=9d
 fi
-libjpeg_srcdir=jpeg-${libjpeg_v}
-
-echo "Installing libjpeg ${libjpeg_v}..."
 
 #case ${1} in
 #  9c)
@@ -46,9 +44,10 @@ echo "Installing libjpeg ${libjpeg_v}..."
 #  ;;
 #esac
 
+echo "Installing libjpeg ${libjpeg_v}..."
+libjpeg_srcdir=jpeg-${libjpeg_v}
+
 check_modules
-module purge
-module list
 
 downloadPackage jpegsrc.v${libjpeg_v}.tar.gz
 
@@ -62,11 +61,54 @@ cd ${tmp}
 tar xvfz ${pkg}/jpegsrc.v${libjpeg_v}.tar.gz
 cd ${tmp}/${libjpeg_srcdir}
 
-./configure --prefix=${opt}/libjpeg-${libjpeg_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+
+config="./configure --prefix=${opt}/libjpeg-${libjpeg_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

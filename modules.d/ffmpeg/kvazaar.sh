@@ -53,9 +53,6 @@ check_modules
 # Yasm is optional, but some of the optimization will not be compiled in if it's missing.
 check_yasm ${kvazaar_yasm_ver}
 
-module purge
-module load yasm/${kvazaar_yasm_ver}
-
 downloadPackage kvazaar-${kvazaar_v}.tar.gz
 
 cd ${tmp}
@@ -72,6 +69,9 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
 fi
+
+module purge
+module load yasm/${kvazaar_yasm_ver}
 
 config="./configure --prefix=${opt}/kvazaar-${kvazaar_v}"
 if [ ${debug} -gt 0 ] ; then

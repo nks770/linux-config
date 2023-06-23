@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building openh264
+echo 'Loading openh264...'
 
 function openh264Installed() {
 # Cannot evaulate if we dont have modules installed
@@ -28,31 +29,31 @@ fi
 }
 
 function build_openh264() {
-exit 4
+
 # Get desired version number to install
 openh264_v=${1}
 if [ -z "${openh264_v}" ] ; then
   openh264_v=2.0.0
 fi
-openh264_srcdir=openh264-${openh264_v}
 
-echo "Installing openh264 ${openh264_v}..."
-
-case ${1} in
+case ${openh264_v} in
   2.0.0) # May 8, 2019
    openh264_nasm_ver=2.14.02
   ;;
   2.3.1) # Sep 20, 2022
    openh264_nasm_ver=2.15.05 # 2020-08-28 09:08
   ;;
+  *)
+   echo "ERROR: Review needed for openh264 ${openh264_v}"
+   exit 4 # Please review
+  ;;
 esac
+
+echo "Installing openh264 ${openh264_v}..."
+openh264_srcdir=openh264-${openh264_v}
 
 check_modules
 check_nasm ${openh264_nasm_ver}
-
-module purge
-module load nasm/${openh264_nasm_ver}
-module list
 
 downloadPackage openh264-${openh264_v}.tar.gz
 
@@ -66,10 +67,16 @@ cd ${tmp}
 tar xvfz ${pkg}/openh264-${openh264_v}.tar.gz
 cd ${tmp}/${openh264_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load nasm/${openh264_nasm_ver}
+
 # Patch to change installation prefix
 cat << eof > prefix.patch
-Index: Makefile
-===================================================================
 --- Makefile    2019-05-08 07:07:17.000000000 +0000
 +++ Makefile    2021-04-25 06:20:24.866535202 +0000
 @@ -21,7 +21,7 @@
@@ -86,11 +93,43 @@ patch -N -Z -b -p0 < prefix.patch
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo ''
+  module list
+  echo ''
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

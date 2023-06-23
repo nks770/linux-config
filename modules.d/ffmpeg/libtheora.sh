@@ -35,16 +35,15 @@ libtheora_v=${1}
 if [ -z "${libtheora_v}" ] ; then
   libtheora_v=1.1.1
 fi
-libtheora_srcdir=libtheora-${libtheora_v}
 
-case ${1} in
+case ${libtheora_v} in
   1.1.1) # 2009 October 1
    libogg_ver=1.3.4
    libvorbis_ver=1.3.7
    doxygen_ver=1.8.14
   ;;
   *)
-   echo "ERROR: Review needed for libtheora ${1}"
+   echo "ERROR: Review needed for libtheora ${libtheora_v}"
    exit 4 # Please review
   ;;
 esac
@@ -55,6 +54,7 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
 fi
 
 echo "Installing libtheora ${libtheora_v}..."
+libtheora_srcdir=libtheora-${libtheora_v}
 
 check_modules
 check_libogg ${libogg_ver}

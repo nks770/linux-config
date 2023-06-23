@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building openjpeg
+echo 'Loading openjpeg...'
 
 function openjpegInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,25 +35,39 @@ openjpeg_v=${1}
 if [ -z "${openjpeg_v}" ] ; then
   openjpeg_v=2.3.1
 fi
-openjpeg_srcdir=openjpeg-${openjpeg_v}
 
-echo "Installing openjpeg ${openjpeg_v}..."
-
-case ${1} in
+case ${openjpeg_v} in
   2.3.1) # Apr 2, 2019
-   openjpeg_cmake_ver=3.13.4 # 2019-02-01 13:20
+   openjpeg_cmake_ver=3.13.4  # 2019-02-01 13:20
+   openjpeg_zlib_ver=1.2.11   # 2017-01-15
+   openjpeg_libpng_ver=1.6.36 # 2018-12-02
+   openjpeg_tiff_ver=4.0.9    # 2017-11-18
   ;;
   2.5.0) # May 13, 2022
-   openjpeg_cmake_ver=3.23.1 # 2022-04-12 10:55
+   openjpeg_cmake_ver=3.23.1  # 2022-04-12 10:55
+   openjpeg_zlib_ver=1.2.12   # 2022-03-27
+   openjpeg_libpng_ver=1.6.37 # 2019-04-15
+   openjpeg_tiff_ver=4.3.0    # 2021-04-20
+  ;;
+  *)
+   echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
+   exit 4 # Please review
   ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  openjpeg_zlib_ver=${global_zlib}
+fi
+
+echo "Installing openjpeg ${openjpeg_v}..."
+openjpeg_srcdir=openjpeg-${openjpeg_v}
+
 check_modules
 check_cmake ${openjpeg_cmake_ver}
-
-module purge
-module load cmake/${openjpeg_cmake_ver}
-module list
+check_zlib ${openjpeg_zlib_ver}
+check_libpng ${openjpeg_libpng_ver}
+check_tiff ${openjpeg_tiff_ver}
 
 downloadPackage openjpeg-${openjpeg_v}.tar.gz
 
@@ -64,13 +79,71 @@ fi
 
 cd ${tmp}
 tar xvfz ${pkg}/openjpeg-${openjpeg_v}.tar.gz
-cd ${tmp}/${openjpeg_srcdir}
+mkdir -pv ${tmp}/${openjpeg_srcdir}/build
+cd ${tmp}/${openjpeg_srcdir}/build
 
-cmake -G 'Unix Makefiles' -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load cmake/${openjpeg_cmake_ver}
+module load zlib/${openjpeg_zlib_ver}
+module load libpng/${openjpeg_libpng_ver}
+module load tiff/${openjpeg_tiff_ver}
+
+if [ ${debug} -gt 0 ] ; then
+  echo ''
+  module list
+  echo cmake -L -G \"Unix Makefiles\" \
+       -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/libz.so.1.2.13 \
+       -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
+       -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/libpng16.so.16.36.0 \
+       -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
+       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/libpng16.so.16.36.0 \
+       -DTIFF_INCLUDE_DIR=${opt}/tiff-${openjpeg_tiff_ver}/include \
+       -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
+  echo ''
+  read k
+fi
+
+cmake -L -G 'Unix Makefiles' \
+      -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/libz.so.1.2.13 \
+      -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
+      -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/libpng16.so.16.36.0 \
+      -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
+      -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
@@ -90,6 +163,10 @@ set PKG ${opt}/openjpeg-\$VER
 
 module-whatis   "Loads openjpeg-${openjpeg_v}"
 conflict openjpeg
+module load zlib/${openjpeg_zlib_ver}
+module load libpng/${openjpeg_libpng_ver}
+prereq zlib/${openjpeg_zlib_ver}
+prereq libpng/${openjpeg_libpng_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include

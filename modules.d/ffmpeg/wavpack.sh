@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building wavpack
+echo 'Loading wavpack...'
 
 function wavpackInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,9 +35,6 @@ wavpack_v=${1}
 if [ -z "${wavpack_v}" ] ; then
   wavpack_v=5.4.0
 fi
-wavpack_srcdir=wavpack-${wavpack_v}
-
-echo "Installing wavpack ${wavpack_v}..."
 
 #case ${1} in
 #  5.2.0) # December 15, 2019
@@ -44,9 +42,10 @@ echo "Installing wavpack ${wavpack_v}..."
 #  ;;
 #esac
 
+echo "Installing wavpack ${wavpack_v}..."
+wavpack_srcdir=wavpack-${wavpack_v}
+
 check_modules
-module purge
-module list
 
 downloadPackage wavpack-${wavpack_v}.tar.bz2
 
@@ -60,11 +59,52 @@ cd ${tmp}
 tar xvfj ${pkg}/wavpack-${wavpack_v}.tar.bz2
 cd ${tmp}/${wavpack_srcdir}
 
-./configure --prefix=${opt}/wavpack-${wavpack_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+config="./configure --prefix=${opt}/wavpack-${wavpack_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

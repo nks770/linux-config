@@ -29,7 +29,7 @@ fi
 }
 
 function build_speex() {
-
+exit 4
 # Get desired version number to install
 speex_v=${1}
 if [ -z "${speex_v}" ] ; then
