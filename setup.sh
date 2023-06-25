@@ -7,6 +7,7 @@ tmp=${root}/temp
 
 debug=1
 run_tests=1
+run_cmake_tests=0
 dependency_strategy=optimized
 
 # Global dependency versions (for optimized strategy)

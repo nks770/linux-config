@@ -64,6 +64,8 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+module purge
+
 config="./configure --prefix=${opt}/wavpack-${wavpack_v}"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

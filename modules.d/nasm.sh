@@ -35,9 +35,9 @@ nasm_v=${1}
 if [ -z "${nasm_v}" ] ; then
   nasm_v=2.13.03
 fi
-nasm_srcdir=nasm-${nasm_v}
 
 echo "Installing nasm ${nasm_v}..."
+nasm_srcdir=nasm-${nasm_v}
 
 check_modules
 
@@ -60,32 +60,10 @@ fi
 # Patch to enable compilation with GCC 8
 touch nasmlib.patch
 
-if [ "${nasm_v}" == "2.13.02" ] ; then
+if [ "${nasm_v}" == "2.13.01" ] || [ "${nasm_v}" == "2.13.02" ] || [ "${nasm_v}" == "2.13.03" ] ; then
 cat << eof > nasmlib.patch
---- include/nasmlib.h   2017-11-29 13:44:08.000000000 -0600
-+++ include/nasmlib.h   2023-04-04 18:31:38.408864893 -0500
-@@ -188,10 +188,8 @@
- int64_t readstrnum(char *str, int length, bool *warn);
-
- /*
-- * seg_init: Initialise the segment-number allocator.
-  * seg_alloc: allocate a hitherto unused segment number.
-  */
--void pure_func seg_init(void);
- int32_t pure_func seg_alloc(void);
-
- /*
-eof
-patch -Z -b -p0 < nasmlib.patch
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-fi
-
-if [ "${nasm_v}" == "2.13.03" ] ; then
-cat << eof > nasmlib.patch
---- include/nasmlib.h   2018-02-07 21:40:15.000000000 +0000
-+++ include/nasmlib.h   2021-04-24 04:10:58.917451792 +0000
+--- include/nasmlib.h
++++ include/nasmlib.h
 @@ -188,10 +188,8 @@
  int64_t readstrnum(char *str, int length, bool *warn);
 

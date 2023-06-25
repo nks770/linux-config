@@ -49,6 +49,10 @@ case ${cmake_v} in
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
+3.9.6) # 2017-11-10
+   ncurses_ver=6.0  # 2015-08-08
+   kwsys_warning=1
+   ;;
 3.10.1) # 2017-12-14
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
@@ -172,7 +176,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 
-if [ ${run_tests} -gt 0 ] ; then
+if [ ${run_cmake_tests} -gt 0 ] ; then
   # Patch to enable avoid a testsuite failure when compiled with newer GCC
   # I borrowed this update from referencing cmake 3.11.4 (slightly newer)
   # This is for test # "34 - CompileFeatures"

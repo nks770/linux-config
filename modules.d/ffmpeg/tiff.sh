@@ -30,6 +30,8 @@ fi
 
 function build_tiff() {
 
+tiff_use_cmake=1
+
 # Get desired version number to install
 tiff_v=${1}
 if [ -z "${tiff_v}" ] ; then
@@ -38,19 +40,25 @@ fi
 
 case ${tiff_v} in
   4.0.9) # 2017-Nov-18
+   tiff_cmake_ver=3.9.6 # 2017-11-10
    tiff_libjpeg_ver=9b # Sun Jan 17 10:46 2016
+   tiff_libjpegturbo_ver=1.5.2 # 2017-08-09
    tiff_zlib_ver=1.2.11 # 2017-01-15
    tiff_xz_ver=5.2.3    # 2016-12-30
    tiff_jbigkit_ver=2.1 # 2014-04-08
   ;;
   4.1.0) # 2019-Nov-03
+   tiff_cmake_ver=3.15.5 # 2019-10-30
    tiff_libjpeg_ver=9c # Sun Jan 14 11:48 2018
+   tiff_libjpegturbo_ver=2.0.3 # 2019-09-04
    tiff_zlib_ver=1.2.11 # 2017-01-15
    tiff_xz_ver=5.2.4    # 2018-04-29
    tiff_jbigkit_ver=2.1 # 2014-04-08
   ;;
   4.4.0) # 2022-May-27 14:53
+   tiff_cmake_ver=3.21.6 # 2022-03-04
    tiff_libjpeg_ver=9e # Sun Jan 16 10:30 2022
+   tiff_libjpegturbo_ver=2.1.3 # 2022-02-25
    tiff_zlib_ver=1.2.11 # 2017-01-15
    tiff_xz_ver=5.2.5    # 2020-03-17
    tiff_jbigkit_ver=2.1 # 2014-04-08
@@ -67,11 +75,52 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
   tiff_xz_ver=${global_xz}
 fi
 
+case ${tiff_libjpegturbo_ver} in
+  1.5.2)
+    tiff_libjpegturbo_lib=libjpeg.so.62.2.0
+  ;;
+  *)
+    echo "ERROR: Unknown libjpegturbo library"
+    exit 3
+  ;;
+esac
+case ${tiff_zlib_ver} in
+  1.2.13)
+    tiff_zlib_lib=libz.so.${tiff_zlib_ver}
+  ;;
+  *)
+    echo "ERROR: Unknown zlib library"
+    exit 3
+  ;;
+esac
+case ${tiff_xz_ver} in
+  5.4.2)
+    tiff_xz_lib=liblzma.so.${tiff_xz_ver}
+  ;;
+  *)
+    echo "ERROR: Unknown xz library"
+    exit 3
+  ;;
+esac
+case ${tiff_jbigkit_ver} in
+  2.1)
+    tiff_jbigkit_lib=libjbig.so.0
+  ;;
+  *)
+    echo "ERROR: Unknown jbigkit library"
+    exit 3
+  ;;
+esac
+
 echo "Installing tiff ${tiff_v}..."
 tiff_srcdir=tiff-${tiff_v}
 
 check_modules
-check_libjpeg ${tiff_libjpeg_ver}
+if [ ${tiff_use_cmake} -gt 0 ] ; then
+  check_cmake ${tiff_cmake_ver}
+fi
+#check_libjpeg ${tiff_libjpeg_ver}
+check_libjpegturbo ${tiff_libjpegturbo_ver}
 check_zlib ${tiff_zlib_ver}
 check_xz ${tiff_xz_ver}
 check_jbigkit ${tiff_jbigkit_ver}
@@ -94,13 +143,46 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load libjpeg/${tiff_libjpeg_ver}
+if [ ${tiff_use_cmake} -gt 0 ] ; then
+  module load cmake/${tiff_cmake_ver}
+fi
+module load libjpeg-turbo/${tiff_libjpegturbo_ver}
+#module load libjpeg/${tiff_libjpeg_ver}
 module load zlib/${tiff_zlib_ver}
 module load xz/${tiff_xz_ver}
 module load jbigkit/${tiff_jbigkit_ver}
 
+
+if [ ${tiff_use_cmake} -gt 0 ] ; then
+
+if [ ! -d ${tmp}/${tiff_srcdir}/build ] ; then
+  mkdir -v ${tmp}/${tiff_srcdir}/build
+fi
+cd ${tmp}/${tiff_srcdir}/build
+
+if [ ${debug} -gt 0 ] ; then
+  echo ''
+  module list
+  echo ''
+  echo cmake -L -G \"Unix Makefiles\" \
+      -DJPEG_LIBRARY=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/lib/${tiff_libjpegturbo_lib} -DJPEG_INCLUDE_DIR=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/include \
+      -DJBIG_LIBRARY=${opt}/jbigkit-${tiff_jbigkit_ver}/lib/${tiff_jbigkit_lib} -DJBIG_INCLUDE_DIR=${opt}/jbigkit-${tiff_jbigkit_ver}/include \
+      -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
+      -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
+      -DCMAKE_INSTALL_PREFIX=${opt}/tiff-${tiff_v} ..
+  read k
+fi
+
+cmake -L -G "Unix Makefiles" \
+      -DJPEG_LIBRARY=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/lib/${tiff_libjpegturbo_lib} -DJPEG_INCLUDE_DIR=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/include \
+      -DJBIG_LIBRARY=${opt}/jbigkit-${tiff_jbigkit_ver}/lib/${tiff_jbigkit_lib} -DJBIG_INCLUDE_DIR=${opt}/jbigkit-${tiff_jbigkit_ver}/include \
+      -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
+      -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
+      -DCMAKE_INSTALL_PREFIX=${opt}/tiff-${tiff_v} ..
+else
+
 config="./configure --prefix=${opt}/tiff-${tiff_v} \
-        --with-jpeg-lib-dir=${opt}/libjpeg-${tiff_libjpeg_ver}/lib \
+        --with-jpeg-lib-dir=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/lib \
         --with-jbig-lib-dir=${opt}/jbigkit-${tiff_jbigkit_ver}/lib \
 	--with-zlib-lib-dir=${opt}/zlib-${tiff_zlib_ver}/lib \
 	--with-lzma-lib-dir=${opt}/xz-${tiff_xz_ver}/lib"
@@ -115,6 +197,7 @@ fi
 
 ${config}
 
+fi
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
   read k
@@ -131,7 +214,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make check
+  make test
   echo '>> Tests complete'
   read k
 fi
@@ -163,11 +246,13 @@ set PKG ${opt}/tiff-\$VER
 
 module-whatis   "Loads tiff-${tiff_v}"
 conflict tiff
-module load libjpeg/${tiff_libjpeg_ver}
+#module load libjpeg/${tiff_libjpeg_ver}
+module load libjpeg-turbo/${tiff_libjpegturbo_ver}
 module load zlib/${tiff_zlib_ver}
 module load xz/${tiff_xz_ver}
 module load jbigkit/${tiff_jbigkit_ver}
-prereq libjpeg/${tiff_libjpeg_ver}
+#prereq libjpeg/${tiff_libjpeg_ver}
+prereq libjpeg-turbo/${tiff_libjpegturbo_ver}
 prereq zlib/${tiff_zlib_ver}
 prereq xz/${tiff_xz_ver}
 prereq jbigkit/${tiff_jbigkit_ver}

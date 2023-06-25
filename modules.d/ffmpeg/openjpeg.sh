@@ -42,12 +42,14 @@ case ${openjpeg_v} in
    openjpeg_zlib_ver=1.2.11   # 2017-01-15
    openjpeg_libpng_ver=1.6.36 # 2018-12-02
    openjpeg_tiff_ver=4.0.9    # 2017-11-18
+   openjpeg_lcms2_ver=2.9     # 2017-11-06
   ;;
   2.5.0) # May 13, 2022
    openjpeg_cmake_ver=3.23.1  # 2022-04-12 10:55
    openjpeg_zlib_ver=1.2.12   # 2022-03-27
    openjpeg_libpng_ver=1.6.37 # 2019-04-15
    openjpeg_tiff_ver=4.3.0    # 2021-04-20
+   openjpeg_lcms2_ver=2.13.1  # 2022-02-03
   ;;
   *)
    echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
@@ -63,11 +65,49 @@ fi
 echo "Installing openjpeg ${openjpeg_v}..."
 openjpeg_srcdir=openjpeg-${openjpeg_v}
 
+case ${openjpeg_zlib_ver} in
+  1.2.13)
+    openjpeg_zlib_lib=libz.so.${openjpeg_zlib_ver}
+  ;;
+  *)
+    echo "ERROR: Unknown zlib library"
+    exit 3
+  ;;
+esac
+case ${openjpeg_libpng_ver} in
+  1.6.36)
+    openjpeg_libpng_lib=libpng16.so.16.36.0
+  ;;
+  *)
+    echo "ERROR: Unknown libpng library"
+    exit 3
+  ;;
+esac
+case ${openjpeg_tiff_ver} in
+  4.0.9)
+    openjpeg_tiff_lib=libtiff.so.5.3.0
+  ;;
+  *)
+    echo "ERROR: Unknown tiff library"
+    exit 3
+  ;;
+esac
+case ${openjpeg_lcms2_ver} in
+  2.9)
+    openjpeg_lcms2_lib=liblcms2.so.2.0.8
+  ;;
+  *)
+    echo "ERROR: Unknown lcms2 library"
+    exit 3
+  ;;
+esac
+
 check_modules
 check_cmake ${openjpeg_cmake_ver}
 check_zlib ${openjpeg_zlib_ver}
 check_libpng ${openjpeg_libpng_ver}
 check_tiff ${openjpeg_tiff_ver}
+check_lcms2 ${openjpeg_lcms2_ver}
 
 downloadPackage openjpeg-${openjpeg_v}.tar.gz
 
@@ -92,28 +132,35 @@ module load cmake/${openjpeg_cmake_ver}
 module load zlib/${openjpeg_zlib_ver}
 module load libpng/${openjpeg_libpng_ver}
 module load tiff/${openjpeg_tiff_ver}
+module load lcms2/${openjpeg_lcms2_ver}
 
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
   echo cmake -L -G \"Unix Makefiles\" \
-       -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/libz.so.1.2.13 \
+       -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/${openjpeg_zlib_lib} \
        -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
-       -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/libpng16.so.16.36.0 \
+       -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/${openjpeg_libpng_lib} \
        -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
-       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/libpng16.so.16.36.0 \
+       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/${openjpeg_tiff_lib} \
        -DTIFF_INCLUDE_DIR=${opt}/tiff-${openjpeg_tiff_ver}/include \
+       -DLCMS2_LIBRARY=${opt}/lcms2-${openjpeg_lcms2_ver}/lib/${openjpeg_lcms2_lib} \
+       -DLCMS2_INCLUDE_DIR=${opt}/lcms2-${openjpeg_lcms2_ver}/include \
        -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
   echo ''
   read k
 fi
 
 cmake -L -G 'Unix Makefiles' \
-      -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/libz.so.1.2.13 \
-      -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
-      -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/libpng16.so.16.36.0 \
-      -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
-      -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
+       -DZLIB_LIBRARY=${opt}/zlib-${openjpeg_zlib_ver}/lib/${openjpeg_zlib_lib} \
+       -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
+       -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/${openjpeg_libpng_lib} \
+       -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
+       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/${openjpeg_tiff_lib} \
+       -DTIFF_INCLUDE_DIR=${opt}/tiff-${openjpeg_tiff_ver}/include \
+       -DLCMS2_LIBRARY=${opt}/lcms2-${openjpeg_lcms2_ver}/lib/${openjpeg_lcms2_lib} \
+       -DLCMS2_INCLUDE_DIR=${opt}/lcms2-${openjpeg_lcms2_ver}/include \
+       -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -130,11 +177,12 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-if [ ${run_tests} -gt 0 ] ; then
-  make check
-  echo '>> Tests complete'
-  read k
-fi
+## openjpeg does not appear to have a test suite
+#if [ ${run_tests} -gt 0 ] ; then
+#  make check
+#  echo '>> Tests complete'
+#  read k
+#fi
 
 make install
 
