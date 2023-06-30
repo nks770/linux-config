@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libwebp
+echo 'Loading libwebp...'
 
 function libwebpInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,11 +35,8 @@ libwebp_v=${1}
 if [ -z "${libwebp_v}" ] ; then
   libwebp_v=1.0.3
 fi
-libwebp_srcdir=libwebp-${libwebp_v}
 
-echo "Installing libwebp ${libwebp_v}..."
-
-case ${1} in
+case ${libwebp_v} in
   1.0.3) # Sat Jul 13 07:23:45 2019
    libwebp_libjpeg_ver=9c # Sun Jan 14 11:48 2018
    libwebp_tiff_ver=4.1.0 # 2019-Nov-03
@@ -49,18 +47,19 @@ case ${1} in
    libwebp_tiff_ver=4.4.0 # 2022-May-27 14:52
    libwebp_giflib_ver=5.2.1 # 2019-06-24
   ;;
+  *)
+   echo "ERROR: Need review for libwebp ${libwebp_v}"
+   exit 4
+   ;;
 esac
+
+echo "Installing libwebp ${libwebp_v}..."
+libwebp_srcdir=libwebp-${libwebp_v}
 
 check_modules
 check_libjpeg ${libwebp_libjpeg_ver}
 check_tiff ${libwebp_tiff_ver}
 check_giflib ${libwebp_giflib_ver}
-
-module purge
-module load libjpeg/${libwebp_libjpeg_ver} \
-            tiff/${libwebp_tiff_ver} \
-            giflib/${libwebp_giflib_ver}
-module list
 
 downloadPackage libwebp-${libwebp_v}.tar.gz
 
@@ -74,7 +73,17 @@ cd ${tmp}
 tar xvfz ${pkg}/libwebp-${libwebp_v}.tar.gz
 cd ${tmp}/${libwebp_srcdir}
 
-./configure --prefix=${opt}/libwebp-${libwebp_v} \
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load libjpeg/${libwebp_libjpeg_ver} \
+            tiff/${libwebp_tiff_ver} \
+            giflib/${libwebp_giflib_ver}
+
+config="./configure --prefix=${opt}/libwebp-${libwebp_v} \
             --enable-libwebpmux \
             --enable-libwebpdecoder \
             --enable-libwebpextras \
@@ -82,11 +91,45 @@ cd ${tmp}/${libwebp_srcdir}
             --with-jpeglibdir=${opt}/libjpeg-${libwebp_libjpeg_ver}/lib \
             --with-tifflibdir=${opt}/tiff-${libwebp_tiff_ver}/lib \
             --with-gifincludedir=${opt}/giflib-${libwebp_giflib_ver}/include \
-            --with-giflibdir=${opt}/giflib-${libwebp_giflib_ver}/lib
-make -j ${ncpu} && make install
+            --with-giflibdir=${opt}/giflib-${libwebp_giflib_ver}/lib"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

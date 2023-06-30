@@ -271,7 +271,7 @@ ncurses-6.4.tar.gz=https://invisible-mirror.net/archives/ncurses/ncurses-6.4.tar
 
 # opencore-amr
 # https://sourceforge.net/projects/opencore-amr/
-opencore-amr-0.1.5.tar.gz=https://iweb.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.5.tar.gz
+opencore-amr-0.1.5.tar.gz=https://cfhcable.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.5.tar.gz
 opencore-amr-0.1.6.tar.gz=https://gigenet.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-0.1.6.tar.gz
 
 # openh264

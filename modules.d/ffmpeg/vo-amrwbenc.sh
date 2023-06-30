@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building OpenCORE Adaptive Multi Rate (AMR)
+echo 'Loading vo-amrwbenc...'
 
 function voamrwbencInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,13 +35,11 @@ voamrwbenc_v=${1}
 if [ -z "${voamrwbenc_v}" ] ; then
   voamrwbenc_v=0.1.3
 fi
-voamrwbenc_srcdir=vo-amrwbenc-${voamrwbenc_v}
 
 echo "Installing vo-amrwbenc ${voamrwbenc_v}..."
+voamrwbenc_srcdir=vo-amrwbenc-${voamrwbenc_v}
 
 check_modules
-module purge
-module list
 
 downloadPackage vo-amrwbenc-${voamrwbenc_v}.tar.gz
 
@@ -54,11 +53,54 @@ cd ${tmp}
 tar xvfz ${pkg}/vo-amrwbenc-${voamrwbenc_v}.tar.gz
 cd ${tmp}/${voamrwbenc_srcdir}
 
-./configure --prefix=${opt}/vo-amrwbenc-${voamrwbenc_v}
-make -j ${ncpu} && make install
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+
+config="./configure --prefix=${opt}/vo-amrwbenc-${voamrwbenc_v}"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make check
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

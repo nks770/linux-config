@@ -40,6 +40,9 @@ case ${libjpegturbo_v} in
   1.5.2) # 2017-08-09
    libjpegturbo_nasm_ver=2.13.01 # 2017-05-01
   ;;
+  2.0.3) # 2019-09-04
+   libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
+  ;;
   *)
    echo "ERROR: Review needed for libjpeg-turbo ${libjpegturbo_v}"
    exit 4 # Please review

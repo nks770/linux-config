@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building giflib
+echo 'Loading giflib...'
 
 function giflibInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,9 +35,6 @@ giflib_v=${1}
 if [ -z "${giflib_v}" ] ; then
   giflib_v=5.2.1
 fi
-giflib_srcdir=giflib-${giflib_v}
-
-echo "Installing giflib ${giflib_v}..."
 
 #case ${1} in
 #  9c)
@@ -46,9 +44,10 @@ echo "Installing giflib ${giflib_v}..."
 #  ;;
 #esac
 
+echo "Installing giflib ${giflib_v}..."
+giflib_srcdir=giflib-${giflib_v}
+
 check_modules
-module purge
-module list
 
 downloadPackage giflib-${giflib_v}.tar.gz
 
@@ -62,12 +61,15 @@ cd ${tmp}
 tar xvfz ${pkg}/giflib-${giflib_v}.tar.gz
 cd ${tmp}/${giflib_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 # Patch to change installation prefix
 cat << eof > prefix.patch
-Index: Makefile
-===================================================================
---- Makefile    2019-06-24 16:08:57.000000000 +0000
-+++ Makefile    2021-04-25 19:16:32.100520135 +0000
+--- Makefile
++++ Makefile
 @@ -14,7 +14,7 @@
  TAR = tar
  INSTALL = install
@@ -82,11 +84,37 @@ patch -N -Z -b -p0 < prefix.patch
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 
-make -j ${ncpu} && make install
+module purge
+
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+if [ ${run_tests} -gt 0 ] ; then
+  make test
+  echo '>> Tests complete'
+  read k
+fi
+
+make install
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module

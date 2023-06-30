@@ -35,11 +35,8 @@ libass_v=${1}
 if [ -z "${libass_v}" ] ; then
   libass_v=0.14.0
 fi
-libass_srcdir=libass-${libass_v}
 
-echo "Installing libass ${libass_v}..."
-
-case ${1} in
+case ${libass_v} in
   0.14.0) # 2017-10-31
    nasm_ver=2.13.02      # 2017-11-29
 #   freetype_ver=2.8.1    # 2017-09-16
@@ -53,10 +50,13 @@ case ${1} in
    freetype_ver=2.12.1  # 2022-05-01
   ;;
   *)
-   echo "ERROR: Need review for libass ${1}"
+   echo "ERROR: Need review for libass ${libass_v}"
    exit 4
    ;;
 esac
+
+echo "Installing libass ${libass_v}..."
+libass_srcdir=libass-${libass_v}
 
 check_modules
 check_nasm ${nasm_ver}
@@ -76,6 +76,11 @@ cd ${tmp}
 tar xvfz ${pkg}/libass-${libass_v}.tar.gz
 cd ${tmp}/${libass_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 module purge
 module load nasm/${nasm_ver}
 module load freetype/${freetype_ver}
@@ -83,7 +88,6 @@ module load fribidi/${fribidi_ver}
 module load fontconfig/${fontconfig_ver}
 
 config="./configure --prefix=${opt}/libass-${libass_v}"
-
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''

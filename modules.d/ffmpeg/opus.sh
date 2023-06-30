@@ -36,7 +36,7 @@ if [ -z "${opus_v}" ] ; then
   opus_v=1.3.1
 fi
 
-case ${opus_V} in
+case ${opus_v} in
   1.3.1) # Apr 12, 2019
    opus_doxygen_ver=1.8.14
   ;;
