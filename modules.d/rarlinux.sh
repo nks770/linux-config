@@ -44,9 +44,9 @@ check_modules
 
 downloadPackage rarlinux-x64-${rarlinux_vv}.tar.gz
 
-mkdir -pv ${opt}/rarlinux-${rarlinux_v}
+mkdir -pv ${opt}/${rarlinux_srcdir}
 
-cd ${opt}/rarlinux-${rarlinux_v}
+cd ${opt}/${rarlinux_srcdir}
 tar xvfz ${pkg}/rarlinux-x64-${rarlinux_vv}.tar.gz
 
 if [ ! $? -eq 0 ] ; then

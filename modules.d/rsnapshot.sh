@@ -3,21 +3,6 @@
 # Functions for detecting and building rsnapshot
 echo 'Loading rsnapshot...'
 
-#function rsnapshotInstalled() {
-#
-#rsnapshot_vvv=${1}
-#
-#if [ -z "${rsnapshot_vvv}" ] ; then
-#rsnapshot_vvv=1.4.5
-#fi
-#
-#if [ ! -f ${opt}/rsnapshot-${rsnapshot_vvv}/bin/rsnapshot ] ; then
-#  return 1
-#fi
-#
-#return 0
-#}
-
 function rsnapshotInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then
@@ -50,9 +35,9 @@ rsnapshot_v=${1}
 if [ -z "${rsnapshot_v}" ] ; then
   rsnapshot_v=1.4.5
 fi
-rsnapshot_srcdir=rsnapshot-${rsnapshot_v}
 
 echo "Installing rsnapshot version ${rsnapshot_v}..."
+rsnapshot_srcdir=rsnapshot-${rsnapshot_v}
 
 check_modules
 
@@ -64,17 +49,25 @@ if [ -d ${tmp}/${rsnapshot_srcdir} ] ; then
   rm -rf ${tmp}/${rsnapshot_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/rsnapshot-${rsnapshot_v}.tar.gz
 cd ${tmp}/${rsnapshot_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
-  ./configure --help
-  echo
-  echo ./configure --prefix=${opt}/rsnapshot-${rsnapshot_v}
+  echo '>> Unzip complete'
   read k
 fi
 
-./configure --prefix=${opt}/rsnapshot-${rsnapshot_v}
+config="./configure --prefix=${opt}/rsnapshot-${rsnapshot_v}"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo
+  echo ${config}
+  read k
+fi
+
+${config}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'

@@ -46,6 +46,11 @@ tar xvfz ${pkg}/tcl${tcl_v}-src.tar.gz
 mv -fv tcl${tcl_v} build
 cd ${opt}/tcl-${tcl_v}/build/unix
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 config="./configure --prefix=${opt}/tcl-${tcl_v}"
 
 if [ ${debug} -gt 0 ] ; then

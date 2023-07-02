@@ -37,66 +37,75 @@ function build_modules() {
 # Get desired version number to install
 modules_v=${1}
 if [ -z "${modules_v}" ] ; then
-  modules_v=5.2.0
+  modules_v=5.3.1
 fi
 
 case ${modules_v} in
 4.7.0)
-   tcl_ver=8.6.11
-   expect_ver=5.45.4
-   dejagnu_ver=1.6.3
+   modules_tcl_ver=8.6.11
+   modules_expect_ver=5.45.4
+   modules_dejagnu_ver=1.6.3
    ;;
 5.2.0)
-   tcl_ver=8.6.13
-   expect_ver=5.45.4
-   dejagnu_ver=1.6.3
+   modules_tcl_ver=8.6.13
+   modules_expect_ver=5.45.4
+   modules_dejagnu_ver=1.6.3
+   ;;
+5.3.1)
+   modules_tcl_ver=8.6.13
+   modules_expect_ver=5.45.4
+   modules_dejagnu_ver=1.6.3
    ;;
 *)
-   tcl_ver=8.6.13
-   expect_ver=5.45.4
-   dejagnu_ver=1.6.3
+   echo "ERROR: Need review for modules ${modules_v}"
+   exit 4
    ;;
 esac
 
 echo "Installing Environment Modules version ${modules_v}..."
+modules_srcdir=modules-${modules_v}
 
-check_tcl ${tcl_ver}
-check_expect ${expect_ver}
-check_dejagnu ${dejagnu_ver} # DejaGnu is needed for the test suite, specifically the 'runtest' executable
+check_tcl ${modules_tcl_ver}
+check_expect ${modules_expect_ver}
+check_dejagnu ${modules_dejagnu_ver} # DejaGnu is needed for the test suite, specifically the 'runtest' executable
 
 downloadPackage modules-${modules_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/modules-${modules_v} ] ; then
-  rm -rf ${tmp}/modules-${modules_v}
+if [ -d ${tmp}/${modules_srcdir} ] ; then
+  rm -rf ${tmp}/${modules_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/modules-${modules_v}.tar.gz
-cd ${tmp}/modules-${modules_v}
+cd ${tmp}/${modules_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
-  ./configure --help
-  echo
-  echo ./configure --prefix=${opt}/Modules/${modules_v} \
-            --with-tclsh=${opt}/tcl-${tcl_ver}/bin/tclsh${tcl_ver%.*} \
-            --with-tcl=${opt}/tcl-${tcl_ver}/lib \
-            --with-tcl-ver=${tcl_ver%.*} \
-	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
+  echo '>> Unzip complete'
   read k
 fi
 
-./configure --prefix=${opt}/Modules/${modules_v} \
-            --with-tclsh=${opt}/tcl-${tcl_ver}/bin/tclsh${tcl_ver%.*} \
-            --with-tcl=${opt}/tcl-${tcl_ver}/lib \
-            --with-tcl-ver=${tcl_ver%.*} \
-	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
+config="./configure --prefix=${opt}/Modules/${modules_v} \
+            --with-tclsh=${opt}/tcl-${modules_tcl_ver}/bin/tclsh${modules_tcl_ver%.*} \
+            --with-tcl=${opt}/tcl-${modules_tcl_ver}/lib \
+            --with-tcl-ver=${modules_tcl_ver%.*} \
+	    --with-tclinclude=${opt}/tcl-${modules_tcl_ver}/include"
 #            --without-tclx \
 #            --with-tclx=/opt/tcl-${2}/lib \
-#            --with-tclx-ver=${tcl_ver%.*}
+#            --with-tclx-ver=${modules_tcl_ver%.*}
 #            CPPFLAGS="-DUSE_INTERP_ERRORLINE"
 
 # DUSE_INTERP_ERRORLINE is for modules 3.x when compilation against tcl 8.6 fails
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -115,8 +124,8 @@ fi
 
 if [ ${run_tests} -gt 0 ] ; then
   # Requires DejaGnu to work
-  echo export PATH=${PATH}:${opt}/dejagnu-${dejagnu_ver}/bin
-  export PATH=${PATH}:${opt}/tcl-${tcl_ver}/bin:${opt}/dejagnu-${dejagnu_ver}/bin
+  echo export PATH=${PATH}:${opt}/dejagnu-${modules_dejagnu_ver}/bin
+  export PATH=${PATH}:${opt}/tcl-${modules_tcl_ver}/bin:${opt}/dejagnu-${modules_dejagnu_ver}/bin
   echo runtest: $(which runtest)
   echo expect: $(which expect)
   make test
@@ -130,19 +139,19 @@ if [ ! $? -eq 0 ] ; then
   exit 4
 fi
 
-cp -av ${tmp}/modules-${modules_v}/init/profile.sh /etc/profile.d/modules.sh
+cp -av ${tmp}/${modules_srcdir}/init/profile.sh /etc/profile.d/modules.sh
 ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
 
 # Create the environment module for tcl
 mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/tcl
-cat << eof > ${opt}/Modules/${modules_v}/modulefiles/tcl/${tcl_ver}
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/tcl/${modules_tcl_ver}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts tcl-${tcl_ver} into your environment"
+   puts stderr "Puts tcl-${modules_tcl_ver} into your environment"
 }
 
-set VER ${tcl_ver}
+set VER ${modules_tcl_ver}
 set PKG ${opt}/tcl-\$VER
 
 module-whatis   "Loads tcl-${tcl_v}"
@@ -161,20 +170,20 @@ eof
 
 # Create the environment module for expect
 mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/expect
-cat << eof > ${opt}/Modules/${modules_v}/modulefiles/expect/${expect_v}
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/expect/${modules_expect_ver}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts expect-${expect_v} into your environment"
+   puts stderr "Puts expect-${modules_expect_ver} into your environment"
 }
 
-set VER ${expect_v}
+set VER ${modules_expect_ver}
 set PKG ${opt}/expect-\$VER
 
-module-whatis   "Loads expect-${expect_v}"
+module-whatis   "Loads expect-${modules_expect_ver}"
 conflict expect
-module load tcl/${tcl_ver}
-prereq tcl/${tcl_ver}
+module load tcl/${modules_tcl_ver}
+prereq tcl/${modules_tcl_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
@@ -186,20 +195,20 @@ eof
 
 # Create the environment module for DejaGnu
 mkdir -pv ${opt}/Modules/${modules_v}/modulefiles/dejagnu
-cat << eof > ${opt}/Modules/${modules_v}/modulefiles/dejagnu/${dejagnu_v}
+cat << eof > ${opt}/Modules/${modules_v}/modulefiles/dejagnu/${modules_dejagnu_ver}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts DejaGnu-${dejagnu_v} into your environment"
+   puts stderr "Puts DejaGnu-${modules_dejagnu_ver} into your environment"
 }
 
-set VER ${dejagnu_v}
+set VER ${modules_dejagnu_ver}
 set PKG ${opt}/dejagnu-\$VER
 
-module-whatis   "Loads dejagnu-${dejagnu_v}"
+module-whatis   "Loads dejagnu-${modules_dejagnu_ver}"
 conflict dejagnu
-module load expect/${expect_v}
-prereq expect/${expect_v}
+module load expect/${modules_expect_ver}
+prereq expect/${modules_expect_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -215,6 +224,6 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 cd ${root}
-rm -rf ${tmp}/modules-${modules_v}
+rm -rf ${tmp}/${modules_srcdir}
 
 }

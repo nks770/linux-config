@@ -50,8 +50,9 @@ doxygen-1.8.17.src.tar.gz=https://phoenixnap.dl.sourceforge.net/project/doxygen/
 doxygen-1.9.5.src.tar.gz=https://gigenet.dl.sourceforge.net/project/doxygen/rel-1.9.5/doxygen-1.9.5.src.tar.gz
 
 # Environment Modules
-modules-4.7.0.tar.gz=https://master.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz?viasf=1
+modules-4.7.0.tar.gz=https://master.dl.sourceforge.net/project/modules/Modules/modules-4.7.0/modules-4.7.0.tar.gz
 modules-5.2.0.tar.gz=https://gigenet.dl.sourceforge.net/project/modules/Modules/modules-5.2.0/modules-5.2.0.tar.gz
+modules-5.3.1.tar.gz=https://phoenixnap.dl.sourceforge.net/project/modules/Modules/modules-5.3.1/modules-5.3.1.tar.gz
 
 # expat
 expat-2.2.4.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_4/expat-2.2.4.tar.bz2

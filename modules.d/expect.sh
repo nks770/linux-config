@@ -33,20 +33,21 @@ expect_v=${1}
 if [ -z "${expect_v}" ] ; then
   expect_v=5.45.4
 fi
-expect_srcdir=expect${expect_v}
 
-case ${dejagnu_v} in
+case ${expect_v} in
 5.45.4)
-   tcl_ver=8.6.13
+   expect_tcl_ver=8.6.13
    ;;
 *)
-   tcl_ver=8.6.13
+   echo "ERROR: Need review for expect ${expect_v}"
+   exit 4
    ;;
 esac
 
 echo "Installing expect version ${expect_v}..."
+expect_srcdir=expect${expect_v}
 
-check_tcl ${tcl_ver}
+check_tcl ${expect_tcl_ver}
 
 downloadPackage expect${expect_v}.tar.gz
 
@@ -56,28 +57,33 @@ if [ -d ${tmp}/${expect_srcdir} ] ; then
   rm -rf ${tmp}/${expect_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/expect${expect_v}.tar.gz
 cd ${tmp}/${expect_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
-  ./configure --help
-  echo
-  echo ./configure --prefix=${opt}/expect-${expect_v} \
-	    --with-tcl=${opt}/tcl-${tcl_ver}/lib \
-	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
+  echo '>> Unzip complete'
   read k
 fi
 
-./configure --prefix=${opt}/expect-${expect_v} \
-	    --with-tcl=${opt}/tcl-${tcl_ver}/lib \
-	    --with-tclinclude=${opt}/tcl-${tcl_ver}/include
+config="./configure --prefix=${opt}/expect-${expect_v} \
+	    --with-tcl=${opt}/tcl-${expect_tcl_ver}/lib \
+	    --with-tclinclude=${opt}/tcl-${expect_tcl_ver}/include"
+
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo
+  echo ${config}
+  read k
+fi
+
+${config}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
   read k
 fi
 
-#make -j ${ncpu}
 make
 
 if [ ! $? -eq 0 ] ; then
