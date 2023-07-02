@@ -124,6 +124,23 @@ check_voamrwbenc ${ffmpeg_voamrwbenc_ver}
 check_libwebp ${ffmpeg_libwebp_ver}
 check_libvpx ${ffmpeg_libvpx_ver}
 
+downloadPackage ffmpeg-${ffmpeg_v}.tar.gz
+
+cd ${tmp}
+
+if [ -d ${tmp}/${ffmpeg_srcdir} ] ; then
+  rm -rf ${tmp}/${ffmpeg_srcdir}
+fi
+
+cd ${tmp}
+tar xvfz ${pkg}/ffmpeg-${ffmpeg_v}.tar.gz
+cd ${tmp}/${ffmpeg_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 module purge
 module load nasm/${ffmpeg_nasm_ver} \
             libaom/${ffmpeg_libaom_ver} \
@@ -150,18 +167,6 @@ module load nasm/${ffmpeg_nasm_ver} \
             vo-amrwbenc/${ffmpeg_voamrwbenc_ver} \
             libwebp/${ffmpeg_libwebp_ver} \
             libvpx/${ffmpeg_libvpx_ver}
-module list
-
-downloadPackage ffmpeg-${ffmpeg_v}.tar.gz
-
-cd ${tmp}
-
-if [ -d ${tmp}/${ffmpeg_srcdir} ] ; then
-  rm -rf ${tmp}/${ffmpeg_srcdir}
-fi
-
-tar xvfz ${pkg}/ffmpeg-${ffmpeg_v}.tar.gz
-cd ${tmp}/${ffmpeg_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

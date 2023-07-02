@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Functions for detecting and building libvpx
+echo 'Loading libvpx...'
 
 function libvpxInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -34,20 +35,22 @@ libvpx_v=${1}
 if [ -z "${libvpx_v}" ] ; then
   libvpx_v=1.8.2
 fi
-libvpx_srcdir=libvpx-${libvpx_v}
 
-echo "Installing libvpx ${libvpx_v}..."
-
-case ${1} in
+case ${libvpx_v} in
   1.8.2) # Dec 19, 2019
    libvpx_yasm_ver=1.3.0 # August 10, 2014
   ;;
+  *)
+   echo "ERROR: Need review for libvpx ${libvpx_v}"
+   exit 4
+   ;;
 esac
 
+echo "Installing libvpx ${libvpx_v}..."
+libvpx_srcdir=libvpx-${libvpx_v}
+
 check_modules
-module purge
-module load yasm/${libvpx_yasm_ver}
-module list
+check_yasm ${libvpx_yasm_ver}
 
 downloadPackage libvpx-${libvpx_v}.tar.gz
 
@@ -61,14 +64,57 @@ cd ${tmp}
 tar xvfz ${pkg}/libvpx-${libvpx_v}.tar.gz
 cd ${tmp}/${libvpx_srcdir}
 
-./configure --prefix=${opt}/libvpx-${libvpx_v} \
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load yasm/${libvpx_yasm_ver}
+
+config="./configure --prefix=${opt}/libvpx-${libvpx_v} \
             --enable-shared \
             --enable-vp8 \
-            --enable-vp9
-make -j ${ncpu} && make install
+            --enable-vp9"
+if [ ${debug} -gt 0 ] ; then
+  ./configure --help
+  echo ''
+  module list
+  echo ''
+  echo ${config}
+  read k
+fi
+
+${config}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Configure complete'
+  read k
+fi
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Build complete'
+  read k
+fi
+
+# libvpx has a testsuite, but it attemps to download a lot of data from the web
+#if [ ${run_tests} -gt 0 ] ; then
+#  make test
+#  echo '>> Tests complete'
+#  read k
+#fi
+
+make install
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Install complete'
+  read k
 fi
 
 # Create the environment module
