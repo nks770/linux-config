@@ -79,9 +79,12 @@ case ${tiff_libjpegturbo_ver} in
   1.5.2)
     tiff_libjpegturbo_lib=libjpeg.so.62.2.0
   ;;
+  2.0.3)
+    tiff_libjpegturbo_lib=libjpeg.so.62.3.0
+  ;;
   *)
     echo "ERROR: Unknown libjpegturbo library"
-#    exit 3
+    exit 3
   ;;
 esac
 case ${tiff_zlib_ver} in

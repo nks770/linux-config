@@ -102,7 +102,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make test
+  make check
   echo '>> Tests complete'
   read k
 fi

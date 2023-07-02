@@ -38,10 +38,14 @@ fi
 
 case ${libjpegturbo_v} in
   1.5.2) # 2017-08-09
+   libjpegturbo_cmake_ver=3.9.0  # 2017-07-18
    libjpegturbo_nasm_ver=2.13.01 # 2017-05-01
+   libjpegturbo_use_cmake=0      # In libjpeg-turbo 1.5.2, cmake is only for windows builds; must use autotools on unix.
   ;;
   2.0.3) # 2019-09-04
+   libjpegturbo_cmake_ver=3.15.3 # 2019-09-04
    libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
+   libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.3, cmake is used for all platforms, autotools not supported.
   ;;
   *)
    echo "ERROR: Review needed for libjpeg-turbo ${libjpegturbo_v}"
@@ -59,6 +63,9 @@ echo "Installing libjpeg-turbo ${libjpegturbo_v}..."
 libjpegturbo_srcdir=libjpeg-turbo-${libjpegturbo_v}
 
 check_modules
+if [ ${libjpegturbo_use_cmake} -gt 0 ] ; then
+  check_cmake ${libjpegturbo_cmake_ver}
+fi
 check_nasm ${libjpegturbo_nasm_ver}
 
 downloadPackage libjpeg-turbo-${libjpegturbo_v}.tar.gz
@@ -79,7 +86,30 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
+if [ ${libjpegturbo_use_cmake} -gt 0 ] ; then
+  module load cmake/${libjpegturbo_cmake_ver}
+fi
 module load nasm/${libjpegturbo_nasm_ver}
+
+if [ ${libjpegturbo_use_cmake} -gt 0 ] ; then
+
+if [ ! -d ${tmp}/${libjpegturbo_srcdir}/build ] ; then
+  mkdir -v ${tmp}/${libjpegturbo_srcdir}/build
+fi
+cd ${tmp}/${libjpegturbo_srcdir}/build
+
+if [ ${debug} -gt 0 ] ; then
+  echo ''
+  module list
+  echo ''
+  echo cmake -L -G \"Unix Makefiles\" \
+      -DCMAKE_INSTALL_PREFIX=${opt}/libjpeg-turbo-${libjpegturbo_v} ..
+  read k
+fi
+
+cmake -L -G "Unix Makefiles" \
+      -DCMAKE_INSTALL_PREFIX=${opt}/libjpeg-turbo-${libjpegturbo_v} ..
+else
 
 config="./configure --prefix=${opt}/libjpeg-turbo-${libjpegturbo_v}"
 if [ ${debug} -gt 0 ] ; then
@@ -93,9 +123,26 @@ fi
 
 ${config}
 
+fi
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
   read k
+  if [ "${libjpegturbo_use_cmake}" -lt 1 ] ; then
+    echo 'NOTE: You are going to see a few messages that look concerning, like this:'
+    echo ' libtool: ignoring unknown tag NASM'
+    echo
+    echo "It's normal.  You can ignore it.  simd/Makefile.am passes --tag NASM to"
+    echo "libtool in order to support older versions of libtool, but unfortunately"
+    echo "newer versions of libtool generate that warning.  At some point, we may"
+    echo "require a newer minimum libtool version, in which case I can remove the"
+    echo "--tag argument.  Another solution might be to detect the libtool version"
+    echo "in simd/Makefile.am and include the --tag argument to libtool only if"
+    echo "using an older version.  I don't have time to look into that right now,"
+    echo "though."
+    echo
+    echo ">> Press enter to acknowledge"
+    read k
+  fi
 fi
 
 make -j ${ncpu}
@@ -109,7 +156,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  make check
+  make test
   echo '>> Tests complete'
   read k
 fi

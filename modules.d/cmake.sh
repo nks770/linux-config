@@ -49,6 +49,10 @@ case ${cmake_v} in
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
+3.9.0) # 2017-07-18
+   ncurses_ver=6.0  # 2015-08-08
+   kwsys_warning=1
+   ;;
 3.9.6) # 2017-11-10
    ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
@@ -77,11 +81,15 @@ case ${cmake_v} in
    ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
+3.14.7) # 2019-10-02
+   ncurses_ver=6.1  # 2018-01-27
+   kwsys_warning=1
+   ;;
 3.15.2) # 2019-08-07
    ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
-3.14.7) # 2019-10-02
+3.15.3) # 2019-09-04
    ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;

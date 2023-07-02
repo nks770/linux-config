@@ -38,12 +38,14 @@ fi
 
 case ${libwebp_v} in
   1.0.3) # Sat Jul 13 07:23:45 2019
-   libwebp_libjpeg_ver=9c # Sun Jan 14 11:48 2018
+#   libwebp_libjpeg_ver=9c # Sun Jan 14 11:48 2018
+   libwebp_libjpegturbo_ver=2.0.3 # 2019-09-04 
    libwebp_tiff_ver=4.1.0 # 2019-Nov-03
    libwebp_giflib_ver=5.2.1 # 2019-06-24
   ;;
   1.2.4) # Sat Aug 06 02:19:15 2022
-   libwebp_libjpeg_ver=9e # Sun Jan 16 10:30 2022
+#   libwebp_libjpeg_ver=9e # Sun Jan 16 10:30 2022
+   libwebp_libjpegturbo_ver=2.0.3 # 2019-09-04
    libwebp_tiff_ver=4.4.0 # 2022-May-27 14:52
    libwebp_giflib_ver=5.2.1 # 2019-06-24
   ;;
@@ -57,7 +59,8 @@ echo "Installing libwebp ${libwebp_v}..."
 libwebp_srcdir=libwebp-${libwebp_v}
 
 check_modules
-check_libjpeg ${libwebp_libjpeg_ver}
+#check_libjpeg ${libwebp_libjpeg_ver}
+check_libjpegturbo ${libwebp_libjpegturbo_ver}
 check_tiff ${libwebp_tiff_ver}
 check_giflib ${libwebp_giflib_ver}
 
@@ -79,16 +82,17 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load libjpeg/${libwebp_libjpeg_ver} \
-            tiff/${libwebp_tiff_ver} \
-            giflib/${libwebp_giflib_ver}
+#module load libjpeg/${libwebp_libjpeg_ver}
+module load libjpeg-turbo/${libwebp_libjpegturbo_ver}
+module load tiff/${libwebp_tiff_ver}
+module load giflib/${libwebp_giflib_ver}
 
 config="./configure --prefix=${opt}/libwebp-${libwebp_v} \
             --enable-libwebpmux \
             --enable-libwebpdecoder \
             --enable-libwebpextras \
             --enable-everything \
-            --with-jpeglibdir=${opt}/libjpeg-${libwebp_libjpeg_ver}/lib \
+            --with-jpeglibdir=${opt}/libjpeg-turbo-${libwebp_libjpegturbo_ver}/lib \
             --with-tifflibdir=${opt}/tiff-${libwebp_tiff_ver}/lib \
             --with-gifincludedir=${opt}/giflib-${libwebp_giflib_ver}/include \
             --with-giflibdir=${opt}/giflib-${libwebp_giflib_ver}/lib"
@@ -149,10 +153,10 @@ set PKG ${opt}/libwebp-\$VER
 
 module-whatis   "Loads libwebp-${libwebp_v}"
 conflict libwebp
-module load libjpeg/${libwebp_libjpeg_ver}
+module load libjpeg-turbo/${libwebp_libjpegturbo_ver}
 module load tiff/${libwebp_tiff_ver}
 module load giflib/${libwebp_giflib_ver}
-prereq libjpeg/${libwebp_libjpeg_ver}
+prereq libjpeg-turbo/${libwebp_libjpegturbo_ver}
 prereq tiff/${libwebp_tiff_ver}
 prereq giflib/${libwebp_giflib_ver}
 

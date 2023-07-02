@@ -85,6 +85,9 @@ elif [ "${1}" == "python" ] ; then
 #elif [ "${1}" == "screen" ] ; then
 #  check_screen 4.8.0
 
+elif [ "${1}" == "libjpegturbo" ] ; then
+  check_libjpegturbo 1.5.2
+
 elif [ "${1}" == "ffmpeg" ] ; then
   check_ffmpeg 4.2.2
 
