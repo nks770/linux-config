@@ -37,26 +37,34 @@ if [ -z "${ncurses_v}" ] ; then
 fi
 
 echo "Installing ncurses ${ncurses_v}..."
+ncurses_srcdir=ncurses-${ncurses_v}
 
 check_modules
-module purge
 
 downloadPackage ncurses-${ncurses_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/ncurses-${ncurses_v} ] ; then
-  rm -rf ${tmp}/ncurses-${ncurses_v}
+if [ -d ${tmp}/${ncurses_srcdir} ] ; then
+  rm -rf ${tmp}/${ncurses_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/ncurses-${ncurses_v}.tar.gz
 cd ${tmp}/ncurses-${ncurses_v}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
 
 config="./configure --prefix=${opt}/ncurses-${ncurses_v} --with-shared"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
   echo ${config}
   read k
 fi
@@ -122,6 +130,6 @@ prepend-path MANPATH \$PKG/share/man
 eof
 
 cd ${root}
-rm -rf ${tmp}/ncurses-${ncurses_v}
+rm -rf ${tmp}/${ncurses_srcdir}
 
 }

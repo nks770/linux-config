@@ -38,47 +38,55 @@ fi
 
 case ${readline_v} in
 7.0) #2016-09-15
-   ncurses_ver=6.0  # 2015-08-08
+   readline_ncurses_ver=6.0  # 2015-08-08
    ;;
 8.1) #2020-12-06
-   ncurses_ver=6.2  # 2020-02-12
+   readline_ncurses_ver=6.2  # 2020-02-12
    ;;
 8.1.2) #2022-01-05
-   ncurses_ver=6.3  # 2021-11-08
+   readline_ncurses_ver=6.3  # 2021-11-08
    ;;
 8.2) #2022-09-26
-   ncurses_ver=6.3  # 2021-11-08
+   readline_ncurses_ver=6.3  # 2021-11-08
    ;;
 *)
-   echo "ERROR: Review needed for readline ${1}"
+   echo "ERROR: Review needed for readline ${readline_v}"
    exit 4
    ;;
 esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  ncurses_ver=${global_ncurses}
+  readline_ncurses_ver=${global_ncurses}
 fi
 
 echo "Installing readline ${readline_v}..."
+readline_srcdir=readline-${readline_v}
 
 check_modules
-check_ncurses ${ncurses_ver}
-module purge
-module load ncurses/${ncurses_ver}
+check_ncurses ${readline_ncurses_ver}
 
 downloadPackage readline-${readline_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/readline-${readline_v} ] ; then
-  rm -rf ${tmp}/readline-${readline_v}
+if [ -d ${tmp}/${readline_srcdir} ] ; then
+  rm -rf ${tmp}/${readline_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/readline-${readline_v}.tar.gz
-cd ${tmp}/readline-${readline_v}
+cd ${tmp}/${readline_srcdir}
 
-config="./configure --prefix=${opt}/readline-${readline_v} --with-curses CFLAGS=-I${opt}/ncurses-${ncurses_ver}/include LDFLAGS=-L${opt}/ncurses-${ncurses_ver}/lib"
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load ncurses/${readline_ncurses_ver}
+
+config="./configure --prefix=${opt}/readline-${readline_v} --with-curses CFLAGS=-I${opt}/ncurses-${readline_ncurses_ver}/include LDFLAGS=-L${opt}/ncurses-${readline_ncurses_ver}/lib"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -140,8 +148,8 @@ set PKG ${opt}/readline-\$VER
 
 module-whatis   "Loads readline-${readline_v}"
 conflict readline
-module load ncurses/${ncurses_ver}
-prereq ncurses/${ncurses_ver}
+module load ncurses/${readline_ncurses_ver}
+prereq ncurses/${readline_ncurses_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -153,6 +161,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/readline-${readline_v}
+rm -rf ${tmp}/${readline_srcdir}
 
 }

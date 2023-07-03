@@ -322,6 +322,7 @@ Python-3.10.7.tgz=https://www.python.org/ftp/python/3.10.7/Python-3.10.7.tgz
 Python-3.10.9.tgz=https://www.python.org/ftp/python/3.10.9/Python-3.10.9.tgz
 Python-3.10.10.tgz=https://www.python.org/ftp/python/3.10.10/Python-3.10.10.tgz
 Python-3.11.2.tgz=https://www.python.org/ftp/python/3.11.2/Python-3.11.2.tgz
+Python-3.11.4.tgz=https://www.python.org/ftp/python/3.11.4/Python-3.11.4.tgz
 
 # Extra Python libraries
 # BeautifulSoup: https://pypi.org/project/beautifulsoup4/#history
@@ -329,9 +330,11 @@ beautifulsoup4-4.9.3.tar.gz=https://files.pythonhosted.org/packages/6b/c3/d31704
 beautifulsoup4-4.11.1.tar.gz=https://files.pythonhosted.org/packages/e8/b0/cd2b968000577ec5ce6c741a54d846dfa402372369b8b6861720aa9ecea7/beautifulsoup4-4.11.1.tar.gz
 beautifulsoup4-4.11.2.tar.gz=https://files.pythonhosted.org/packages/75/f8/de84282681c5a8307f3fff67b64641627b2652752d49d9222b77400d02b8/beautifulsoup4-4.11.2.tar.gz
 beautifulsoup4-4.11.2-py3-none-any.whl=https://files.pythonhosted.org/packages/c6/ee/16d6f808f5668317d7c23f942091fbc694bcded6aa39678e5167f61b2ba0/beautifulsoup4-4.11.2-py3-none-any.whl
+beautifulsoup4-4.12.2-py3-none-any.whl=https://files.pythonhosted.org/packages/57/f4/a69c20ee4f660081a7dedb1ac57f29be9378e04edfcb90c526b923d4bebc/beautifulsoup4-4.12.2-py3-none-any.whl
 # soupsieve: https://pypi.org/project/soupsieve/#history
 soupsieve-2.4.tar.gz=https://files.pythonhosted.org/packages/1b/cb/34933ebdd6bf6a77daaa0bd04318d61591452eb90ecca4def947e3cb2165/soupsieve-2.4.tar.gz
 soupsieve-2.4-py3-none-any.whl=https://files.pythonhosted.org/packages/d2/70/2c92d7bc961ba43b7b21032b7622144de5f97dec14b62226533f6940798e/soupsieve-2.4-py3-none-any.whl
+soupsieve-2.4.1-py3-none-any.whl=https://files.pythonhosted.org/packages/49/37/673d6490efc51ec46d198c75903d99de59baffdd47aea3d071b80a9e4e89/soupsieve-2.4.1-py3-none-any.whl
 # mutagen: https://pypi.org/project/mutagen/#history
 mutagen-1.46.0-py3-none-any.whl=https://files.pythonhosted.org/packages/03/ee/114d7016d2e34f341e212fefb5e7bd87785077ebcfff0ad23a497c70eea1/mutagen-1.46.0-py3-none-any.whl
 # demjson
@@ -340,8 +343,10 @@ demjson3-3.0.6.tar.gz=https://files.pythonhosted.org/packages/f7/d2/6a81a9b5311d
 # setuptools
 setuptools-57.5.0-py3-none-any.whl=https://files.pythonhosted.org/packages/4b/b9/71687c5d2034c863db1db2e0704f5e27581ff3cb44d7f293968c5e08ceb3/setuptools-57.5.0-py3-none-any.whl
 setuptools-67.6.0-py3-none-any.whl=https://files.pythonhosted.org/packages/c3/9e/8a7ba2c9984a060daa6c6f9fff4d576b7ace3936239d6b771541eab972ed/setuptools-67.6.0-py3-none-any.whl
+setuptools-68.0.0-py3-none-any.whl=https://files.pythonhosted.org/packages/c7/42/be1c7bbdd83e1bfb160c94b9cafd8e25efc7400346cf7ccdbdb452c467fa/setuptools-68.0.0-py3-none-any.whl
 # pip
 pip-23.0.1-py3-none-any.whl=https://files.pythonhosted.org/packages/07/51/2c0959c5adf988c44d9e1e0d940f5b074516ecc87e96b1af25f59de9ba38/pip-23.0.1-py3-none-any.whl
+pip-23.1.2-py3-none-any.whl=https://files.pythonhosted.org/packages/08/e3/57d4c24a050aa0bcca46b2920bff40847db79535dc78141eb83581a52eb8/pip-23.1.2-py3-none-any.whl
 
 # rarlinux
 rarlinux-x64-612.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-612.tar.gz
@@ -378,6 +383,7 @@ sqlite-autoconf-3400000.tar.gz=https://sqlite.org/2022/sqlite-autoconf-3400000.t
 sqlite-autoconf-3400100.tar.gz=https://sqlite.org/2022/sqlite-autoconf-3400100.tar.gz
 sqlite-autoconf-3410000.tar.gz=https://sqlite.org/2023/sqlite-autoconf-3410000.tar.gz
 sqlite-autoconf-3410200.tar.gz=https://sqlite.org/2023/sqlite-autoconf-3410200.tar.gz
+sqlite-autoconf-3420000.tar.gz=https://sqlite.org/2023/sqlite-autoconf-3420000.tar.gz
 
 # Tcl/Tk
 tcl8.6.11-src.tar.gz=https://phoenixnap.dl.sourceforge.net/project/tcl/Tcl/8.6.11/tcl8.6.11-src.tar.gz
@@ -407,6 +413,7 @@ util-linux-2.33.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linu
 util-linux-2.34.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.34/util-linux-2.34.tar.gz
 util-linux-2.36.2.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/util-linux-2.36.2.tar.gz
 util-linux-2.38.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.gz
+util-linux-2.39.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.1.tar.gz
 
 # Vim
 vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2

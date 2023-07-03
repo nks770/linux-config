@@ -91,6 +91,7 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
   read k
 fi
+
 make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then

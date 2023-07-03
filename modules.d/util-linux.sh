@@ -37,20 +37,28 @@ if [ -z "${utillinux_v}" ] ; then
 fi
 
 echo "Installing util-linux ${utillinux_v}..."
+utillinux_srcdir=util-linux-${utillinux_v}
 
 check_modules
-module purge
 
 downloadPackage util-linux-${utillinux_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/util-linux-${utillinux_v} ] ; then
-  rm -rf ${tmp}/util-linux-${utillinux_v}
+if [ -d ${tmp}/${utillinux_srcdir} ] ; then
+  rm -rf ${tmp}/${utillinux_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/util-linux-${utillinux_v}.tar.gz
-cd ${tmp}/util-linux-${utillinux_v}
+cd ${tmp}/${utillinux_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
 
 config="./configure --prefix=${opt}/util-linux-${utillinux_v} \
 	    ADJTIME_PATH=${opt}/util-linux-${utillinux_v}/etc/adjtime \
@@ -67,7 +75,7 @@ config="./configure --prefix=${opt}/util-linux-${utillinux_v} \
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
   echo ${config}
   read k
 fi
@@ -134,6 +142,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/util-linux-${utillinux_v}
+rm -rf ${tmp}/${utillinux_srcdir}
 
 }

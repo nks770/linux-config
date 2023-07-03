@@ -37,6 +37,7 @@ if [ -z "${bzip2_v}" ] ; then
 fi
 
 echo "Installing bzip2 ${bzip2_v}..."
+bzip2_srcdir=bzip2-${bzip2_v}
 
 check_modules
 module purge
@@ -45,10 +46,11 @@ downloadPackage bzip2-${bzip2_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/bzip2-${bzip2_v} ] ; then
-  rm -rf ${tmp}/bzip2-${bzip2_v}
+if [ -d ${tmp}/${bzip2_srcdir} ] ; then
+  rm -rf ${tmp}/${bzip2_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/bzip2-${bzip2_v}.tar.gz
 cd ${tmp}/bzip2-${bzip2_v}
 
@@ -293,6 +295,6 @@ prepend-path MANPATH \$PKG/man
 eof
 
 cd ${root}
-rm -rf ${tmp}/bzip2-${bzip2_v}
+rm -rf ${tmp}/${bzip2_srcdir}
 
 }

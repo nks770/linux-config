@@ -38,36 +38,47 @@ fi
 
 case ${libffi_v} in
 3.4.4)
-   dejagnu_ver=1.6.3
+   libffi_dejagnu_ver=1.6.3
    ;;
 *)
-   dejagnu_ver=1.6.3
+   echo "ERROR: Need review for libffi ${libffi_v}"
+   exit 4
    ;;
 esac
+
 echo "Installing libffi ${libffi_v}..."
+libffi_srcdir=libffi-${libffi_v}
 
 check_modules
-check_dejagnu ${dejagnu_ver}
-
-module purge
-module load dejagnu/${dejagnu_ver}
+check_dejagnu ${libffi_dejagnu_ver}
 
 downloadPackage libffi-${libffi_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/libffi-${libffi_v} ] ; then
-  rm -rf ${tmp}/libffi-${libffi_v}
+if [ -d ${tmp}/${libffi_srcdir} ] ; then
+  rm -rf ${tmp}/${libffi_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/libffi-${libffi_v}.tar.gz
-cd ${tmp}/libffi-${libffi_v}
+cd ${tmp}/${libffi_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load dejagnu/${libffi_dejagnu_ver}
 
 config="./configure --prefix=${opt}/libffi-${libffi_v}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
+  module list
+  echo ''
   echo ${config}
   read k
 fi
@@ -79,8 +90,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-#make -j ${ncpu}
-make
+make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
   exit 4
@@ -136,6 +146,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/libffi-${libffi_v}
+rm -rf ${tmp}/${libffi_srcdir}
 
 }

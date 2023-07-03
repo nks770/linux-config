@@ -38,78 +38,81 @@ fi
 
 case ${openssl_v} in
 1.1.0g) # 2017-11-02
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.0h) # 2018-03-27
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.0l) # 2019-09-10
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1a) # 2018-11-20
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1c) # 2019-05-28
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1d) # 2019-09-10
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1i) # 2020-12-08
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1k) # 2021-03-25
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1n) # 2022-03-15
-   zlib_ver=1.2.11 # 2017-01-15
+   openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
    ;;
 1.1.1s) # 2022-11-01
-   zlib_ver=1.2.13 # 2022-10-12
+   openssl_zlib_ver=1.2.13 # 2022-10-12
    cert_error_warn=0
    ;;
 1.1.1t) # 2023-02-07
-   zlib_ver=1.2.13 # 2022-10-12
+   openssl_zlib_ver=1.2.13 # 2022-10-12
+   cert_error_warn=0
+   ;;
+1.1.1u) # 2023-05-30
+   openssl_zlib_ver=1.2.13 # 2022-10-12
    cert_error_warn=0
    ;;
 *)
-   echo "ERROR: Review needed for openssl ${1}"
+   echo "ERROR: Review needed for openssl ${openssl_v}"
    exit 4
    ;;
 esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  zlib_ver=${global_zlib}
+  openssl_zlib_ver=${global_zlib}
 fi
 
 echo "Installing OpenSSL ${openssl_v}..."
+openssl_srcdir=openssl-${openssl_v}
 
 check_modules
-check_zlib ${zlib_ver}
-
-module purge
-module load zlib/${zlib_ver}
+check_zlib ${openssl_zlib_ver}
 
 downloadPackage openssl-${openssl_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/openssl-${openssl_v} ] ; then
-  rm -rf ${tmp}/openssl-${openssl_v}
+if [ -d ${tmp}/${openssl_srcdir} ] ; then
+  rm -rf ${tmp}/${openssl_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/openssl-${openssl_v}.tar.gz
-cd ${tmp}/openssl-${openssl_v}
+cd ${tmp}/${openssl_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
@@ -124,8 +127,8 @@ fi
 # The below patch is copied from commit 6beb8b39ba8e4cb005c1fcd2586ba19e17f04b95
 if [ "${openssl_v}" == "1.1.1d" ] ; then
 cat << eof > c_zlib.patch
---- crypto/comp/c_zlib.c        2019-09-10 08:13:07.000000000 -0500
-+++ crypto/comp/c_zlib.c        2019-09-12 10:12:49.649139378 -0500
+--- crypto/comp/c_zlib.c
++++ crypto/comp/c_zlib.c
 @@ -598,6 +598,28 @@
          BIO_copy_next_retry(b);
          break;
@@ -165,6 +168,9 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 fi
+
+module purge
+module load zlib/${openssl_zlib_ver}
 
 config="./config -v --prefix=${opt}/openssl-${openssl_v} \
 	    --openssldir=${opt}/openssl-${openssl_v}/etc/ssl \
@@ -244,8 +250,8 @@ set PKG ${opt}/openssl-\$VER
 
 module-whatis   "Loads openssl-${openssl_v}"
 conflict openssl
-module load zlib/${zlib_ver}
-prereq zlib/${zlib_ver}
+module load zlib/${openssl_zlib_ver}
+prereq zlib/${openssl_zlib_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -258,6 +264,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/openssl-${openssl_v}
+rm -rf ${tmp}/${openssl_srcdir}
 
 }

@@ -33,7 +33,7 @@ function build_python() {
 # Get desired version number to install
 python_v=${1}
 if [ -z "${python_v}" ] ; then
-  python_v=3.9.4
+  python_v=3.11.4
 fi
 
 curses_failure=0
@@ -42,182 +42,198 @@ sql_deterministic_chk=1
 
 case ${python_v} in
 3.6.4) # 2017-12-19
-   gdbm_ver=1.13        #2017-03-11
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.6      #2010-09-20
-   xz_ver=5.2.3         #2016-12-30
-   openssl_ver=1.1.0g   #2017-11-02
-   sqlite_ver=3.21.0    #2017-10-24
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.2.1     #2014-11-12
-   utillinux_ver=2.31.1 #2017-12-19
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.13        #2017-03-11
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.3         #2016-12-30
+   python_openssl_ver=1.1.0g   #2017-11-02
+   python_sqlite_ver=3.21.0    #2017-10-24
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.31.1 #2017-12-19
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    ;;
 3.6.5) # 2018-03-28
-   gdbm_ver=1.14.1      #2018-01-03
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.6      #2010-09-20
-   xz_ver=5.2.3         #2016-12-30
-   openssl_ver=1.1.0h   #2018-03-27
-   sqlite_ver=3.22.0    #2018-01-22
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.2.1     #2014-11-12
-   utillinux_ver=2.32   #2018-03-21
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.14.1      #2018-01-03
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.3         #2016-12-30
+   python_openssl_ver=1.1.0h   #2018-03-27
+   python_sqlite_ver=3.22.0    #2018-01-22
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.32   #2018-03-21
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    ;;
 3.7.2) #2018-12-24
-   gdbm_ver=1.18.1      #2018-10-27
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.6      #2010-09-20
-   xz_ver=5.2.4         #2018-04-29
-   openssl_ver=1.1.1a   #2018-11-20
-   sqlite_ver=3.26.0    #2018-12-01
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.2.1     #2014-11-12
-   utillinux_ver=2.33   #2018-11-06
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1a   #2018-11-20
+   python_sqlite_ver=3.26.0    #2018-12-01
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.33   #2018-11-06
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    httlib_failure=1
    ;;
 3.7.4) #2019-07-08
-   gdbm_ver=1.18.1      #2018-10-27
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.7      #2019-06-27
-   xz_ver=5.2.4         #2018-04-29
-   openssl_ver=1.1.1c   #2019-05-28
-   sqlite_ver=3.28.0    #2019-04-16
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.2.1     #2014-11-12
-   utillinux_ver=2.34   #2019-06-14
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.7      #2019-06-27
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1c   #2019-05-28
+   python_sqlite_ver=3.28.0    #2019-04-16
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.34   #2019-06-14
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    ;;
 3.7.10) #2021-02-15
-   gdbm_ver=1.19        #2020-12-23
-   readline_ver=8.1     #2020-12-06
-   ncurses_ver=6.2      #2020-02-12
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.5         #2020-03-17
-   openssl_ver=1.1.1i   #2020-12-08
-   sqlite_ver=3.34.1    #2021-01-20
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.3       #2019-11-23
-   utillinux_ver=2.36.2 #2021-02-12
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.19        #2020-12-23
+   python_readline_ver=8.1     #2020-12-06
+   python_ncurses_ver=6.2      #2020-02-12
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.5         #2020-03-17
+   python_openssl_ver=1.1.1i   #2020-12-08
+   python_sqlite_ver=3.34.1    #2021-01-20
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.3       #2019-11-23
+   python_utillinux_ver=2.36.2 #2021-02-12
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    ;;
 3.8.0) #2019-10-14
-   gdbm_ver=1.18.1      #2018-10-27
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.4         #2018-04-29
-   openssl_ver=1.1.1d   #2019-09-10
-   sqlite_ver=3.30.1    #2019-10-10
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.2.1     #2014-11-12
-   utillinux_ver=2.34   #2019-06-14
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1d   #2019-09-10
+   python_sqlite_ver=3.30.1    #2019-10-10
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.34   #2019-06-14
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=0
    sql_deterministic_chk=1
    ;;
 3.8.1) #2019-12-18
-   gdbm_ver=1.18.1      #2018-10-27
-   readline_ver=7.0     #2016-09-15
-   ncurses_ver=6.0      #2015-08-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.4         #2018-04-29
-   openssl_ver=1.1.1d   #2019-09-10
-   sqlite_ver=3.30.1    #2019-10-10
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.3       #2019-11-23
-   utillinux_ver=2.34   #2019-06-14
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1d   #2019-09-10
+   python_sqlite_ver=3.30.1    #2019-10-10
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.3       #2019-11-23
+   python_utillinux_ver=2.34   #2019-06-14
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=0
    sql_deterministic_chk=0
    ;;
 3.9.4) #2021-04-04
-   gdbm_ver=1.19        #2020-12-23
-   readline_ver=8.1     #2020-12-06
-   ncurses_ver=6.2      #2020-02-12
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.5         #2020-03-17
-   openssl_ver=1.1.1k   #2021-03-25
-   sqlite_ver=3.35.4    #2021-04-02
-   zlib_ver=1.2.11      #2017-01-15
-   libffi_ver=3.3       #2019-11-23
-   utillinux_ver=2.36.2 #2021-02-12
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.19        #2020-12-23
+   python_readline_ver=8.1     #2020-12-06
+   python_ncurses_ver=6.2      #2020-02-12
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.5         #2020-03-17
+   python_openssl_ver=1.1.1k   #2021-03-25
+   python_sqlite_ver=3.35.4    #2021-04-02
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.3       #2019-11-23
+   python_utillinux_ver=2.36.2 #2021-02-12
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=1
    ;;
 3.9.16) #2022-12-06
-   gdbm_ver=1.23        #2022-02-04
-   readline_ver=8.1.2   #2022-01-05
-   ncurses_ver=6.3      #2021-11-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.9         #2022-11-30
-   openssl_ver=1.1.1s   #2022-11-01
-   sqlite_ver=3.40.0    #2022-11-16
-   zlib_ver=1.2.13      #2022-10-12
-   libffi_ver=3.4.4     #2022-10-23
-   utillinux_ver=2.38.1 #2022-08-04
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.23        #2022-02-04
+   python_readline_ver=8.1.2   #2022-01-05
+   python_ncurses_ver=6.3      #2021-11-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.9         #2022-11-30
+   python_openssl_ver=1.1.1s   #2022-11-01
+   python_sqlite_ver=3.40.0    #2022-11-16
+   python_zlib_ver=1.2.13      #2022-10-12
+   python_libffi_ver=3.4.4     #2022-10-23
+   python_utillinux_ver=2.38.1 #2022-08-04
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=1
    ;;
 3.10.9) #2022-12-06
-   gdbm_ver=1.23        #2022-02-04
-   readline_ver=8.1.2   #2022-01-05
-   ncurses_ver=6.3      #2021-11-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.2.9         #2022-11-30
-   openssl_ver=1.1.1s   #2022-11-01
-   sqlite_ver=3.40.0    #2022-11-16
-   zlib_ver=1.2.13      #2022-10-12
-   libffi_ver=3.4.4     #2022-10-23
-   utillinux_ver=2.38.1 #2022-08-04
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.23        #2022-02-04
+   python_readline_ver=8.1.2   #2022-01-05
+   python_ncurses_ver=6.3      #2021-11-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.9         #2022-11-30
+   python_openssl_ver=1.1.1s   #2022-11-01
+   python_sqlite_ver=3.40.0    #2022-11-16
+   python_zlib_ver=1.2.13      #2022-10-12
+   python_libffi_ver=3.4.4     #2022-10-23
+   python_utillinux_ver=2.38.1 #2022-08-04
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=1
    ;;
 3.10.10) #2023-02-08
-   gdbm_ver=1.23        #2022-02-04
-   readline_ver=8.1.2   #2022-01-05
-   ncurses_ver=6.3      #2021-11-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.4.1         #2023-01-11
-   openssl_ver=1.1.1t   #2023-02-07
-   sqlite_ver=3.40.1    #2022-12-28
-   zlib_ver=1.2.13      #2022-10-12
-   libffi_ver=3.4.4     #2022-10-23
-   utillinux_ver=2.38.1 #2022-08-04
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.23        #2022-02-04
+   python_readline_ver=8.1.2   #2022-01-05
+   python_ncurses_ver=6.3      #2021-11-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.4.1         #2023-01-11
+   python_openssl_ver=1.1.1t   #2023-02-07
+   python_sqlite_ver=3.40.1    #2022-12-28
+   python_zlib_ver=1.2.13      #2022-10-12
+   python_libffi_ver=3.4.4     #2022-10-23
+   python_utillinux_ver=2.38.1 #2022-08-04
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=1
    ;;
 3.11.2) #2023-02-08
-   gdbm_ver=1.23        #2022-02-04
-   readline_ver=8.1.2   #2022-01-05
-   ncurses_ver=6.3      #2021-11-08
-   bzip2_ver=1.0.8      #2019-07-13
-   xz_ver=5.4.1         #2023-01-11
-   openssl_ver=1.1.1t   #2023-02-07
-   sqlite_ver=3.40.1    #2022-12-28
-   zlib_ver=1.2.13      #2022-10-12
-   libffi_ver=3.4.4     #2022-10-23
-   utillinux_ver=2.38.1 #2022-08-04
-   tcl_ver=8.6.13
-   tk_ver=8.6.13
+   python_gdbm_ver=1.23        #2022-02-04
+   python_readline_ver=8.1.2   #2022-01-05
+   python_ncurses_ver=6.3      #2021-11-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.4.1         #2023-01-11
+   python_openssl_ver=1.1.1t   #2023-02-07
+   python_sqlite_ver=3.40.1    #2022-12-28
+   python_zlib_ver=1.2.13      #2022-10-12
+   python_libffi_ver=3.4.4     #2022-10-23
+   python_utillinux_ver=2.38.1 #2022-08-04
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
    curses_failure=1
+   ;;
+3.11.4) #2023-06-06
+   python_gdbm_ver=1.23        #2022-02-04
+   python_readline_ver=8.1.2   #2022-01-05
+   python_ncurses_ver=6.3      #2021-11-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.4.3         #2023-05-04
+   python_openssl_ver=1.1.1u   #2023-05-30
+   python_sqlite_ver=3.42.0    #2023-05-16
+   python_zlib_ver=1.2.13      #2022-10-12
+   python_libffi_ver=3.4.4     #2022-10-23
+   python_utillinux_ver=2.39   #2023-05-17
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   curses_failure=1
+   sql_deterministic_chk=0
    ;;
 *)
    echo "ERROR: Need review for Python ${1}"
@@ -227,46 +243,43 @@ esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  bzip2_ver=${global_bzip2}
-#  gdbm_ver=${global_gdbm}
-  ncurses_ver=${global_ncurses}
-  openssl_ver=${global_openssl}
-  readline_ver=${global_readline}
-#  sqlite_ver=${global_sqlite}
-  utillinux_ver=${global_utillinux}
-  xz_ver=${global_xz}
-  zlib_ver=${global_zlib}
+  python_bzip2_ver=${global_bzip2}
+  python_ncurses_ver=${global_ncurses}
+  python_openssl_ver=${global_openssl}
+  python_readline_ver=${global_readline}
+  python_utillinux_ver=${global_utillinux}
+  python_xz_ver=${global_xz}
+  python_zlib_ver=${global_zlib}
 fi
 
 echo "Installing Python ${python_v}..."
+python_srcdir=Python-${python_v}
 
 check_modules
-check_bzip2 ${bzip2_ver}
-check_zlib ${zlib_ver}
-check_xz ${xz_ver}
-check_openssl ${openssl_ver}
-check_libffi ${libffi_ver}
-check_utillinux ${utillinux_ver}
-check_ncurses ${ncurses_ver}
-check_readline ${readline_ver}
-check_sqlite ${sqlite_ver}
-check_gdbm ${gdbm_ver}
-check_tcl ${tcl_ver}
-check_tk ${tk_ver}
-
-module purge
-module load bzip2/${bzip2_ver} zlib/${zlib_ver} xz/${xz_ver} openssl/${openssl_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver} tk/${tk_ver}
+check_bzip2 ${python_bzip2_ver}
+check_zlib ${python_zlib_ver}
+check_xz ${python_xz_ver}
+check_openssl ${python_openssl_ver}
+check_libffi ${python_libffi_ver}
+check_utillinux ${python_utillinux_ver}
+check_ncurses ${python_ncurses_ver}
+check_readline ${python_readline_ver}
+check_sqlite ${python_sqlite_ver}
+check_gdbm ${python_gdbm_ver}
+check_tcl ${python_tcl_ver}
+check_tk ${python_tk_ver}
 
 downloadPackage Python-${python_v}.tgz
 
 cd ${tmp}
 
-if [ -d ${tmp}/Python-${python_v} ] ; then
-  rm -rf ${tmp}/Python-${python_v}
+if [ -d ${tmp}/${python_srcdir} ] ; then
+  rm -rf ${tmp}/${python_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/Python-${python_v}.tgz
-cd ${tmp}/Python-${python_v}
+cd ${tmp}/${python_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
@@ -284,8 +297,8 @@ fi
 #
 if [ "${python_v}" == "3.6.4" ] ; then
 cat << eof > multiple.patch
---- Modules/faulthandler.c	2017-12-18 22:53:56.000000000 -0600
-+++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0500
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
 @@ -1091,18 +1091,15 @@
  #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
  #define FAULTHANDLER_STACK_OVERFLOW
@@ -312,8 +325,8 @@ cat << eof > multiple.patch
      uintptr_t sp = (uintptr_t)&buffer;
      *depth += 1;
      if (sp < min_sp || max_sp < sp)
---- Lib/test/test_logging.py	2017-12-18 22:53:56.000000000 -0600
-+++ Lib/test/test_logging.py	2023-06-04 16:02:41.267396458 -0500
+--- Lib/test/test_logging.py
++++ Lib/test/test_logging.py
 @@ -1742,7 +1742,7 @@
          self.server_class.address_family = socket.AF_INET
          super(IPv6SysLogHandlerTest, self).tearDown()
@@ -323,8 +336,8 @@ cat << eof > multiple.patch
  class HTTPHandlerTest(BaseTest):
      """Test for HTTPHandler."""
  
---- Lib/test/test_poplib.py	2017-12-18 22:53:56.000000000 -0600
-+++ Lib/test/test_poplib.py	2023-06-04 16:03:48.884112017 -0500
+--- Lib/test/test_poplib.py
++++ Lib/test/test_poplib.py
 @@ -10,13 +10,15 @@
  import os
  import errno
@@ -342,8 +355,8 @@ cat << eof > multiple.patch
  SUPPORTS_SSL = False
  if hasattr(poplib, 'POP3_SSL'):
      import ssl
---- Lib/test/test_multiprocessing_fork.py	2017-12-18 22:53:56.000000000 -0600
-+++ Lib/test/test_multiprocessing_fork.py	2023-06-07 18:44:35.056184742 -0500
+--- Lib/test/test_multiprocessing_fork.py
++++ Lib/test/test_multiprocessing_fork.py
 @@ -6,6 +6,7 @@
  if support.PGO:
      raise unittest.SkipTest("test is not helpful for PGO")
@@ -352,8 +365,8 @@ cat << eof > multiple.patch
  
  test._test_multiprocessing.install_tests_in_module_dict(globals(), 'fork')
  
---- Lib/test/test_multiprocessing_forkserver.py	2017-12-18 22:53:56.000000000 -0600
-+++ Lib/test/test_multiprocessing_forkserver.py	2023-06-07 18:45:40.365963524 -0500
+--- Lib/test/test_multiprocessing_forkserver.py
++++ Lib/test/test_multiprocessing_forkserver.py
 @@ -6,6 +6,8 @@
  if support.PGO:
      raise unittest.SkipTest("test is not helpful for PGO")
@@ -363,8 +376,8 @@ cat << eof > multiple.patch
  test._test_multiprocessing.install_tests_in_module_dict(globals(), 'forkserver')
  
  if __name__ == '__main__':
---- Lib/test/test_multiprocessing_spawn.py	2017-12-18 22:53:56.000000000 -0600
-+++ Lib/test/test_multiprocessing_spawn.py	2023-06-07 18:45:37.305891040 -0500
+--- Lib/test/test_multiprocessing_spawn.py
++++ Lib/test/test_multiprocessing_spawn.py
 @@ -6,6 +6,8 @@
  if support.PGO:
      raise unittest.SkipTest("test is not helpful for PGO")
@@ -387,8 +400,8 @@ fi
 
 if [ "${python_v}" == "3.7.2" ] ; then
 cat << eof > multiple.patch
---- Modules/faulthandler.c      2018-12-23 15:37:36.000000000 -0600
-+++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0600
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
 @@ -1094,18 +1094,15 @@
  #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
  #define FAULTHANDLER_STACK_OVERFLOW
@@ -415,8 +428,8 @@ cat << eof > multiple.patch
      uintptr_t sp = (uintptr_t)&buffer;
      *depth += 1;
      if (sp < min_sp || max_sp < sp)
---- Lib/test/test_asyncio/test_sslproto.py	2018-12-23 15:37:36.000000000 -0600
-+++ Lib/test/test_asyncio/test_sslproto.py	2023-04-26 00:01:45.137154555 -0500
+--- Lib/test/test_asyncio/test_sslproto.py
++++ Lib/test/test_asyncio/test_sslproto.py
 @@ -424,17 +424,14 @@
  
      def test_start_tls_server_1(self):
@@ -530,8 +543,8 @@ fi
 
 if [ "${python_v}" == "3.7.4" ] ; then
 cat << eof > faulthandler.patch
---- Modules/faulthandler.c      2019-07-08 13:03:50.000000000 -0500
-+++ Modules/faulthandler.c      2023-03-25 13:56:26.334300904 -0500
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
 @@ -1094,18 +1094,15 @@
  #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
  #define FAULTHANDLER_STACK_OVERFLOW
@@ -571,8 +584,8 @@ fi
 
 if [ "${python_v}" == "3.8.0" ] ; then
 cat << eof > faulthandler.patch
---- Modules/faulthandler.b      2019-10-14 08:34:47.000000000 -0500
-+++ Modules/faulthandler.c      2023-04-02 18:05:40.932981391 -0500
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
 @@ -1097,18 +1097,15 @@
  #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
  #define FAULTHANDLER_STACK_OVERFLOW
@@ -610,21 +623,34 @@ if [ ${debug} -gt 0 ] ; then
 fi
 fi
 
+module purge
+module load bzip2/${python_bzip2_ver}
+module load zlib/${python_zlib_ver}
+module load xz/${python_xz_ver}
+module load openssl/${python_openssl_ver}
+module load libffi/${python_libffi_ver}
+module load util-linux/${python_utillinux_ver}
+module load ncurses/${python_ncurses_ver}
+module load readline/${python_readline_ver}
+module load sqlite/${python_sqlite_ver}
+module load gdbm/${python_gdbm_ver}
+module load tk/${python_tk_ver}
+
 if [ "${python_v}" == "3.6.4" ] ; then
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
   	    --enable-optimizations \
   	    CXX=$(command -v g++)"
-  export CPPFLAGS="-I${opt}/zlib-${zlib_ver}/include -I${opt}/bzip2-${bzip2_ver}/include -I${opt}/xz-${xz_ver}/include -I${opt}/libffi-${libffi_ver}/include -I${opt}/util-linux-${utillinux_ver}/include/uuid -I${opt}/ncurses-${ncurses_ver}/include/ncurses -I${opt}/readline-${readline_ver}/include -I${opt}/sqlite-${sqlite_ver}/include -I${opt}/gdbm-${gdbm_ver}/include -I${opt}/tcl-${tcl_ver}/include -I${opt}/tk-${tk_ver}/include -I${opt}/openssl-${openssl_ver}/include"
-  export LDFLAGS="-L${opt}/zlib-${zlib_ver}/lib -L${opt}/bzip2-${bzip2_ver}/lib -L${opt}/xz-${xz_ver}/lib -L${opt}/libffi-${libffi_ver}/lib -L${opt}/util-linux-${utillinux_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib -L${opt}/readline-${readline_ver}/lib -L${opt}/sqlite-${sqlite_ver}/lib -L${opt}/gdbm-${gdbm_ver}/lib -L${opt}/openssl-${openssl_ver}/lib $(pkg-config --libs tk)"
+  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${opt}/libffi-${python_libffi_ver}/include -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
+  export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib -L${opt}/openssl-${python_openssl_ver}/lib $(pkg-config --libs tk)"
 else
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
-  	    --with-openssl=${opt}/openssl-${openssl_ver} \
+  	    --with-openssl=${opt}/openssl-${python_openssl_ver} \
   	    --enable-optimizations \
   	    CXX=$(command -v g++)"
-  export CPPFLAGS="-I${opt}/zlib-${zlib_ver}/include -I${opt}/bzip2-${bzip2_ver}/include -I${opt}/xz-${xz_ver}/include -I${opt}/libffi-${libffi_ver}/include -I${opt}/util-linux-${utillinux_ver}/include/uuid -I${opt}/ncurses-${ncurses_ver}/include/ncurses -I${opt}/readline-${readline_ver}/include -I${opt}/sqlite-${sqlite_ver}/include -I${opt}/gdbm-${gdbm_ver}/include -I${opt}/tcl-${tcl_ver}/include -I${opt}/tk-${tk_ver}/include"
-  export LDFLAGS="-L${opt}/zlib-${zlib_ver}/lib -L${opt}/bzip2-${bzip2_ver}/lib -L${opt}/xz-${xz_ver}/lib -L${opt}/libffi-${libffi_ver}/lib -L${opt}/util-linux-${utillinux_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib -L${opt}/readline-${readline_ver}/lib -L${opt}/sqlite-${sqlite_ver}/lib -L${opt}/gdbm-${gdbm_ver}/lib $(pkg-config --libs tk)"
+  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${opt}/libffi-${python_libffi_ver}/include -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include"
+  export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib $(pkg-config --libs tk)"
 fi
 
 export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline -lsqlite3"
@@ -688,10 +714,10 @@ if [ ${run_tests} -gt 0 ] ; then
     # make TESTS='test_ssl_new' V=1 test
     echo ''
   fi
-  if [ ${sql_deterministic_chk} -gt 0 ] && [ "${sqlite_ver}" != "3.30.1" ] ; then
+  if [ ${sql_deterministic_chk} -gt 0 ] && [ "${python_sqlite_ver}" != "3.30.1" ] ; then
     echo ''
     echo 'NOTE: test_sqlite fails in Python 3.8 when linked with a version of Sqlite'
-    echo "      newer than 3.32.0. (You have linked with version ${sqlite_ver}). This appears"
+    echo "      newer than 3.32.0. (You have linked with version ${python_sqlite_ver}). This appears"
     echo "      to be a problem with the testsuite, and not a problem with the Python source"
     echo "      code itself.  Specific failed test: CheckFuncDeterministic"
     echo "      https://github.com/python/cpython/commit/c610d970f5373b143bf5f5900d4645e6a90fb460"
@@ -732,18 +758,28 @@ set PKG ${opt}/Python-\$VER
 
 module-whatis   "Loads Python-${python_v}"
 conflict Python
-module load openssl/${openssl_ver} zlib/${zlib_ver} bzip2/${bzip2_ver} xz/${xz_ver} libffi/${libffi_ver} util-linux/${utillinux_ver} ncurses/${ncurses_ver} readline/${readline_ver} sqlite/${sqlite_ver} gdbm/${gdbm_ver} tk/${tk_ver}
-prereq openssl/${openssl_ver}
-prereq zlib/${zlib_ver}
-prereq bzip2/${bzip2_ver}
-prereq xz/${xz_ver}
-prereq libffi/${libffi_ver}
-prereq util-linux/${utillinux_ver}
-prereq ncurses/${ncurses_ver}
-prereq readline/${readline_ver}
-prereq sqlite/${sqlite_ver}
-prereq gdbm/${gdbm_ver}
-prereq tk/${tk_ver}
+module load openssl/${python_openssl_ver}
+module load zlib/${python_zlib_ver}
+module load bzip2/${python_bzip2_ver}
+module load xz/${python_xz_ver}
+module load libffi/${python_libffi_ver}
+module load util-linux/${python_utillinux_ver}
+module load ncurses/${python_ncurses_ver}
+module load readline/${python_readline_ver}
+module load sqlite/${python_sqlite_ver}
+module load gdbm/${python_gdbm_ver}
+module load tk/${python_tk_ver}
+prereq openssl/${python_openssl_ver}
+prereq zlib/${python_zlib_ver}
+prereq bzip2/${python_bzip2_ver}
+prereq xz/${python_xz_ver}
+prereq libffi/${python_libffi_ver}
+prereq util-linux/${python_utillinux_ver}
+prereq ncurses/${python_ncurses_ver}
+prereq readline/${python_readline_ver}
+prereq sqlite/${python_sqlite_ver}
+prereq gdbm/${python_gdbm_ver}
+prereq tk/${python_tk_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -754,11 +790,9 @@ prepend-path MANPATH \$PKG/share/man
 prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
-#module load gcc/${python_gcc_ver}
-#prereq gcc/${python_gcc_ver}
 
 cd ${root}
-rm -rf ${tmp}/Python-${python_v}
+rm -rf ${tmp}/${python_srcdir}
 
 unset CPPFLAGS
 unset LDFLAGS

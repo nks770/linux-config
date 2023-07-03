@@ -38,60 +38,60 @@ fi
 
 case ${gdbm_v} in
 1.13) #2017-03-11
-   readline_ver=7.0 #2016-09-15
-   ncurses_ver=6.0  #2015-08-08
+   gdbm_readline_ver=7.0 #2016-09-15
+   gdbm_ncurses_ver=6.0  #2015-08-08
    parseopt_patch=0
    ;;
 1.14.1) #2018-01-03
-   readline_ver=7.0 #2016-09-15
-   ncurses_ver=6.0  #2015-08-08
+   gdbm_readline_ver=7.0 #2016-09-15
+   gdbm_ncurses_ver=6.0  #2015-08-08
    parseopt_patch=0
    ;;
 1.18.1) #2018-10-27
-   readline_ver=7.0 #2016-09-15
-   ncurses_ver=6.0  #2015-08-08
+   gdbm_readline_ver=7.0 #2016-09-15
+   gdbm_ncurses_ver=6.0  #2015-08-08
    parseopt_patch=1
    ;;
 1.19) #2020-12-23
-   readline_ver=8.1 #2020-12-06
-   ncurses_ver=6.2  #2020-02-12
+   gdbm_readline_ver=8.1 #2020-12-06
+   gdbm_ncurses_ver=6.2  #2020-02-12
    parseopt_patch=0
    ;;
 1.23) #2022-02-04
-   readline_ver=8.1.2 #2022-01-05
-   ncurses_ver=6.3    #2021-11-08
+   gdbm_readline_ver=8.1.2 #2022-01-05
+   gdbm_ncurses_ver=6.3    #2021-11-08
    parseopt_patch=0
    ;;
 *)
-   echo "ERROR: Need review for gdbm ${1}"
+   echo "ERROR: Need review for gdbm ${gdbm_v}"
    exit 4
    ;;
 esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  readline_ver=${global_readline}
-  ncurses_ver=${global_ncurses}
+  gdbm_readline_ver=${global_readline}
+  gdbm_ncurses_ver=${global_ncurses}
 fi
 
 echo "Installing gdbm ${gdbm_v}..."
+gdbm_srcdir=gdbm-${gdbm_v}
 
 check_modules
-check_readline ${readline_ver}
-check_ncurses ${ncurses_ver}
-module purge
-module load readline/${readline_ver} ncurses/${ncurses_ver}
+check_readline ${gdbm_readline_ver}
+check_ncurses ${gdbm_ncurses_ver}
 
 downloadPackage gdbm-${gdbm_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/gdbm-${gdbm_v} ] ; then
-  rm -rf ${tmp}/gdbm-${gdbm_v}
+if [ -d ${tmp}/${gdbm_srcdir} ] ; then
+  rm -rf ${tmp}/${gdbm_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/gdbm-${gdbm_v}.tar.gz
-cd ${tmp}/gdbm-${gdbm_v}
+cd ${tmp}/${gdbm_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
@@ -104,8 +104,8 @@ if [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
 
 if [ "${gdbm_v}" == "1.13" ] ; then
 cat << eof > parseopt.patch
---- src/parseopt.c  2017-01-02 05:53:22.000000000 -0600
-+++ src/parseopt.c  2023-03-21 23:42:41.797112817 -0500
+--- src/parseopt.c
++++ src/parseopt.c
 @@ -252,8 +252,6 @@
  }
 eof
@@ -122,8 +122,8 @@ fi
 
 if [ "${gdbm_v}" == "1.18.1" ] ; then
 cat << eof > parseopt.patch
---- src/parseopt.c  2018-05-30 04:39:15.000000000 -0500
-+++ src/parseopt.c  2023-03-21 23:42:41.797112817 -0500
+--- src/parseopt.c
++++ src/parseopt.c
 @@ -255,8 +255,6 @@
  }
 eof
@@ -149,14 +149,16 @@ if [ ${debug} -gt 0 ] ; then
 fi
 fi
 
-if [ "${gdbm_v}" == "1.13" ] ; then
-  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat --enable-gdbm-export CPPFLAGS=-I/opt/readline-${readline_ver}/include"
-  export LDFLAGS="-L${opt}/readline-${readline_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib -L${tmp}/gdbm-${gdbm_v}/src/.libs"
-else
-  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat CPPFLAGS=-I/opt/readline-${readline_ver}/include"
-  export LDFLAGS="-L${opt}/readline-${readline_ver}/lib -L${opt}/ncurses-${ncurses_ver}/lib"
-fi
+module purge
+module load readline/${gdbm_readline_ver} ncurses/${gdbm_ncurses_ver}
 
+if [ "${gdbm_v}" == "1.13" ] ; then
+  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat --enable-gdbm-export CPPFLAGS=-I/opt/readline-${gdbm_readline_ver}/include"
+  export LDFLAGS="-L${opt}/readline-${gdbm_readline_ver}/lib -L${opt}/ncurses-${gdbm_ncurses_ver}/lib -L${tmp}/${gdbm_srcdir}/src/.libs"
+else
+  config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat CPPFLAGS=-I/opt/readline-${gdbm_readline_ver}/include"
+  export LDFLAGS="-L${opt}/readline-${gdbm_readline_ver}/lib -L${opt}/ncurses-${gdbm_ncurses_ver}/lib"
+fi
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -218,9 +220,9 @@ set PKG ${opt}/gdbm-\$VER
 
 module-whatis   "Loads gdbm-${gdbm_v}"
 conflict gdbm
-module load readline/${readline_ver} ncurses/${ncurses_ver}
-prereq readline/${readline_ver}
-prereq ncurses/${ncurses_ver}
+module load readline/${gdbm_readline_ver} ncurses/${gdbm_ncurses_ver}
+prereq readline/${gdbm_readline_ver}
+prereq ncurses/${gdbm_ncurses_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
@@ -232,6 +234,6 @@ prepend-path MANPATH \$PKG/share/man
 eof
 
 cd ${root}
-rm -rf ${tmp}/gdbm-${gdbm_v}
+rm -rf ${tmp}/${gdbm_srcdir}
 
 }

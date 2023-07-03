@@ -37,20 +37,28 @@ if [ -z "${zlib_v}" ] ; then
 fi
 
 echo "Installing zlib ${zlib_v}..."
+zlib_srcdir=zlib-${zlib_v}
 
 check_modules
-module purge
 
 downloadPackage zlib-${zlib_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/zlib-${zlib_v} ] ; then
-  rm -rf ${tmp}/zlib-${zlib_v}
+if [ -d ${tmp}/${zlib_srcdir} ] ; then
+  rm -rf ${tmp}/${zlib_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/zlib-${zlib_v}.tar.gz
-cd ${tmp}/zlib-${zlib_v}
+cd ${tmp}/${zlib_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
 
 config="./configure --prefix=${opt}/zlib-${zlib_v}"
 
@@ -123,6 +131,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/zlib-${zlib_v}
+rm -rf ${tmp}/${zlib_srcdir}
 
 }

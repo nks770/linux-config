@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Functions for installing generic wheel modules for python 3
-echo 'Loading generic wheel for Python 3...'
-
+echo 'Loading generic wheel installer for Python 3...'
 
 function p3wheelInstalled() {
 # Cannot evaulate if we dont have modules installed
@@ -18,32 +17,58 @@ module load Python/${1}
 if [ ! $? -eq 0 ] ; then
   return 1
 fi
-py_exe=$(which python3)
-if [ ! -f "${py_exe}" ] ; then
-  return 1
-fi
-py_lib=$(echo ${py_exe%/*}/../lib/python*/site-packages)
-pytest=$(find "${py_lib}" -name "${2}-*")
 
-if [ -z "${pytest}" ] ; then
-  return 1
-#fi
-#${py_exe} -c "import ${2}"
-#if [ ! $? -eq 0 ] ; then
-#  return 1
+case ${2} in
+mutagen)
+  mname=mutagen
+  vquery="print('.'.join([str(x) for x in mutagen.version]))"
+  ;;
+beautifulsoup4)
+  mname=bs4
+  vquery="print(bs4.__version__)"
+  ;;
+*)
+  mname=${2}
+  vquery="print(${2}.__version__)"
+  ;;
+esac
+
+echo -n "Searching for ${2} ${3}... "
+
+if [ "${2}" == "demjson3" ] ; then
+  # demjson3 3.0.6 reports internally as 3.0.5
+  pytest=$(pip3 list | grep demjson3 | awk '{print $2}' 2>/dev/null)
+  if [ -z "${pytest}" ] ; then
+    pytest="<not found>"
+  fi
 else
+  pytest=$(echo -e "import ${mname}\n${vquery}" | python3 2>/dev/null)
+  if [ -z "${pytest}" ] ; then
+    pytest="<not found>"
+  fi
+fi
+
+echo -n "${pytest} "
+if [ "${pytest}" == "${3}" ] ; then
+  echo "(success)"
   return 0
+else
+  echo "(fail)"
+  return 1
 fi
 }
 
 function check_p3wheel() {
-if p3wheelInstalled ${1} ${2}; then
+if p3wheelInstalled ${1} ${2} ${3}; then
   echo "${2} is installed for Python/${1}."
 else
   if [ "${2}" == "demjson" ] ; then
     install_p3wheel ${1} setuptools 57.5.0
+    install_p3wheel ${1} pip 23.0.1
     install_p3wheel ${1} ${2} ${3}
-    install_p3wheel ${1} setuptools 67.6.0
+  elif [ "${2}" == "demjson3" ] ; then
+    install_p3wheel ${1} pip 23.0.1
+    install_p3wheel ${1} ${2} ${3}
   else
     install_p3wheel ${1} ${2} ${3}
   fi
@@ -87,34 +112,15 @@ if [ ! -f ${pkg}/${wfile} ] ; then
   exit 4
 fi
 
-#if [ "${mode}" == "tgz" ] ; then
-#  cd ${tmp}
-#
-#  if [ -d ${tmp}/${wheel_name}-${wheel_v} ] ; then
-#    rm -rf ${tmp}/${wheel_name}-${wheel_v}
-#  fi
-#
-#  tar xvfz ${pkg}/${wfile}
-#  cd ${tmp}/${wheel_name}-${wheel_v}
-#
-#fi
 if [ ${debug} -gt 0 ] ; then
   echo ">> Ready to install ${module_name}"
   read k
 fi
 
-#if [ "${mode}" == "whl" ] ; then
-  pip3 install --no-index ${pkg}/${wfile}
-  if [ ! $? -eq 0 ] ; then
-    exit 4
-  fi
-#fi
-#if [ "${mode}" == "tgz" ] ; then
-#  python3 setup.py install
-#  if [ ! $? -eq 0 ] ; then
-#    exit 4
-#  fi
-#fi
+pip3 install --no-index ${pkg}/${wfile}
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
@@ -132,9 +138,5 @@ if [ ${run_tests} -gt 0 ] ; then
   read k
 fi
 cd ${root}
-
-#if [ "${mode}" == "tgz" ] ; then
-#  rm -rf ${tmp}/${wheel_name}-${wheel_v}
-#fi
 
 }

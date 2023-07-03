@@ -60,35 +60,42 @@ fi
 
 case ${tk_v} in
 8.6.13)
-   tcl_ver=8.6.13
+   tk_tcl_ver=8.6.13
    ;;
 *)
-   tcl_ver=8.6.13
+   echo "ERROR: Need review for tk ${tk_v}"
+   exit 4
    ;;
 esac
 
 echo "Installing Tk version ${tk_v}..."
+tk_srcdir=tk-${tk_v}
 
 check_modules
-check_tcl ${tcl_ver}
-
-module purge
-module load tcl/${tcl_ver}
+check_tcl ${tk_tcl_ver}
 
 downloadPackage tk${tk_v}-src.tar.gz
 
-mkdir -pv ${opt}/tk-${tk_v}
+mkdir -pv ${opt}/${tk_srcdir}
 
-cd ${opt}/tk-${tk_v}
+cd ${opt}/${tk_srcdir}
 tar xvfz ${pkg}/tk${tk_v}-src.tar.gz
 mv -fv tk${tk_v} build
-cd ${opt}/tk-${tk_v}/build/unix
+cd ${opt}/${tk_srcdir}/build/unix
 
-config="./configure --prefix=${opt}/tk-${tk_v} --with-tcl=${opt}/tcl-${tcl_ver}/lib"
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load tcl/${tk_tcl_ver}
+
+config="./configure --prefix=${opt}/tk-${tk_v} --with-tcl=${opt}/tcl-${tk_tcl_ver}/lib"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
   echo ${config}
   read k
 fi
@@ -142,8 +149,8 @@ set PKG ${opt}/tk-\$VER
 
 module-whatis   "Loads tk-${tk_v}"
 conflict tk
-module load tcl/${tcl_ver}
-prereq tcl/${tcl_ver}
+module load tcl/${tk_tcl_ver}
+prereq tcl/${tk_tcl_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include

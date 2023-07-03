@@ -37,20 +37,28 @@ if [ -z "${xz_v}" ] ; then
 fi
 
 echo "Installing xz ${xz_v}..."
+xz_srcdir=xz-${xz_v}
 
 check_modules
-module purge
 
 downloadPackage xz-${xz_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/xz-${xz_v} ] ; then
-  rm -rf ${tmp}/xz-${xz_v}
+if [ -d ${tmp}/${xz_srcdir} ] ; then
+  rm -rf ${tmp}/${xz_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/xz-${xz_v}.tar.gz
-cd ${tmp}/xz-${xz_v}
+cd ${tmp}/${xz_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
 
 config="./configure --prefix=${opt}/xz-${xz_v}"
 
@@ -123,6 +131,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/xz-${xz_v}
+rm -rf ${tmp}/${xz_srcdir}
 
 }

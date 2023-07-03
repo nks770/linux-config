@@ -6,7 +6,7 @@ pkg=${root}/packages
 tmp=${root}/temp
 
 debug=1
-run_tests=0
+run_tests=1
 run_cmake_tests=0
 dependency_strategy=optimized
 
@@ -42,16 +42,16 @@ global_openssl=1.1.1u   # 2023-05-30
 #####################
 function python_extensions(){
     check_p3wheel ${1} demjson 2.2.4
+    check_p3wheel ${1} demjson3 3.0.6
     #install_p3wheel ${1} setuptools 67.6.0
-    install_p3wheel ${1} setuptools 68.0.0
+    check_p3wheel ${1} setuptools 68.0.0
     #install_p3wheel ${1} pip 23.0.1
-    install_p3wheel ${1} pip 23.1.2
+    check_p3wheel ${1} pip 23.1.2
     #check_p3wheel ${1} soupsieve 2.4
     check_p3wheel ${1} soupsieve 2.4.1
     #check_p3wheel ${1} beautifulsoup4 4.11.2
     check_p3wheel ${1} beautifulsoup4 4.12.2
     check_p3wheel ${1} mutagen 1.46.0
-    check_p3wheel ${1} demjson3 3.0.6
 }
 
 ncpu=$(cat /proc/cpuinfo | grep name | wc -l)

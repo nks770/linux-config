@@ -33,71 +33,73 @@ function build_sqlite() {
 # Get desired version number to install
 sqlite_v=${1}
 if [ -z "${sqlite_v}" ] ; then
-  sqlite_v=3.41.0
+  sqlite_v=3.42.0
 fi
 
 case ${sqlite_v} in
 3.21.0) # 2017-10-24
    sql_srcdir=sqlite-autoconf-3210000
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.22.0) # 2018-01-22
    sql_srcdir=sqlite-autoconf-3220000
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.26.0) # 2018-12-01
    sql_srcdir=sqlite-autoconf-3260000
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.28.0) # 2019-04-16
    sql_srcdir=sqlite-autoconf-3280000
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.30.1) # 2019-10-10
    sql_srcdir=sqlite-autoconf-3300100
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.34.1) # 2021-01-20
    sql_srcdir=sqlite-autoconf-3340100
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.35.4) # 2021-04-02
    sql_srcdir=sqlite-autoconf-3350400
-   zlib_ver=1.2.11 # 2017-01-15
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.40.0) # 2022-11-16
    sql_srcdir=sqlite-autoconf-3400000
-   zlib_ver=1.2.13 # 2022-10-12
+   sqlite_zlib_ver=1.2.13 # 2022-10-12
    ;;
 3.40.1) # 2022-12-28
    sql_srcdir=sqlite-autoconf-3400100
-   zlib_ver=1.2.13 # 2022-10-12
+   sqlite_zlib_ver=1.2.13 # 2022-10-12
    ;;
 3.41.0) # 2023-02-21
    sql_srcdir=sqlite-autoconf-3410000
-   zlib_ver=1.2.13 # 2022-10-12
+   sqlite_zlib_ver=1.2.13 # 2022-10-12
    ;;
 3.41.2) # 2023-03-22
    sql_srcdir=sqlite-autoconf-3410200
-   zlib_ver=1.2.13 # 2022-10-12
+   sqlite_zlib_ver=1.2.13 # 2022-10-12
+   ;;
+3.42.0) # 2023-05-16
+   sql_srcdir=sqlite-autoconf-3420000
+   sqlite_zlib_ver=1.2.13 # 2022-10-12
    ;;
 *)
-   sql_srcdir=unknown
-   zlib_ver=1.2.13
+   echo "ERROR: Review needed for sqlite ${sqlive_v}"
+   exit 4
    ;;
 esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  zlib_ver=${global_zlib}
+  sqlite_zlib_ver=${global_zlib}
 fi
 
 echo "Installing sqlite ${sqlite_v}..."
 
 check_modules
-check_zlib ${zlib_ver}
-module purge
-module load zlib/${zlib_ver}
+check_zlib ${sqlite_zlib_ver}
 
 downloadPackage ${sql_srcdir}.tar.gz
 
@@ -107,8 +109,17 @@ if [ -d ${tmp}/${sql_srcdir} ] ; then
   rm -rf ${tmp}/${sql_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/${sql_srcdir}.tar.gz
 cd ${tmp}/${sql_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+module load zlib/${sqlite_zlib_ver}
 
 if [ "${sqlite_v}" == "3.21.0" ] ; then
   config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts5"
@@ -178,8 +189,8 @@ set PKG ${opt}/sqlite-\$VER
 
 module-whatis   "Loads sqlite-${sqlite_v}"
 conflict sqlite
-module load zlib/${zlib_ver}
-prereq zlib/${zlib_ver}
+module load zlib/${sqlite_zlib_ver}
+prereq zlib/${sqlite_zlib_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
