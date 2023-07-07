@@ -3,6 +3,17 @@
 # Functions for detecting and building JBIG-KIT
 echo 'Loading JBIG-KIT...'
 
+function get_jbigkit_library() {
+case ${1} in
+  2.1)
+    echo libjbig.so.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
 function jbigkitInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then

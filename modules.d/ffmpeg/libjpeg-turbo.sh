@@ -3,6 +3,23 @@
 # Functions for detecting and building libjpeg-turbo
 echo 'Loading libjpeg-turbo...'
 
+function get_libjpegturbo_library() {
+case ${1} in
+  1.5.2)
+    echo libjpeg.so.62.2.0
+  ;;
+  2.0.3)
+    echo libjpeg.so.62.3.0
+  ;;
+  2.0.4)
+    echo libjpeg.so.62.3.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
 function libjpegturboInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then
@@ -46,6 +63,11 @@ case ${libjpegturbo_v} in
    libjpegturbo_cmake_ver=3.15.3 # 2019-09-04
    libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
    libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.3, cmake is used for all platforms, autotools not supported.
+  ;;
+  2.0.4) # 2019-12-31
+   libjpegturbo_cmake_ver=3.16.2 # 2019-12-19
+   libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
+   libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
   ;;
   *)
    echo "ERROR: Review needed for libjpeg-turbo ${libjpegturbo_v}"

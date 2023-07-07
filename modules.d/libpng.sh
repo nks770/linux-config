@@ -46,8 +46,11 @@ case ${libpng_v} in
 1.6.36) # 2018-12-02
    zlib_ver=1.2.11   #2017-01-15
    ;;
+1.6.37) # 2019-04-15
+   zlib_ver=1.2.11   #2017-01-15
+   ;;
 *)
-   echo "ERROR: Need review for libpng ${1}"
+   echo "ERROR: Need review for libpng ${libpng_v}"
    exit 4
    ;;
 esac
@@ -58,6 +61,7 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
 fi
 
 echo "Installing libpng ${libpng_v}..."
+libpng_srcdir=libpng-${libpng_v}
 
 check_modules
 check_zlib ${zlib_ver}
@@ -66,12 +70,17 @@ downloadPackage libpng-${libpng_v}.tar.gz
 
 cd ${tmp}
 
-if [ -d ${tmp}/libpng-${libpng_v} ] ; then
-  rm -rf ${tmp}/libpng-${libpng_v}
+if [ -d ${tmp}/${libpng_srcdir} ] ; then
+  rm -rf ${tmp}/${libpng_srcdir}
 fi
 
 tar xvfz ${pkg}/libpng-${libpng_v}.tar.gz
-cd ${tmp}/libpng-${libpng_v}
+cd ${tmp}/${libpng_srcdir}
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
 
 module purge
 module load zlib/${zlib_ver}
@@ -152,6 +161,6 @@ prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 eof
 
 cd ${root}
-rm -rf ${tmp}/libpng-${libpng_v}
+rm -rf ${tmp}/${libpng_srcdir}
 
 }

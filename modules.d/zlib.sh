@@ -3,6 +3,17 @@
 # Functions for detecting and building zlib
 echo 'Loading zlib...'
 
+function get_zlib_library() {
+case ${1} in
+  1.2.13)
+    echo libz.so.1.2.13
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
 function zlibInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then

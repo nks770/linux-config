@@ -3,6 +3,17 @@
 # Functions for detecting and building xz
 echo 'Loading xz...'
 
+function get_xz_library() {
+case ${1} in
+  5.4.2)
+    echo liblzma.so.5.4.2
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
 function xzInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then

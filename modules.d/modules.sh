@@ -139,7 +139,38 @@ if [ ! $? -eq 0 ] ; then
   exit 4
 fi
 
-cp -av ${tmp}/${modules_srcdir}/init/profile.sh /etc/profile.d/modules.sh
+profile_needed=1
+
+while [ ${profile_needed} -gt 0 ] ; do
+  if [ -f /etc/profile.d/modules.sh ] ; then
+    cmp -s ${tmp}/${modules_srcdir}/init/profile.sh /etc/profile.d/modules.sh
+    if [ $? -eq 0 ] ; then
+      profile_needed=0
+      echo 'The correct modules.sh is already installed in profile.d.'
+      echo 'No further action is needed.'
+    else
+      profile_needed=1
+    fi
+  else
+    profile_needed=1
+  fi
+  if [ ${profile_needed} -gt 0 ] ; then
+    cp -av ${tmp}/${modules_srcdir}/init/profile.sh /etc/profile.d/modules.sh
+    if [ $? -eq 0 ] ; then
+      profile_needed=0
+    fi
+  fi
+  if [ ${profile_needed} -gt 0 ] ; then
+    echo ''
+    echo 'PLEASE EXECUTE THE FOLLOWING COMMAND AS SUPER USER:'
+    echo "cp -av ${tmp}/${modules_srcdir}/init/profile.sh /etc/profile.d/modules.sh"
+    echo ''
+    echo 'Press enter when complete.'
+    echo ''
+    read k
+  fi
+done
+
 ln -sv ${opt}/Modules/${modules_v} ${opt}/Modules/default
 
 # Create the environment module for tcl
