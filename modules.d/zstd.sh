@@ -126,6 +126,8 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+# The zstd testsuite is not safe to run as root!
+# It sets the chmod of "/dev/null" to 600, and breaks a lot of stuff!
 if [ ${run_tests} -gt 0 ] ; then
   make check
   echo '>> Tests complete'

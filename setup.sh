@@ -76,6 +76,15 @@ for module in $(ls modules.d/*/*.sh) ; do
   source ${module}
 done
 
+# Test if the opt directory is writable by this script.
+touch ${opt}/.me 2>/dev/null
+if [ $? -eq 0 ] ; then
+  rm -f ${opt}/.me
+else
+  echo "ERROR: ${opt} is not writable!"
+  exit 4
+fi
+
 if [ ${debug} -gt 0 ] ; then
   echo ">> Modules (${dependency_strategy}) loaded, press enter to begin."
   read k
