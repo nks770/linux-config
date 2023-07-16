@@ -39,6 +39,7 @@ cmake_srcdir=cmake-${cmake_v}
 
 kwsys_warning=0
 chmod_warning=0
+rerun_failures=0
 
 case ${cmake_v} in
 3.0.2) # 2014-09-11
@@ -111,6 +112,12 @@ case ${cmake_v} in
    ncurses_ver=6.2    # 2020-02-12
    openssl_ver=1.1.1i # 2020-12-08
    chmod_warning=1
+   ;;
+3.24.0) # 2022-08-04
+   ncurses_ver=6.3    # 2021-11-08
+   openssl_ver=1.1.1q # 2022-07-05
+   chmod_warning=0
+   rerun_failures=161
    ;;
 *)
    echo "ERROR: Review needed for cmake ${1}"
@@ -261,35 +268,57 @@ eof
     fi
   fi
 
-  make test
-  echo ''
-  if [ ${kwsys_warning} -gt 0 ] ; then
-    echo 'NOTE: You are probably seeing a failed test for "kwsys.testSystemTools"'
-    echo 'Looking further into the matter, the specific error message is:'
-    echo 'TestFileAccess incorrectly indicated that this is a writable file: ...'
+  export CTEST_OUTPUT_ON_FAILURE=1
+#  export LC_ALL=en_US.UTF-8
+
+#  make test
+  make test ARGS=-j${ncpu}
+  testresult=$?
+
+  unset CTEST_OUTPUT_ON_FAILURE
+#  unset LC_ALL
+
+  if [ ${testresult} -gt 0 ] ; then
     echo ''
-    echo 'If the testsuite is run as root, this is an expected failure'
-    echo 'More info is available here:'
-    echo 'https://gitlab.kitware.com/utils/kwsys/-/merge_requests/251'
+    if [ ${kwsys_warning} -gt 0 ] ; then
+      echo 'NOTE: You are probably seeing a failed test for "kwsys.testSystemTools"'
+      echo 'Looking further into the matter, the specific error message is:'
+      echo 'TestFileAccess incorrectly indicated that this is a writable file: ...'
+      echo ''
+      echo 'If the testsuite is run as root, this is an expected failure'
+      echo 'More info is available here:'
+      echo 'https://gitlab.kitware.com/utils/kwsys/-/merge_requests/251'
+    fi
+    if [ ${chmod_warning} -gt 0 ] ; then
+      echo 'NOTE: I have seen a few failed tests for this version of cmake. They'
+      echo 'mostly seem to be related to running the test suite as root, and the'
+      echo 'resulting file access permission associated with root.'
+      echo ''
+      echo 'Notes about four tests of concern:'
+      echo '  355 - RunCMake.Make (Failed) - fails at first, but then succeeds when re-run'
+      echo '  446 - RunCMake.file-CHMOD (Failed) - expected "file failed to open for reading"'
+      echo '  451 - RunCMake.find_program (Failed) - expected "The file ... is readable but not executable"'
+      echo '  512 - RunCMake.CommandLine (Failed) - expected "permission denied"'
+      echo ''
+      echo 'Perhaps worth looking into further later, but seems OK?'
+    fi
+    if [ ${rerun_failures} -gt 0 ] ; then
+      echo "NOTE: With this version of CMake, I have observed ${rerun_failures} tests"
+      echo 'that fail the first time they run.  Looking into the logs, the expected'
+      echo 'and actual output appear to be identical, which points to the test system'
+      echo 'itself being the problem, and not a problem with the cmake build.'
+      echo ''
+      echo 'In any case, re-running the failed tests results in a subsequent success.'
+      echo ''
+      echo 'Please proceed with re-running the tests, and you should find a 100%'
+      echo 'success rate.'
+    fi
+    echo ''
+    echo '>> Press enter for more info on failed tests (if applicable)'
+    read k
+    echo ''
+    ./bin/ctest -V --rerun-failed
   fi
-  if [ ${chmod_warning} -gt 0 ] ; then
-    echo 'NOTE: I have seen a few failed tests for this version of cmake. They'
-    echo 'mostly seem to be related to running the test suite as root, and the'
-    echo 'resulting file access permission associated with root.'
-    echo ''
-    echo 'Notes about four tests of concern:'
-    echo '  355 - RunCMake.Make (Failed) - fails at first, but then succeeds when re-run'
-    echo '  446 - RunCMake.file-CHMOD (Failed) - expected "file failed to open for reading"'
-    echo '  451 - RunCMake.find_program (Failed) - expected "The file ... is readable but not executable"'
-    echo '  512 - RunCMake.CommandLine (Failed) - expected "permission denied"'
-    echo ''
-    echo 'Perhaps worth looking into further later, but seems OK?'
-  fi
-  echo ''
-  echo '>> Press enter for more info on failed tests (if applicable)'
-  read k
-  echo ''
-  ./bin/ctest -V --rerun-failed
   echo ''
   echo '>> Tests complete'
   read k
@@ -352,7 +381,10 @@ prepend-path PATH \$PKG/bin
 
 eof
 fi
+
 cd ${root}
 rm -rf ${tmp}/${cmake_srcdir}
+
+unset CMAKE_PREFIX_PATH
 
 }

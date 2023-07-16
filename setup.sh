@@ -7,7 +7,7 @@ tmp=${root}/temp
 
 debug=1
 run_tests=1
-run_cmake_tests=0
+run_cmake_tests=1
 dependency_strategy=optimized
 
 #######################################################
@@ -15,6 +15,7 @@ dependency_strategy=optimized
 #######################################################
 # Toolchain for bison/flex/m4/doxygen
 global_bison=3.8.2      # 2021-09-25
+global_dejagnu=1.6.3
 global_help2man=1.49.3  # 2022-12-15
 global_flex=2.6.4       # 2017-05-06
 global_m4=1.4.19        # 2021-05-28
@@ -29,6 +30,7 @@ global_utillinux=2.39.1 # 2023-06-27
 
 # Commonly linked compression libraries
 global_bzip2=1.0.8      # 2019-07-13
+#global_lz4=1.9.4        # 2022-08-15
 global_xz=5.4.2         # 2023-03-18
 global_zlib=1.2.13      # 2022-10-12
 

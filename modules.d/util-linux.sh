@@ -60,18 +60,32 @@ fi
 
 module purge
 
+#config="./configure --prefix=${opt}/util-linux-${utillinux_v} \
+#	    ADJTIME_PATH=${opt}/util-linux-${utillinux_v}/etc/adjtime \
+#            --disable-chfn-chsh  \
+#            --disable-login      \
+#            --disable-nologin    \
+#            --disable-su         \
+#            --disable-setpriv    \
+#            --disable-runuser    \
+#            --disable-pylibmount \
+#            --disable-static     \
+#	    --disable-wall       \
+#            --without-python     \
+#            runstatedir=/run"
+
+# At this point, we're really just interested in uuid components
+# Several other components like 'mount' and 'wall' cannot be built
+# as non-root user because the 'make install' phase depends on being
+# able to run arbitrary 'chgrp' and 'chmod' commands.
+
+# --disable-bash-completion \
 config="./configure --prefix=${opt}/util-linux-${utillinux_v} \
-	    ADJTIME_PATH=${opt}/util-linux-${utillinux_v}/etc/adjtime \
-            --disable-chfn-chsh  \
-            --disable-login      \
-            --disable-nologin    \
-            --disable-su         \
-            --disable-setpriv    \
-            --disable-runuser    \
-            --disable-pylibmount \
-            --disable-static     \
-            --without-python     \
-            runstatedir=/run"
+	--disable-all-programs \
+	--with-bashcompletiondir=${opt}/util-linux-${utillinux_v}/share/bash-completion/completions \
+	--enable-libuuid \
+	--enable-uuidd \
+	--enable-uuidgen"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

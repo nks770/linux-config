@@ -40,26 +40,31 @@ case ${gdbm_v} in
 1.13) #2017-03-11
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
+   gdbm_dejagnu_ver=1.6.3
    parseopt_patch=0
    ;;
 1.14.1) #2018-01-03
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
+   gdbm_dejagnu_ver=1.6.3
    parseopt_patch=0
    ;;
 1.18.1) #2018-10-27
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
+   gdbm_dejagnu_ver=1.6.3
    parseopt_patch=1
    ;;
 1.19) #2020-12-23
    gdbm_readline_ver=8.1 #2020-12-06
    gdbm_ncurses_ver=6.2  #2020-02-12
+   gdbm_dejagnu_ver=1.6.3
    parseopt_patch=0
    ;;
 1.23) #2022-02-04
    gdbm_readline_ver=8.1.2 #2022-01-05
    gdbm_ncurses_ver=6.3    #2021-11-08
+   gdbm_dejagnu_ver=1.6.3
    parseopt_patch=0
    ;;
 *)
@@ -80,6 +85,7 @@ gdbm_srcdir=gdbm-${gdbm_v}
 check_modules
 check_readline ${gdbm_readline_ver}
 check_ncurses ${gdbm_ncurses_ver}
+check_dejagnu ${gdbm_dejagnu_ver}
 
 downloadPackage gdbm-${gdbm_v}.tar.gz
 
@@ -150,7 +156,9 @@ fi
 fi
 
 module purge
-module load readline/${gdbm_readline_ver} ncurses/${gdbm_ncurses_ver}
+module load readline/${gdbm_readline_ver}
+module load ncurses/${gdbm_ncurses_ver}
+module load dejagnu/${gdbm_dejagnu_ver}
 
 if [ "${gdbm_v}" == "1.13" ] ; then
   config="./configure --prefix=${opt}/gdbm-${gdbm_v} --enable-libgdbm-compat --enable-gdbm-export CPPFLAGS=-I/opt/readline-${gdbm_readline_ver}/include"

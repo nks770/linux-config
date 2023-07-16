@@ -141,6 +141,7 @@ check_libjpegturbo ${tiff_libjpegturbo_ver}
 check_zlib ${tiff_zlib_ver}
 check_xz ${tiff_xz_ver}
 check_jbigkit ${tiff_jbigkit_ver}
+check_zstd ${tiff_zstd_ver}
 
 downloadPackage tiff-${tiff_v}.tar.gz
 
@@ -168,6 +169,7 @@ module load libjpeg-turbo/${tiff_libjpegturbo_ver}
 module load zlib/${tiff_zlib_ver}
 module load xz/${tiff_xz_ver}
 module load jbigkit/${tiff_jbigkit_ver}
+module load zstd/${tiff_zstd_ver}
 
 
 if [ ${tiff_use_cmake} -gt 0 ] ; then
@@ -320,11 +322,13 @@ tiff_xz_ver=${global_xz}
 tiff_ffmpeg_ver=${3}
 tiff_jbigkit_ver=${4}
 tiff_libjpegturbo_ver=${5}
+tiff_zstd_ver=${6}
 
 tiff_zlib_lib=$(get_zlib_library ${tiff_zlib_ver})
 tiff_xz_lib=$(get_xz_library ${tiff_xz_ver})
 tiff_jbigkit_lib=$(get_jbigkit_library ${tiff_jbigkit_ver})
 tiff_libjpegturbo_lib=$(get_libjpegturbo_library ${tiff_libjpegturbo_ver})
+tiff_zstd_lib=$(get_zstd_library ${tiff_zstd_ver})
 
 tiff_srcdir=tiff-${tiff_v}
 tiff_prefix=${2}
@@ -338,6 +342,7 @@ check_libjpegturbo ${tiff_libjpegturbo_ver}
 check_zlib ${tiff_zlib_ver}
 check_xz ${tiff_xz_ver}
 check_jbigkit ${tiff_jbigkit_ver}
+check_zstd ${tiff_zstd_ver}
 
 downloadPackage tiff-${tiff_v}.tar.gz
 
