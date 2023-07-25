@@ -134,10 +134,12 @@ module load libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 module load zlib/${ffmpeg_zlib_ver}
 module load xz/${ffmpeg_xz_ver}
 module load jbigkit/${ffmpeg_jbigkit_ver}
+module load zstd/${ffmpeg_zstd_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 prereq zlib/${ffmpeg_zlib_ver}
 prereq xz/${ffmpeg_xz_ver}
 prereq jbigkit/${ffmpeg_jbigkit_ver}
+prereq zstd/${ffmpeg_zstd_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -155,7 +157,7 @@ check_jbigkit ${ffmpeg_jbigkit_ver}
 check_giflib  ${ffmpeg_giflib_ver}
 check_libpng  ${ffmpeg_libpng_ver}
 check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
-ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v} ${ffmpeg_jbigkit_ver} ${ffmpeg_libjpegturbo_ver}
+ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_libass ${ffmpeg_libass_ver}
