@@ -53,7 +53,9 @@ if tiffDepInstalled ${1} ${2}; then
   echo "present"
 else
   echo "not present"
-  ff_build_tiff ${1} ${2} ${3} ${4} ${5}
+  ff_build_tiff ${1} ${2} ${3}
+  ff_build_libwebp ${4} ${2} ${3}
+  ff_build_tiff ${1} ${2} ${3}
 fi
 }
 
@@ -339,12 +341,14 @@ tiff_xz_ver=${global_xz}
 tiff_jbigkit_ver=${ffmpeg_jbigkit_ver}
 tiff_libjpegturbo_ver=${ffmpeg_libjpegturbo_ver}
 tiff_zstd_ver=${ffmpeg_zstd_ver}
+tiff_libwebp_ver=${ffmpeg_libwebp_ver}
 
 tiff_zlib_lib=$(get_zlib_library ${tiff_zlib_ver})
 tiff_xz_lib=$(get_xz_library ${tiff_xz_ver})
 tiff_jbigkit_lib=$(get_jbigkit_library ${tiff_jbigkit_ver})
 tiff_libjpegturbo_lib=$(get_libjpegturbo_library ${tiff_libjpegturbo_ver})
 tiff_zstd_lib=$(get_zstd_library ${tiff_zstd_ver})
+tiff_libwebp_lib=$(get_libwebp_library ${tiff_libwebp_ver})
 
 tiff_srcdir=tiff-${tiff_v}
 tiff_prefix=${2}
@@ -395,6 +399,11 @@ if [ ! -d ${tmp}/${tiff_srcdir}/build ] ; then
 fi
 cd ${tmp}/${tiff_srcdir}/build
 
+# Only include libwebp if it exists
+if [ -f "${tiff_prefix}/lib/${tiff_libwebp_lib}" ] ; then
+  tiff_libwebp_cmake="-DWEBP_LIBRARY=${tiff_prefix}/lib/${tiff_libwebp_lib} -DWEBP_INCLUDE_DIR=${tiff_prefix}/include"
+fi
+
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
@@ -405,6 +414,7 @@ if [ ${debug} -gt 0 ] ; then
       -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
       -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
+      ${tiff_libwebp_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
   read k
 fi
@@ -415,6 +425,7 @@ cmake -L -G "Unix Makefiles" \
       -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
       -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
+      ${tiff_libwebp_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
 
 else
@@ -468,4 +479,8 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
+
+cd ${root}
+rm -rf ${tmp}/${tiff_srcdir}
+
 }

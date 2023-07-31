@@ -54,6 +54,7 @@ case ${1} in
     ffmpeg_libpng_ver=1.6.37              # 2019-04-15
     ffmpeg_libjpegturbo_ver=2.0.4         # 2019-12-31
     ffmpeg_tiff_ver=4.1.0                 # 2019-11-03
+    ffmpeg_libwebp_ver=1.0.3              # 2019-07-13
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
 #   ffmpeg_libass_ver=0.14.0              # 2017-10-31
@@ -77,7 +78,6 @@ case ${1} in
 #   ffmpeg_speex_ver=1.2.0    # December 7, 2016
 #   ffmpeg_opencoreamr_ver=0.1.5 # 2017-03-16
 #   ffmpeg_voamrwbenc_ver=0.1.3  # 2013-07-27
-#   ffmpeg_libwebp_ver=1.0.3      # Sat Jul 13 07:23:45 2019
 #   ffmpeg_libvpx_ver=1.8.2   # Dec 19, 2019
   ;;
 #  5.1.2) # 2022-09-25
@@ -130,11 +130,13 @@ set PKG ${opt}/ffmpeg-dep-\$VER
 
 module-whatis   "Loads ffmpeg-dep-${ffmpeg_v}"
 conflict ffmpeg-dep
+module load libpng/${ffmpeg_libpng_ver}
 module load libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 module load zlib/${ffmpeg_zlib_ver}
 module load xz/${ffmpeg_xz_ver}
 module load jbigkit/${ffmpeg_jbigkit_ver}
 module load zstd/${ffmpeg_zstd_ver}
+prereq libpng/${ffmpeg_libpng_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 prereq zlib/${ffmpeg_zlib_ver}
 prereq xz/${ffmpeg_xz_ver}
@@ -157,7 +159,8 @@ check_jbigkit ${ffmpeg_jbigkit_ver}
 check_giflib  ${ffmpeg_giflib_ver}
 check_libpng  ${ffmpeg_libpng_ver}
 check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
-ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v} ${ffmpeg_libwebp_ver}
+ff_check_libwebp ${ffmpeg_libwebp_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_libass ${ffmpeg_libass_ver}
