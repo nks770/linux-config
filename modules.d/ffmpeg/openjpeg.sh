@@ -3,32 +3,36 @@
 # Functions for detecting and building openjpeg
 echo 'Loading openjpeg...'
 
-function openjpegInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check openjpeg
-if [ ! -f ${MODULEPATH}/openjpeg/${1} ] ; then
+function get_openjpeg_library() {
+case ${1} in
+  2.3.1)
+    echo libopenjp2.so.2.3.1
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function openjpegDepInstalled() {
+if [ ! -f "${2}/lib/$(get_openjpeg_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_openjpeg() {
-if openjpegInstalled ${1}; then
-  echo "openjpeg ${1} is installed."
+function ff_check_openjpeg() {
+echo -n "Checking for presence of openjpeg-${1} in ${2}..."
+if openjpegDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_openjpeg ${1}
+  echo "not present"
+  ff_build_openjpeg ${1} ${2} ${3}
 fi
 }
 
-function build_openjpeg() {
+function ff_build_openjpeg() {
 
 # Get desired version number to install
 openjpeg_v=${1}
@@ -38,18 +42,12 @@ fi
 
 case ${openjpeg_v} in
   2.3.1) # Apr 2, 2019
-   openjpeg_cmake_ver=3.13.4  # 2019-02-01 13:20
-   openjpeg_zlib_ver=1.2.11   # 2017-01-15
-   openjpeg_libpng_ver=1.6.36 # 2018-12-02
-   openjpeg_tiff_ver=4.0.9    # 2017-11-18
-   openjpeg_lcms2_ver=2.9     # 2017-11-06
+   openjpeg_cmake_ver=3.13.4   # 2019-02-01 13:20
+   openjpeg_doxygen_ver=1.8.15 # 2018-12-27
   ;;
   2.5.0) # May 13, 2022
    openjpeg_cmake_ver=3.23.1  # 2022-04-12 10:55
-   openjpeg_zlib_ver=1.2.12   # 2022-03-27
-   openjpeg_libpng_ver=1.6.37 # 2019-04-15
-   openjpeg_tiff_ver=4.3.0    # 2021-04-20
-   openjpeg_lcms2_ver=2.13.1  # 2022-02-03
+   openjpeg_doxygen_ver=1.9.4 # 2022-05-05
   ;;
   *)
    echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
@@ -57,57 +55,30 @@ case ${openjpeg_v} in
   ;;
 esac
 
-# Optimized dependency strategy
-if [ "${dependency_strategy}" == "optimized" ] ; then
-  openjpeg_zlib_ver=${global_zlib}
-fi
+openjpeg_ffmpeg_ver=${3}
 
-echo "Installing openjpeg ${openjpeg_v}..."
+openjpeg_zlib_ver=${ffmpeg_zlib_ver}
+openjpeg_libpng_ver=${ffmpeg_libpng_ver}
+openjpeg_tiff_ver=${ffmpeg_tiff_ver}
+openjpeg_lcms2_ver=${ffmpeg_lcms2_ver}
+
+openjpeg_zlib_lib=$(get_zlib_library ${openjpeg_zlib_ver})
+openjpeg_libpng_lib=$(get_libpng_library ${openjpeg_libpng_ver})
+openjpeg_tiff_lib=$(get_tiff_library ${openjpeg_tiff_ver})
+openjpeg_lcms2_lib=$(get_lcms2_library ${openjpeg_lcms2_ver})
+
 openjpeg_srcdir=openjpeg-${openjpeg_v}
+openjpeg_prefix=${2}
 
-case ${openjpeg_zlib_ver} in
-  1.2.13)
-    openjpeg_zlib_lib=libz.so.${openjpeg_zlib_ver}
-  ;;
-  *)
-    echo "ERROR: Unknown zlib library"
-    exit 3
-  ;;
-esac
-case ${openjpeg_libpng_ver} in
-  1.6.36)
-    openjpeg_libpng_lib=libpng16.so.16.36.0
-  ;;
-  *)
-    echo "ERROR: Unknown libpng library"
-    exit 3
-  ;;
-esac
-case ${openjpeg_tiff_ver} in
-  4.0.9)
-    openjpeg_tiff_lib=libtiff.so.5.3.0
-  ;;
-  *)
-    echo "ERROR: Unknown tiff library"
-    exit 3
-  ;;
-esac
-case ${openjpeg_lcms2_ver} in
-  2.9)
-    openjpeg_lcms2_lib=liblcms2.so.2.0.8
-  ;;
-  *)
-    echo "ERROR: Unknown lcms2 library"
-    exit 3
-  ;;
-esac
+echo "Installing openjpeg-${openjpeg_v} in ${openjpeg_prefix}..."
 
 check_modules
 check_cmake ${openjpeg_cmake_ver}
 check_zlib ${openjpeg_zlib_ver}
 check_libpng ${openjpeg_libpng_ver}
-check_tiff ${openjpeg_tiff_ver}
-check_lcms2 ${openjpeg_lcms2_ver}
+check_doxygen ${openjpeg_doxygen_ver}
+ff_check_tiff ${openjpeg_tiff_ver} ${2} ${3}
+ff_check_lcms2 ${openjpeg_lcms2_ver} ${2} ${3}
 
 downloadPackage openjpeg-${openjpeg_v}.tar.gz
 
@@ -128,11 +99,11 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
+module load ffmpeg-dep/${openjpeg_ffmpeg_ver}
 module load cmake/${openjpeg_cmake_ver}
 module load zlib/${openjpeg_zlib_ver}
 module load libpng/${openjpeg_libpng_ver}
-module load tiff/${openjpeg_tiff_ver}
-module load lcms2/${openjpeg_lcms2_ver}
+module load doxygen/${openjpeg_doxygen_ver}
 
 if [ ${debug} -gt 0 ] ; then
   echo ''
@@ -142,11 +113,12 @@ if [ ${debug} -gt 0 ] ; then
        -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
        -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/${openjpeg_libpng_lib} \
        -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
-       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/${openjpeg_tiff_lib} \
-       -DTIFF_INCLUDE_DIR=${opt}/tiff-${openjpeg_tiff_ver}/include \
-       -DLCMS2_LIBRARY=${opt}/lcms2-${openjpeg_lcms2_ver}/lib/${openjpeg_lcms2_lib} \
-       -DLCMS2_INCLUDE_DIR=${opt}/lcms2-${openjpeg_lcms2_ver}/include \
-       -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
+       -DTIFF_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_tiff_lib} \
+       -DTIFF_INCLUDE_DIR=${openjpeg_prefix}/include \
+       -DLCMS2_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_lcms2_lib} \
+       -DLCMS2_INCLUDE_DIR=${openjpeg_prefix}/include \
+       -DBUILD_DOC=ON \
+       -DCMAKE_INSTALL_PREFIX=${openjpeg_prefix} ..
   echo ''
   read k
 fi
@@ -156,11 +128,12 @@ cmake -L -G 'Unix Makefiles' \
        -DZLIB_INCLUDE_DIR=${opt}/zlib-${openjpeg_zlib_ver}/include \
        -DPNG_LIBRARY=${opt}/libpng-${openjpeg_libpng_ver}/lib/${openjpeg_libpng_lib} \
        -DPNG_PNG_INCLUDE_DIR=${opt}/libpng-${openjpeg_libpng_ver}/include \
-       -DTIFF_LIBRARY=${opt}/tiff-${openjpeg_tiff_ver}/lib/${openjpeg_tiff_lib} \
-       -DTIFF_INCLUDE_DIR=${opt}/tiff-${openjpeg_tiff_ver}/include \
-       -DLCMS2_LIBRARY=${opt}/lcms2-${openjpeg_lcms2_ver}/lib/${openjpeg_lcms2_lib} \
-       -DLCMS2_INCLUDE_DIR=${opt}/lcms2-${openjpeg_lcms2_ver}/include \
-       -DCMAKE_INSTALL_PREFIX=${opt}/openjpeg-${openjpeg_v} ..
+       -DTIFF_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_tiff_lib} \
+       -DTIFF_INCLUDE_DIR=${openjpeg_prefix}/include \
+       -DLCMS2_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_lcms2_lib} \
+       -DLCMS2_INCLUDE_DIR=${openjpeg_prefix}/include \
+       -DBUILD_DOC=ON \
+       -DCMAKE_INSTALL_PREFIX=${openjpeg_prefix} ..
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -193,37 +166,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/openjpeg
-cat << eof > ${MODULEPATH}/openjpeg/${openjpeg_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts openjpeg-${openjpeg_v} into your environment"
-}
-
-set VER ${openjpeg_v}
-set PKG ${opt}/openjpeg-\$VER
-
-module-whatis   "Loads openjpeg-${openjpeg_v}"
-conflict openjpeg
-module load zlib/${openjpeg_zlib_ver}
-module load libpng/${openjpeg_libpng_ver}
-prereq zlib/${openjpeg_zlib_ver}
-prereq libpng/${openjpeg_libpng_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path PATH \$PKG/bin
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${openjpeg_srcdir}

@@ -3,6 +3,17 @@
 # Functions for detecting and building libpng
 echo 'Loading libpng...'
 
+function get_libpng_library() {
+case ${1} in
+  1.6.37)
+    echo libpng16.so.16.37.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
 function libpngInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then

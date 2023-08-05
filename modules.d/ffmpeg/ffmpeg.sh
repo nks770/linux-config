@@ -55,6 +55,8 @@ case ${1} in
     ffmpeg_libjpegturbo_ver=2.0.4         # 2019-12-31
     ffmpeg_tiff_ver=4.1.0                 # 2019-11-03
     ffmpeg_libwebp_ver=1.0.3              # 2019-07-13
+    ffmpeg_lcms2_ver=2.9                  # 2017-11-25
+    ffmpeg_openjpeg_ver=2.3.1             # 2019-04-02
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
 #   ffmpeg_libass_ver=0.14.0              # 2017-10-31
@@ -71,7 +73,6 @@ case ${1} in
 #   ffmpeg_kvazaar_ver=1.3.0              # 2019-07-09
 #   ffmpeg_libilbc_ver=2.0.2              # 2014-12-14
 #   ffmpeg_openh264_ver=2.0.0             # 2019-05-08
-#   ffmpeg_openjpeg_ver=2.3.1             # 2019-04-02
 #   ffmpeg_wavpack_ver=5.2.0              # 2019-12-15
 #   ffmpeg_twolame_ver=0.4.0              # 2019-10-11
 #   ffmpeg_opus_ver=1.3.1                 # 2019-04-12
@@ -161,6 +162,8 @@ check_libpng  ${ffmpeg_libpng_ver}
 check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
 ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v} ${ffmpeg_libwebp_ver}
 ff_check_libwebp ${ffmpeg_libwebp_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_lcms2 ${ffmpeg_lcms2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_openjpeg ${ffmpeg_openjpeg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_libass ${ffmpeg_libass_ver}

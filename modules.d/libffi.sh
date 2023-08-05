@@ -37,6 +37,9 @@ if [ -z "${libffi_v}" ] ; then
 fi
 
 case ${libffi_v} in
+3.2.1)
+   libffi_dejagnu_ver=1.6.3
+   ;;
 3.4.4)
    libffi_dejagnu_ver=1.6.3
    ;;

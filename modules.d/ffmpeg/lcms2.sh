@@ -3,63 +3,58 @@
 # Functions for detecting and building Little CMS
 echo 'Loading Little CMS...'
 
-function lcms2Installed() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check lcms2
-if [ ! -f ${MODULEPATH}/lcms2/${1} ] ; then
+function get_lcms2_library() {
+case ${1} in
+  2.9)
+    echo liblcms2.so.2.0.8
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function lcms2DepInstalled() {
+if [ ! -f "${2}/lib/$(get_lcms2_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_lcms2() {
-if lcms2Installed ${1}; then
-  echo "lcms2 ${1} is installed."
+function ff_check_lcms2() {
+echo -n "Checking for presence of lcms2-${1} in ${2}..."
+if lcms2DepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_lcms2 ${1}
+  echo "not present"
+  ff_build_lcms2 ${1} ${2} ${3}
 fi
 }
 
-function build_lcms2() {
+function ff_build_lcms2() {
 
 # Get desired version number to install
 lcms2_v=${1}
 if [ -z "${lcms2_v}" ] ; then
-  lcms2_v=0.4.0
+  lcms2_v=2.9
 fi
 
-case ${lcms2_v} in
-  2.9) # 2017-11-06
-   lcms2_tiff_ver=4.0.9
-   lcms2_libjpegturbo_ver=1.5.2
-   lcms2_zlib_ver=1.2.11        # 2017-01-15
-  ;;
-  *)
-   echo "ERROR: Review needed for lcms2 ${lcms2_v}"
-   exit 4 # Please review
-  ;;
-esac
+lcms2_ffmpeg_ver=${3}
 
-# Optimized dependency strategy
-if [ "${dependency_strategy}" == "optimized" ] ; then
-  lcms2_zlib_ver=${global_zlib}
-fi
+lcms2_tiff_ver=${ffmpeg_tiff_ver}
+lcms2_libjpegturbo_ver=${ffmpeg_libjpegturbo_ver}
+lcms2_zlib_ver=${ffmpeg_zlib_ver}
 
-echo "Installing lcms2 ${lcms2_v}..."
 lcms2_srcdir=lcms2-${lcms2_v}
+lcms2_prefix=${2}
+
+echo "Installing lcms2-${lcms2_v} in ${lcms2_prefix}..."
 
 check_modules
 check_zlib ${lcms2_zlib_ver}
-check_tiff ${lcms2_tiff_ver}
 check_libjpegturbo ${lcms2_libjpegturbo_ver}
+ff_check_tiff ${lcms2_tiff_ver} ${2} ${3}
 
 downloadPackage lcms2-${lcms2_v}.tar.gz
 
@@ -79,11 +74,11 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
+module load ffmpeg-dep/${lcms2_ffmpeg_ver}
 module load zlib/${lcms2_zlib_ver}
-module load tiff/${lcms2_tiff_ver}
 module load libjpeg-turbo/${lcms2_libjpegturbo_ver}
 
-config="./configure --prefix=${opt}/lcms2-${lcms2_v} --with-jpeg=${opt}/libjpeg-turbo-${lcms2_libjpegturbo_ver} --with-tiff=${opt}/tiff-${lcms2_tiff_ver} LDFLAGS=-L${opt}/zlib-${lcms2_zlib_ver}/lib"
+config="./configure --prefix=${lcms2_prefix} --with-jpeg=${opt}/libjpeg-turbo-${lcms2_libjpegturbo_ver} --with-tiff=${lcms2_prefix} LDFLAGS=-L${opt}/zlib-${lcms2_zlib_ver}/lib"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -125,40 +120,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/lcms2
-cat << eof > ${MODULEPATH}/lcms2/${lcms2_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts lcms2-${lcms2_v} into your environment"
-}
-
-set VER ${lcms2_v}
-set PKG ${opt}/lcms2-\$VER
-
-module-whatis   "Loads lcms2-${lcms2_v}"
-conflict lcms2
-module load tiff/${lcms2_tiff_ver}
-module load libjpeg-turbo/${lcms2_libjpegturbo_ver}
-module load zlib/${lcms2_zlib_ver}
-prereq tiff/${lcms2_tiff_ver}
-prereq libjpeg-turbo/${lcms2_libjpegturbo_ver}
-prereq zlib/${lcms2_zlib_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path PATH \$PKG/bin
-prepend-path MANPATH \$PKG/share/man
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${lcms2_srcdir}

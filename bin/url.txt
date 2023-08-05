@@ -407,6 +407,7 @@ tk8.6.13-src.tar.gz=https://prdownloads.sourceforge.net/tcl/tk8.6.13-src.tar.gz
 # https://www.gnu.org/software/texinfo/
 texinfo-6.3.tar.gz=https://ftp.gnu.org/gnu/texinfo/texinfo-6.3.tar.gz
 texinfo-7.0.tar.gz=https://ftp.gnu.org/gnu/texinfo/texinfo-7.0.tar.gz
+texinfo-7.0.3.tar.gz=https://ftp.gnu.org/gnu/texinfo/texinfo-7.0.3.tar.gz
 
 # tiff
 # http://www.libtiff.org/

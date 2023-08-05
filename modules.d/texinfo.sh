@@ -43,6 +43,9 @@ case ${texinfo_v} in
 7.0) # 2022-11-07
    ncurses_ver=6.3 # 2021-11-08
    ;;
+7.0.3) # 2023-03-26
+   ncurses_ver=6.4 # 2022-12-31
+   ;;
 *)
    echo "ERROR: Need review for texinfo ${1}"
    exit 4
