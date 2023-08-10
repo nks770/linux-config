@@ -58,6 +58,8 @@ modules-5.3.1.tar.gz=https://phoenixnap.dl.sourceforge.net/project/modules/Modul
 # expat
 expat-2.2.4.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_4/expat-2.2.4.tar.bz2
 expat-2.2.6.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_6/expat-2.2.6.tar.bz2
+expat-2.2.7.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_7/expat-2.2.7.tar.bz2
+expat-2.2.9.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_9/expat-2.2.9.tar.bz2
 
 # expect
 expect5.45.4.tar.gz=https://cfhcable.dl.sourceforge.net/project/expect/Expect/5.45.4/expect5.45.4.tar.gz
@@ -90,12 +92,14 @@ flac-1.3.3.tar.xz=https://ftp.osuosl.org/pub/xiph/releases/flac/flac-1.3.3.tar.x
 fontconfig-2.12.6.tar.gz=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.12.6.tar.gz
 fontconfig-2.13.1.tar.gz=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.1.tar.gz
 fontconfig-2.13.91.tar.gz=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.91.tar.gz
+fontconfig-2.13.92.tar.gz=https://www.freedesktop.org/software/fontconfig/release/fontconfig-2.13.92.tar.gz
 
 # freetype
 # https://freetype.org/
 freetype-2.8.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.8.1.tar.gz
 freetype-2.9.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.9.1.tar.gz
 freetype-2.10.0.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.0.tar.gz
+freetype-2.10.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.1.tar.gz
 
 # fribidi
 # https://github.com/fribidi/fribidi

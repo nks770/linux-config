@@ -57,6 +57,11 @@ case ${1} in
     ffmpeg_libwebp_ver=1.0.3              # 2019-07-13
     ffmpeg_lcms2_ver=2.9                  # 2017-11-25
     ffmpeg_openjpeg_ver=2.3.1             # 2019-04-02
+    # Font rendering libraries
+    ffmpeg_utillinux_ver=2.34             # 2019-06-14
+    ffmpeg_expat_ver=2.2.9                # 2019-09-25
+    ffmpeg_freetype_ver=2.10.1            # 2019-07-01
+    ffmpeg_fontconfig_ver=2.13.92         # 2019-08-09
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
 #   ffmpeg_libass_ver=0.14.0              # 2017-10-31
@@ -110,8 +115,14 @@ case ${1} in
 #  ;;
 esac
 
+# Optimized dependency strategy
+if [ "${dependency_strategy}" == "optimized" ] ; then
+  ffmpeg_utillinux_ver=${global_utillinux}
+fi
+
 ffmpeg_zlib_ver=${global_zlib}
 ffmpeg_xz_ver=${global_xz}
+ffmpeg_bzip2_ver=${global_bzip2}
 
 check_modules
 # Create the environment module
@@ -137,12 +148,18 @@ module load zlib/${ffmpeg_zlib_ver}
 module load xz/${ffmpeg_xz_ver}
 module load jbigkit/${ffmpeg_jbigkit_ver}
 module load zstd/${ffmpeg_zstd_ver}
+module load bzip2/${ffmpeg_bzip2_ver}
+module load expat/${ffmpeg_expat_ver}
+module load util-linux/${ffmpeg_utillinux_ver}
 prereq libpng/${ffmpeg_libpng_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 prereq zlib/${ffmpeg_zlib_ver}
 prereq xz/${ffmpeg_xz_ver}
 prereq jbigkit/${ffmpeg_jbigkit_ver}
 prereq zstd/${ffmpeg_zstd_ver}
+prereq bzip2/${ffmpeg_bzip2_ver}
+prereq expat/${ffmpeg_expat_ver}
+prereq util-linux/${ffmpeg_utillinux_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -160,10 +177,14 @@ check_jbigkit ${ffmpeg_jbigkit_ver}
 check_giflib  ${ffmpeg_giflib_ver}
 check_libpng  ${ffmpeg_libpng_ver}
 check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
+check_expat ${ffmpeg_expat_ver}
+check_utillinux ${ffmpeg_utillinux_ver}
 ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v} ${ffmpeg_libwebp_ver}
 ff_check_libwebp ${ffmpeg_libwebp_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_lcms2 ${ffmpeg_lcms2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_openjpeg ${ffmpeg_openjpeg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_freetype ${ffmpeg_freetype_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_fontconfig ${ffmpeg_fontconfig_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_libass ${ffmpeg_libass_ver}

@@ -5,8 +5,8 @@ echo 'Loading freetype...'
 
 function get_freetype_library() {
 case ${1} in
-  1.0.3)
-    echo unknown.so
+  2.10.1)
+    echo libfreetype.so.6.17.1
   ;;
   *)
     echo ''
@@ -43,6 +43,8 @@ fi
 freetype_ffmpeg_ver=${3}
 
 freetype_bzip2_ver=${ffmpeg_bzip2_ver}
+freetype_zlib_ver=${ffmpeg_zlib_ver}
+freetype_libpng_ver=${ffmpeg_libpng_ver}
 
 freetype_srcdir=freetype-${freetype_v}
 freetype_prefix=${2}
@@ -51,6 +53,8 @@ echo "Installing freetype-${freetype_v} in ${freetype_prefix}..."
 
 check_modules
 check_bzip2 ${freetype_bzip2_ver}
+check_zlib ${freetype_zlib_ver}
+check_libpng ${freetype_libpng_ver}
 
 downloadPackage freetype-${freetype_v}.tar.gz
 
@@ -70,7 +74,10 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
+module load ffmpeg-dep/${freetype_ffmpeg_ver}
 module load bzip2/${freetype_bzip2_ver}
+module load zlib/${freetype_zlib_ver}
+module load libpng/${freetype_libpng_ver}
 
 config="./configure --prefix=${freetype_prefix} CFLAGS=-I${opt}/bzip2-${freetype_bzip2_ver}/include LDFLAGS=-L${opt}/bzip2-${freetype_bzip2_ver}/lib"
 if [ ${debug} -gt 0 ] ; then
