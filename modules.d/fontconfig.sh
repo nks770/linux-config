@@ -107,6 +107,11 @@ cd ${tmp}
 tar xvfz ${pkg}/fontconfig-${fontconfig_v}.tar.gz
 cd ${tmp}/${fontconfig_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 module purge
 module load ffmpeg-dep/${fontconfig_ffmpeg_ver}
 module load expat/${fontconfig_expat_ver}

@@ -49,6 +49,12 @@ case ${gdbm_v} in
    gdbm_dejagnu_ver=1.6.3
    parseopt_patch=0
    ;;
+1.18) #2018-08-21
+   gdbm_readline_ver=7.0 #2016-09-15
+   gdbm_ncurses_ver=6.0  #2015-08-08
+   gdbm_dejagnu_ver=1.6.3
+   parseopt_patch=0
+   ;;
 1.18.1) #2018-10-27
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
@@ -106,7 +112,7 @@ fi
 
 # Patch to enable compilation with GCC 8
 # https://bugs.gentoo.org/705898
-if [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
+if [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
 
 if [ "${gdbm_v}" == "1.13" ] ; then
 cat << eof > parseopt.patch
@@ -126,7 +132,7 @@ eof
 echo -e ' \f' >> parseopt.patch
 fi
 
-if [ "${gdbm_v}" == "1.18.1" ] ; then
+if [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
 cat << eof > parseopt.patch
 --- src/parseopt.c
 +++ src/parseopt.c
@@ -196,7 +202,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  if [ "${gdbm_v}" == "1.18.1" ] ; then
+  if [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
     module unload dejagnu
   fi
   make check

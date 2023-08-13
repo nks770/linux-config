@@ -1,245 +1,76 @@
 #!/bin/bash
 
 # Functions for detecting and building freetype
-echo 'Loading freetype/harfbuzz...'
+echo 'Loading harfbuzz...'
 
-function freetype_harfbuzzInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check freetype
-if [ ! -f ${MODULEPATH}/freetype/${1} ] ; then
+function get_harfbuzz_library() {
+case ${1} in
+  2.6.4)
+    echo xlibfontconfig.so.1.12.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function harfbuzzDepInstalled() {
+if [ ! -f "${2}/lib/$(get_fontconfig_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_freetype_harfbuzz() {
-if freetype_harfbuzzInstalled ${1}; then
-  echo "freetype ${1} is installed."
+function ff_check_harfbuzz() {
+echo -n "Checking for presence of harfbuzz-${1} in ${2}..."
+if harfbuzzDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_freetype_harfbuzz ${1}
+  echo "not present"
+  ff_build_harfbuzz ${1} ${2} ${3}
 fi
 }
 
-function build_freetype_harfbuzz() {
+
+function ff_build_harfbuzz() {
 
 # Get desired version number to install
-freetype_v=${1}
-if [ -z "${freetype_v}" ] ; then
-  freetype_v=2.12.1
+harfbuzz_v=${1}
+if [ -z "${harfbuzz_v}" ] ; then
+  harfbuzz_v=2.6.4
 fi
 
-case ${freetype_v} in
-2.8.1) # 2017-09-16
-   zlib_ver=1.2.11    #2017-01-15
-   bzip2_ver=1.0.6    #2010-09-20
-#   libpng_ver=1.2.58 #2017-08-24
-#   libpng_ver=1.4.21 #2017-08-24
-   libpng_ver=1.5.29  #2017-08-24
-   harfbuzz_v=1.5.1   #2017-09-05
-   icu_ver=59.1       #2017-04-14
-   graphite2_ver=1.3.10 #2017-05-05
-   ;;
-2.9.1) # 2018-05-02
-   zlib_ver=1.2.11    #2017-01-15
-   bzip2_ver=1.0.6    #2010-09-20
-   libpng_ver=1.6.34  #2017-09-29
-   harfbuzz_v=1.7.6   #2018-03-07
-   icu_ver=61.1       #2018-03-26
-   graphite2_ver=1.3.11 #2018-03-04
-   ;;
-2.10.0) # 2019-03-15
-   zlib_ver=1.2.11    #2017-01-15
-   bzip2_ver=1.0.6    #2010-09-20
-   libpng_ver=1.6.36  #2018-12-02
-   harfbuzz_v=2.3.1   #2019-01-30
-   icu_ver=63.1       #2018-10-15
-   graphite2_ver=1.3.13 #2018-12-20
-   ;;
-*)
-   echo "ERROR: Need review for freetype ${1}"
-   exit 4
-   ;;
-esac
+harfbuzz_ffmpeg_ver=${3}
+harfbuzz_icu_ver=${ffmpeg_icu_ver}
+harfbuzz_graphite2_ver=${ffmpeg_graphite2_ver}
 
-# Optimized dependency strategy
-if [ "${dependency_strategy}" == "optimized" ] ; then
-  bzip2_ver=${global_bzip2}
-  zlib_ver=${global_zlib}
-fi
+harfbuzz_srcdir=harfbuzz-${harfbuzz_v}
+harfbuzz_prefix=${2}
 
-############
-# freetype #
-############
-
-echo "Installing freetype ${freetype_v}..."
+echo "Installing harfbuzz-${harfbuzz_v} in ${harfbuzz_prefix}..."
 
 check_modules
-check_zlib ${zlib_ver}
-check_bzip2 ${bzip2_ver}
-check_libpng ${libpng_ver}
-check_icu ${icu_ver}
-check_graphite2 ${graphite2_ver}
-#check_harfbuzz ${harfbuzz_ver}
-
-downloadPackage freetype-${freetype_v}.tar.gz
-
-cd ${tmp}
-
-if [ -d ${tmp}/freetype-${freetype_v} ] ; then
-  rm -rf ${tmp}/freetype-${freetype_v}
-fi
-
-tar xvfz ${pkg}/freetype-${freetype_v}.tar.gz
-cd ${tmp}/freetype-${freetype_v}
-
-config="./configure --prefix=${opt}/freetype-${freetype_v} CFLAGS=-I${opt}/bzip2-${bzip2_ver}/include LDFLAGS=-L${opt}/bzip2-${bzip2_ver}/lib"
-
-module purge
-module load zlib/${zlib_ver}
-module load bzip2/${bzip2_ver}
-module load libpng/${libpng_ver}
-#module load harfbuzz/${harfbuzz_ver}
-
-if [ ${debug} -gt 0 ] ; then
-  ./configure --help
-  echo ''
-  module list
-  echo ''
-  echo ${config}
-  read k
-fi
-
-${config}
-
-if [ ${debug} -gt 0 ] ; then
-  echo '>> Configure complete'
-  read k
-fi
-
-make -j ${ncpu}
-
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-if [ ${debug} -gt 0 ] ; then
-  echo '>> Build complete'
-  read k
-fi
-
-if [ ${run_tests} -gt 0 ] ; then
-  make check
-  echo '>> Tests complete'
-  read k
-fi
-
-make install
-
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-if [ ${debug} -gt 0 ] ; then
-  echo '>> (Phase 1) Install complete'
-  read k
-fi
-
-############
-# harfbuzz #
-############
-
-echo "Installing harfbuzz ${harfbuzz_v}..."
+check_icu ${harfbuzz_icu_ver}
+check_graphite2 ${harfbuzz_graphite2_ver}
 
 downloadPackage harfbuzz-${harfbuzz_v}.tar.bz2
 
 cd ${tmp}
 
-if [ -d ${tmp}/harfbuzz-${harfbuzz_v} ] ; then
-  rm -rf ${tmp}/harfbuzz-${harfbuzz_v}
+if [ -d ${tmp}/${harfbuzz_srcdir} ] ; then
+  rm -rf ${tmp}/${harfbuzz_srcdir}
 fi
-
-tar xvfj ${pkg}/harfbuzz-${harfbuzz_v}.tar.bz2
-cd ${tmp}/harfbuzz-${harfbuzz_v}
-
-module load icu/${icu_ver}
-module load graphite2/${graphite2_ver}
-
-config="./configure --with-graphite2 --prefix=${opt}/harfbuzz-${harfbuzz_v} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${opt}/freetype-${freetype_v}/lib/pkgconfig"
-
-if [ ${debug} -gt 0 ] ; then
-  ./configure --help
-  echo ''
-  module list
-  echo PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
-  echo ''
-  echo ${config}
-  read k
-fi
-
-${config}
-
-if [ ${debug} -gt 0 ] ; then
-  echo PKG_CONFIG_PATH=${PKG_CONFIG_PATH}
-  echo '>> Configure complete'
-  read k
-fi
-
-make -j ${ncpu}
-
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-if [ ${debug} -gt 0 ] ; then
-  echo '>> Build complete'
-  read k
-fi
-
-if [ ${run_tests} -gt 0 ] ; then
-  make check
-  echo '>> Tests complete'
-  read k
-fi
-
-make install
-
-if [ ! $? -eq 0 ] ; then
-  exit 4
-fi
-if [ ${debug} -gt 0 ] ; then
-  echo '>> harfbuzz install complete'
-  read k
-fi
-
-############
-# freetype #
-############
-
-echo "Installing freetype ${freetype_v}..."
-
-#downloadPackage freetype-${freetype_v}.tar.gz
 
 cd ${tmp}
-
-if [ -d ${tmp}/freetype-${freetype_v} ] ; then
-  rm -rf ${tmp}/freetype-${freetype_v}
-fi
-
-tar xvfz ${pkg}/freetype-${freetype_v}.tar.gz
-cd ${tmp}/freetype-${freetype_v}
-
-config="./configure --prefix=${opt}/freetype-${freetype_v} CFLAGS=-I${opt}/bzip2-${bzip2_ver}/include LDFLAGS=-L${opt}/bzip2-${bzip2_ver}/lib PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${opt}/harfbuzz-${harfbuzz_v}/lib/pkgconfig"
+tar xvfj ${pkg}/harfbuzz-${harfbuzz_v}.tar.bz2
+cd ${tmp}/${harfbuzz_srcdir}
 
 module purge
-module load zlib/${zlib_ver}
-module load bzip2/${bzip2_ver}
-module load libpng/${libpng_ver}
-#module load harfbuzz/${harfbuzz_ver}
+module load icu/${harfbuzz_icu_ver}
+module load graphite2/${harfbuzz_graphite2_ver}
+
+config="./configure --with-graphite2 --prefix=${harfbuzz_prefix} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${harfbuzz_prefix}/lib/pkgconfig"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -285,72 +116,6 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-# Create the environment modules
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/freetype
-mkdir -pv ${MODULEPATH}/harfbuzz
-cat << eof > ${MODULEPATH}/freetype/${freetype_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts freetype-${freetype_v} into your environment"
-}
-
-set VER ${freetype_v}
-set PKG ${opt}/freetype-\$VER
-
-module-whatis   "Loads freetype-${freetype_v}"
-conflict freetype
-module load zlib/${zlib_ver}
-module load bzip2/${bzip2_ver}
-module load libpng/${libpng_ver}
-module load harfbuzz/${harfbuzz_v}
-prereq zlib/${zlib_ver}
-prereq bzip2/${bzip2_ver}
-prereq libpng/${libpng_ver}
-prereq harfbuzz/${harfbuzz_v}
-
-prepend-path PATH \$PKG/bin
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path MANPATH \$PKG/share/man
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
-cat << eof > ${MODULEPATH}/harfbuzz/${harfbuzz_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts harfbuzz-${harfbuzz_v} into your environment"
-}
-
-set VER ${harfbuzz_v}
-set PKG ${opt}/harfbuzz-\$VER
-
-module-whatis   "Loads harfbuzz-${harfbuzz_v}"
-conflict harfbuzz
-module load freetype/${freetype_v}
-module load icu/${icu_ver}
-module load graphite2/${graphite2_ver}
-prereq freetype/${freetype_v}
-prereq icu/${icu_ver}
-prereq graphite2/${graphite2_ver}
-
-prepend-path PATH \$PKG/bin
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-#prepend-path MANPATH \$PKG/share/man
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
-
 cd ${root}
-rm -rf ${tmp}/freetype-${freetype_v}
-rm -rf ${tmp}/harfbuzz-${harfbuzz_v}
+rm -rf ${tmp}/${harfbuzz_srcdir}
 }

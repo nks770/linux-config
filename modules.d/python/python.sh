@@ -69,6 +69,21 @@ case ${python_v} in
    python_tcl_ver=8.6.13
    python_tk_ver=8.6.13
    ;;
+3.7.1) #2018-10-20
+   python_gdbm_ver=1.18        #2018-08-21
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1    #2018-09-11
+   python_sqlite_ver=3.25.2    #2018-09-25
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.32.1 #2018-07-16
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   httlib_failure=1
+   ;;
 3.7.2) #2018-12-24
    python_gdbm_ver=1.18.1      #2018-10-27
    python_readline_ver=7.0     #2016-09-15
@@ -387,6 +402,142 @@ cat << eof > multiple.patch
  test._test_multiprocessing.install_tests_in_module_dict(globals(), 'spawn')
  
  if __name__ == '__main__':
+eof
+patch -Z -b -p0 < multiple.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+if [ "${python_v}" == "3.7.1" ] ; then
+cat << eof > multiple.patch
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
+@@ -1094,18 +1094,15 @@
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+ #define FAULTHANDLER_STACK_OVERFLOW
+
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-uintptr_t
++static uintptr_t
+ stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     uintptr_t sp = (uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+--- Lib/test/test_asyncio/test_sslproto.py
++++ Lib/test/test_asyncio/test_sslproto.py
+@@ -423,11 +423,14 @@
+ 
+     def test_start_tls_server_1(self):
+         HELLO_MSG = b'1' * self.PAYLOAD_SIZE
++        ANSWER = b'answer'
+ 
+         server_context = test_utils.simple_server_sslcontext()
+         client_context = test_utils.simple_client_sslcontext()
++        answer = None
+ 
+         def client(sock, addr):
++            nonlocal answer
+             sock.settimeout(self.TIMEOUT)
+ 
+             sock.connect(addr)
+@@ -437,32 +440,36 @@
+             sock.start_tls(client_context)
+             sock.sendall(HELLO_MSG)
+ 
+-            sock.shutdown(socket.SHUT_RDWR)
++            answer = sock.recv_all(len(ANSWER))
+             sock.close()
+ 
+         class ServerProto(asyncio.Protocol):
+-            def __init__(self, on_con, on_eof, on_con_lost):
++            def __init__(self, on_con, on_con_lost):
+                 self.on_con = on_con
+-                self.on_eof = on_eof
+                 self.on_con_lost = on_con_lost
+                 self.data = b''
++                self.transport = None
+ 
+             def connection_made(self, tr):
++                self.transport = tr
+                 self.on_con.set_result(tr)
+ 
++            def replace_transport(self, tr):
++                self.transport = tr
++
+             def data_received(self, data):
+                 self.data += data
+-
+-            def eof_received(self):
+-                self.on_eof.set_result(1)
++                if len(self.data) >= len(HELLO_MSG):
++                    self.transport.write(ANSWER)
+ 
+             def connection_lost(self, exc):
++                self.transport = None
+                 if exc is None:
+                     self.on_con_lost.set_result(None)
+                 else:
+                     self.on_con_lost.set_exception(exc)
+ 
+-        async def main(proto, on_con, on_eof, on_con_lost):
++        async def main(proto, on_con, on_con_lost):
+             tr = await on_con
+             tr.write(HELLO_MSG)
+ 
+@@ -473,16 +480,16 @@
+                 server_side=True,
+                 ssl_handshake_timeout=self.TIMEOUT)
+ 
+-            await on_eof
++            proto.replace_transport(new_tr)
++
+             await on_con_lost
+             self.assertEqual(proto.data, HELLO_MSG)
+             new_tr.close()
+ 
+         async def run_main():
+             on_con = self.loop.create_future()
+-            on_eof = self.loop.create_future()
+             on_con_lost = self.loop.create_future()
+-            proto = ServerProto(on_con, on_eof, on_con_lost)
++            proto = ServerProto(on_con, on_con_lost)
+ 
+             server = await self.loop.create_server(
+                 lambda: proto, '127.0.0.1', 0)
+@@ -491,11 +498,12 @@
+             with self.tcp_client(lambda sock: client(sock, addr),
+                                  timeout=self.TIMEOUT):
+                 await asyncio.wait_for(
+-                    main(proto, on_con, on_eof, on_con_lost),
++                    main(proto, on_con, on_con_lost),
+                     loop=self.loop, timeout=self.TIMEOUT)
+ 
+             server.close()
+             await server.wait_closed()
++            self.assertEqual(answer, ANSWER)
+ 
+         self.loop.run_until_complete(run_main())
+ 
 eof
 patch -Z -b -p0 < multiple.patch
 if [ ! $? -eq 0 ] ; then

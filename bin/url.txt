@@ -107,6 +107,7 @@ fribidi-0.19.7.tar.bz2=https://github.com/fribidi/fribidi/releases/download/0.19
 
 # gdbm
 gdbm-1.13.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz
+gdbm-1.18.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.18.tar.gz
 gdbm-1.18.1.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.18.1.tar.gz
 gdbm-1.19.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.19.tar.gz
 gdbm-1.23.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.23.tar.gz
@@ -124,11 +125,13 @@ gperf-3.1.tar.gz=https://ftp.gnu.org/pub/gnu/gperf/gperf-3.1.tar.gz
 # https://github.com/silnrsi/graphite
 graphite2-1.3.10.tgz=https://github.com/silnrsi/graphite/releases/download/1.3.10/graphite2-1.3.10.tgz
 graphite2-1.3.11.tgz=https://github.com/silnrsi/graphite/releases/download/1.3.11/graphite2-1.3.11.tgz
+graphite2-1.3.13.tgz=https://github.com/silnrsi/graphite/releases/download/1.3.13/graphite2-1.3.13.tgz
 
 # harfbuzz
 harfbuzz-1.5.1.tar.bz2=https://github.com/harfbuzz/harfbuzz/releases/download/1.5.1/harfbuzz-1.5.1.tar.bz2
 harfbuzz-1.7.6.tar.bz2=https://github.com/harfbuzz/harfbuzz/releases/download/1.7.6/harfbuzz-1.7.6.tar.bz2
 harfbuzz-2.3.1.tar.bz2=https://github.com/harfbuzz/harfbuzz/releases/download/2.3.1/harfbuzz-2.3.1.tar.bz2
+harfbuzz-2.6.4.tar.bz2=https://github.com/harfbuzz/harfbuzz/releases/download/2.6.4/harfbuzz-2.6.4.tar.bz2
 
 # help2man
 # https://www.gnu.org/software/help2man/
@@ -323,6 +326,7 @@ opus-1.3.1.tar.gz=https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
 
 # Python
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
+Python-3.7.1.tgz=https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz
 Python-3.7.2.tgz=https://www.python.org/ftp/python/3.7.2/Python-3.7.2.tgz
 Python-3.7.4.tgz=https://www.python.org/ftp/python/3.7.4/Python-3.7.4.tgz
 Python-3.7.10.tgz=https://www.python.org/ftp/python/3.7.10/Python-3.7.10.tgz
@@ -390,6 +394,7 @@ speex-1.2.1.tar.gz=http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz
 
 # sqlite
 sqlite-autoconf-3210000.tar.gz=https://sqlite.org/2017/sqlite-autoconf-3210000.tar.gz
+sqlite-autoconf-3250200.tar.gz=https://sqlite.org/2018/sqlite-autoconf-3250200.tar.gz
 sqlite-autoconf-3260000.tar.gz=https://sqlite.org/2018/sqlite-autoconf-3260000.tar.gz
 sqlite-autoconf-3280000.tar.gz=https://sqlite.org/2019/sqlite-autoconf-3280000.tar.gz
 sqlite-autoconf-3300100.tar.gz=https://sqlite.org/2019/sqlite-autoconf-3300100.tar.gz

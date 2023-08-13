@@ -3,32 +3,36 @@
 # Functions for detecting and building Graphite2
 echo 'Loading Graphite2...'
 
-function graphite2Installed() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check graphite2
-if [ ! -f ${MODULEPATH}/graphite2/${1} ] ; then
+function get_graphite2_library() {
+case ${1} in
+  1.3.13)
+    echo libgraphite2.so.3.2.1
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function graphite2DepInstalled() {
+if [ ! -f "${2}/lib/$(get_graphite2_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_graphite2() {
-if graphite2Installed ${1}; then
-  echo "Graphite2 ${1} is installed."
+function ff_check_graphite2() {
+echo -n "Checking for presence of graphite2-${1} in ${2}..."
+if graphite2DepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_graphite2 ${1}
+  echo "not present"
+  ff_build_graphite2 ${1} ${2} ${3}
 fi
 }
 
-function build_graphite2() {
+function ff_build_graphite2() {
 
 # Get desired version number to install
 graphite2_v=${1}
@@ -38,10 +42,18 @@ fi
 
 case ${graphite2_v} in
   1.3.10) # 2017-05-05
-   cmake_ver=3.8.1  # 2017-05-02
+   graphite2_cmake_ver=3.8.1  # 2017-05-02
+   graphite2_doxygen_ver=1.8.14 # 2017-12-25
   ;;
   1.3.11) # 2018-03-04
-   cmake_ver=3.10.2 # 2018-01-18
+   graphite2_cmake_ver=3.10.2 # 2018-01-18
+   graphite2_doxygen_ver=1.8.14 # 2017-12-25
+   graphite2_python_ver=3.6.4   # 2017-12-19
+  ;;
+  1.3.13) # 2018-12-20
+   graphite2_cmake_ver=3.13.2   # 2018-12-13
+   graphite2_doxygen_ver=1.8.14 # 2017-12-25
+   graphite2_python_ver=3.7.1   # 2018-10-20
   ;;
   *)
    echo "ERROR: Review needed for Graphite2 ${graphite2_v}"
@@ -49,22 +61,31 @@ case ${graphite2_v} in
   ;;
 esac
 
-echo "Installing Graphite2 ${graphite2_v}..."
+graphite2_ffmpeg_ver=${3}
+graphite2_freetype_ver=${ffmpeg_freetype_ver}
+
+graphite2_srcdir=graphite2-${graphite2_v}
+graphite2_prefix=${2}
+
+echo "Installing graphite2-${graphite2_v} in ${graphite2_prefix}..."
 
 check_modules
-check_cmake ${cmake_ver}
+check_cmake ${graphite2_cmake_ver}
+check_doxygen ${graphite2_doxygen_ver}
+check_python ${graphite2_python_ver}
 
 downloadPackage graphite2-${graphite2_v}.tgz
 
 cd ${tmp}
 
-if [ -d ${tmp}/graphite2-${graphite2_v} ] ; then
-  rm -rf ${tmp}/graphite2-${graphite2_v}
+if [ -d ${tmp}/${graphite2_srcdir} ] ; then
+  rm -rf ${tmp}/${graphite2_srcdir}
 fi
 
+cd ${tmp}
 tar xvfz ${pkg}/graphite2-${graphite2_v}.tgz
-mkdir -v ${tmp}/graphite2-${graphite2_v}/build
-cd ${tmp}/graphite2-${graphite2_v}/build
+mkdir -v ${tmp}/${graphite2_srcdir}/build
+cd ${tmp}/${graphite2_srcdir}/build
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
@@ -72,7 +93,10 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load cmake/${cmake_ver}
+module load ffmpeg-dep/${graphite2_ffmpeg_ver}
+module load cmake/${graphite2_cmake_ver}
+module load doxygen/${graphite2_doxygen_ver}
+module load Python/${graphite2_python_ver}
 
 if [ ${debug} -gt 0 ] ; then
   #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
@@ -80,12 +104,12 @@ if [ ${debug} -gt 0 ] ; then
   module list
   echo ''
   echo cmake -L -G \"Unix Makefiles\" \
-      -DCMAKE_INSTALL_PREFIX=${opt}/graphite2-${graphite2_v} ..
+      -DCMAKE_INSTALL_PREFIX=${graphite2_prefix} ..
   read k
 fi
 
 cmake -L -G "Unix Makefiles" \
-      -DCMAKE_INSTALL_PREFIX=${opt}/graphite2-${graphite2_v} ..
+      -DCMAKE_INSTALL_PREFIX=${graphite2_prefix} ..
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -121,34 +145,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/graphite2
-cat << eof > ${MODULEPATH}/graphite2/${graphite2_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts Graphite2-${graphite2_v} into your environment"
-}
-
-set VER ${graphite2_v}
-set PKG ${opt}/graphite2-\$VER
-
-module-whatis   "Loads Graphite2-${graphite2_v}"
-conflict graphite2
-
-prepend-path PATH \$PKG/bin
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
-
 cd ${root}
-rm -rf ${tmp}/graphite2-${graphite2_v}
+rm -rf ${tmp}/${graphite2_srcdir}
 
 }
