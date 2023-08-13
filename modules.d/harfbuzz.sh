@@ -6,7 +6,7 @@ echo 'Loading harfbuzz...'
 function get_harfbuzz_library() {
 case ${1} in
   2.6.4)
-    echo xlibfontconfig.so.1.12.0
+    echo libharfbuzz.so.0.20600.4
   ;;
   *)
     echo ''
@@ -15,7 +15,7 @@ esac
 }
 
 function harfbuzzDepInstalled() {
-if [ ! -f "${2}/lib/$(get_fontconfig_library ${1})" ] ; then
+if [ ! -f "${2}/lib/$(get_harfbuzz_library ${1})" ] ; then
   return 1
 else
   return 0
@@ -41,6 +41,17 @@ if [ -z "${harfbuzz_v}" ] ; then
   harfbuzz_v=2.6.4
 fi
 
+case ${harfbuzz_v} in
+  2.6.4) # 2018-12-20
+   harfbuzz_package=harfbuzz-${harfbuzz_v}.tar.xz
+   harfbuzz_tar=xvfJ
+  ;;
+  *)
+   echo "ERROR: Review needed for harfbuzz ${harfbuzz_v}"
+   exit 4 # Please review
+  ;;
+esac
+
 harfbuzz_ffmpeg_ver=${3}
 harfbuzz_icu_ver=${ffmpeg_icu_ver}
 harfbuzz_graphite2_ver=${ffmpeg_graphite2_ver}
@@ -52,9 +63,9 @@ echo "Installing harfbuzz-${harfbuzz_v} in ${harfbuzz_prefix}..."
 
 check_modules
 check_icu ${harfbuzz_icu_ver}
-check_graphite2 ${harfbuzz_graphite2_ver}
+ff_check_graphite2 ${harfbuzz_graphite2_ver} ${2} ${3}
 
-downloadPackage harfbuzz-${harfbuzz_v}.tar.bz2
+downloadPackage ${harfbuzz_package}
 
 cd ${tmp}
 
@@ -63,12 +74,17 @@ if [ -d ${tmp}/${harfbuzz_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfj ${pkg}/harfbuzz-${harfbuzz_v}.tar.bz2
+tar ${harfbuzz_tar} ${pkg}/${harfbuzz_package}
 cd ${tmp}/${harfbuzz_srcdir}
 
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
 module purge
+module load ffmpeg-dep/${harfbuzz_ffmpeg_ver}
 module load icu/${harfbuzz_icu_ver}
-module load graphite2/${harfbuzz_graphite2_ver}
 
 config="./configure --with-graphite2 --prefix=${harfbuzz_prefix} PKG_CONFIG_PATH=${PKG_CONFIG_PATH}:${harfbuzz_prefix}/lib/pkgconfig"
 
