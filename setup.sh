@@ -7,6 +7,7 @@ tmp=${root}/temp
 
 debug=1
 run_tests=1
+run_cairo_tests=0
 run_cmake_tests=1
 dependency_strategy=optimized
 

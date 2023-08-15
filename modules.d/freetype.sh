@@ -29,6 +29,14 @@ if freetypeDepInstalled ${1} ${2}; then
 else
   echo "not present"
   ff_build_freetype ${1} ${2} ${3}
+  ff_build_fontconfig ${ffmpeg_fontconfig_ver} ${2} ${3}
+  ff_build_graphite2 ${ffmpeg_graphite2_ver} ${2} ${3}
+  ff_build_harfbuzz ${ffmpeg_harfbuzz_ver} ${2} ${3}
+  ff_build_pixman ${ffmpeg_pixman_ver} ${2} ${3}
+  ff_build_cairo ${ffmpeg_cairo_ver} ${2} ${3}
+  ff_build_harfbuzz ${ffmpeg_harfbuzz_ver} ${2} ${3}
+  ff_build_freetype ${1} ${2} ${3}
+  ff_build_fontconfig ${ffmpeg_fontconfig_ver} ${2} ${3}
 fi
 }
 

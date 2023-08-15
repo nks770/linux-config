@@ -65,6 +65,8 @@ case ${1} in
     ffmpeg_freetype_ver=2.10.1            # 2019-07-01
     ffmpeg_fontconfig_ver=2.13.92         # 2019-08-09
     ffmpeg_harfbuzz_ver=2.6.4             # 2019-10-29
+    ffmpeg_cairo_ver=1.16.0               # 2018-10-19
+    ffmpeg_pixman_ver=0.38.4              # 2019-04-10
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
 #   ffmpeg_libass_ver=0.14.0              # 2017-10-31
@@ -185,7 +187,7 @@ check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
 check_expat ${ffmpeg_expat_ver}
 check_utillinux ${ffmpeg_utillinux_ver}
 check_icu ${ffmpeg_icu_ver}
-ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v} ${ffmpeg_libwebp_ver}
+ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libwebp ${ffmpeg_libwebp_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_lcms2 ${ffmpeg_lcms2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_openjpeg ${ffmpeg_openjpeg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
@@ -193,6 +195,8 @@ ff_check_freetype ${ffmpeg_freetype_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_fontconfig ${ffmpeg_fontconfig_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_graphite2 ${ffmpeg_graphite2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_harfbuzz ${ffmpeg_harfbuzz_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_pixman ${ffmpeg_pixman_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_libass ${ffmpeg_libass_ver}

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Functions for detecting and building freetype
+# Functions for detecting and building harfbuzz
 echo 'Loading harfbuzz...'
 
 function get_harfbuzz_library() {

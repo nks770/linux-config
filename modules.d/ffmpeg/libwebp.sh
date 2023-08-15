@@ -56,7 +56,7 @@ check_modules
 check_libjpegturbo ${libwebp_libjpegturbo_ver}
 check_giflib ${libwebp_giflib_ver}
 check_libpng ${libwebp_libpng_ver}
-ff_check_tiff ${libwebp_tiff_ver} ${2} ${3} ${libwebp_v}
+ff_check_tiff ${libwebp_tiff_ver} ${2} ${3}
 
 downloadPackage libwebp-${libwebp_v}.tar.gz
 

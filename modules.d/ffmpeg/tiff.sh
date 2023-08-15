@@ -29,7 +29,7 @@ if tiffDepInstalled ${1} ${2}; then
 else
   echo "not present"
   ff_build_tiff ${1} ${2} ${3}
-  ff_build_libwebp ${4} ${2} ${3}
+  ff_build_libwebp ${ffmpeg_libwebp_ver} ${2} ${3}
   ff_build_tiff ${1} ${2} ${3}
 fi
 }
