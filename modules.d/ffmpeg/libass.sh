@@ -3,32 +3,37 @@
 # Functions for detecting and building libass
 echo 'Loading libass...'
 
-function libassInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check libass
-if [ ! -f ${MODULEPATH}/libass/${1} ] ; then
+function get_libass_library() {
+case ${1} in
+  0.14.0)
+    echo libass.so.9.0.2
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function libassDepInstalled() {
+if [ ! -f "${2}/lib/$(get_libass_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_libass() {
-if libassInstalled ${1}; then
-  echo "libass ${1} is installed."
+function ff_check_libass() {
+echo -n "Checking for presence of libass-${1} in ${2}..."
+if libassDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_libass ${1}
+  echo "not present"
+  ff_build_libass ${1} ${2} ${3}
 fi
 }
 
-function build_libass() {
+
+function ff_build_libass() {
 
 # Get desired version number to install
 libass_v=${1}
@@ -38,33 +43,32 @@ fi
 
 case ${libass_v} in
   0.14.0) # 2017-10-31
-   nasm_ver=2.13.02      # 2017-11-29
-#   freetype_ver=2.8.1    # 2017-09-16
-   freetype_ver=2.9.1    # 2018-05-02
-   fribidi_ver=0.19.7    # 2016-08-06
-#   fontconfig_ver=2.12.6 # 2017-09-21
-   fontconfig_ver=2.13.1 # 2018-08-30
+   libass_nasm_ver=2.13.01      # 2017-05-01
   ;;
-  0.16.0) # 2022-05-12
-   nasm_ver=2.15.05     # 2020-08-28
-   freetype_ver=2.12.1  # 2022-05-01
-  ;;
+#  0.16.0) # 2022-05-12
+#   nasm_ver=2.15.05     # 2020-08-28
+#  ;;
   *)
    echo "ERROR: Need review for libass ${libass_v}"
    exit 4
    ;;
 esac
 
-echo "Installing libass ${libass_v}..."
+libass_ffmpeg_ver=${3}
+libass_fribidi_ver=${ffmpeg_fribidi_ver}
+
 libass_srcdir=libass-${libass_v}
+libass_prefix=${2}
+
+echo "Installing libass-${libass_v} in ${libass_prefix}..."
 
 check_modules
-check_nasm ${nasm_ver}
-check_freetype_harfbuzz ${freetype_ver}
-check_fribidi ${fribidi_ver}
-check_fontconfig ${fontconfig_ver}
+check_nasm ${libass_nasm_ver}
+check_fribidi ${libass_fribidi_ver}
+ff_check_freetype ${ffmpeg_freetype_ver} ${2} ${3}
+ff_check_fontconfig ${ffmpeg_fontconfig_ver} ${2} ${3}
 
-downloadPackage libass-${libass_v}.tar.gz
+downloadPackage ${libass_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -73,7 +77,7 @@ if [ -d ${tmp}/${libass_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/libass-${libass_v}.tar.gz
+tar xvfz ${pkg}/${libass_srcdir}.tar.gz
 cd ${tmp}/${libass_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -82,12 +86,11 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load nasm/${nasm_ver}
-module load freetype/${freetype_ver}
-module load fribidi/${fribidi_ver}
-module load fontconfig/${fontconfig_ver}
+module load ffmpeg-dep/${libass_ffmpeg_ver}
+module load nasm/${libass_nasm_ver}
+module load fribidi/${libass_fribidi_ver}
 
-config="./configure --prefix=${opt}/libass-${libass_v}"
+config="./configure --prefix=${libass_prefix}"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -127,38 +130,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/libass
-cat << eof > ${MODULEPATH}/libass/${libass_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts libass-${libass_v} into your environment"
-}
-
-set VER ${libass_v}
-set PKG ${opt}/libass-\$VER
-
-module-whatis   "Loads libass-${libass_v}"
-conflict libass
-module load freetype/${freetype_ver}
-module load fribidi/${fribidi_ver}
-module load fontconfig/${fontconfig_ver}
-prereq freetype/${freetype_ver}
-prereq fribidi/${fribidi_ver}
-prereq fontconfig/${fontconfig_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${libass_srcdir}

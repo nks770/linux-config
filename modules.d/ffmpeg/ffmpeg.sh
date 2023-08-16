@@ -67,12 +67,13 @@ case ${1} in
     ffmpeg_harfbuzz_ver=2.6.4             # 2019-10-29
     ffmpeg_cairo_ver=1.16.0               # 2018-10-19
     ffmpeg_pixman_ver=0.38.4              # 2019-04-10
+    ffmpeg_fribidi_ver=1.0.8              # 2019-12-13
+    ffmpeg_libass_ver=0.14.0              # 2017-10-31
+#   ffmpeg_libbluray_ver=1.1.2            # 2019-06-07
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
-#   ffmpeg_libass_ver=0.14.0              # 2017-10-31
 #   ffmpeg_lame_ver=3.100                 # 2017-10-13
 #   ffmpeg_xvidcore_ver=1.3.6             # 2019-12-08
-#   ffmpeg_libbluray_ver=1.1.2            # 2019-06-07
 #   ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08
 #   ffmpeg_x264_ver=20191125              # 2019-11-25
 #   ffmpeg_x265_ver=3.2.1                 # 2019-10-22
@@ -157,6 +158,7 @@ module load bzip2/${ffmpeg_bzip2_ver}
 module load expat/${ffmpeg_expat_ver}
 module load util-linux/${ffmpeg_utillinux_ver}
 module load icu/${ffmpeg_icu_ver}
+module load fribidi/${ffmpeg_fribidi_ver}
 prereq libpng/${ffmpeg_libpng_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 prereq zlib/${ffmpeg_zlib_ver}
@@ -167,6 +169,7 @@ prereq bzip2/${ffmpeg_bzip2_ver}
 prereq expat/${ffmpeg_expat_ver}
 prereq util-linux/${ffmpeg_utillinux_ver}
 prereq icu/${ffmpeg_icu_ver}
+prereq fribidi/${ffmpeg_fribidi_ver}
 
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
@@ -187,6 +190,7 @@ check_libjpegturbo ${ffmpeg_libjpegturbo_ver}
 check_expat ${ffmpeg_expat_ver}
 check_utillinux ${ffmpeg_utillinux_ver}
 check_icu ${ffmpeg_icu_ver}
+check_fribidi ${ffmpeg_fribidi_ver}
 ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libwebp ${ffmpeg_libwebp_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_lcms2 ${ffmpeg_lcms2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
@@ -197,9 +201,9 @@ ff_check_graphite2 ${ffmpeg_graphite2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_harfbuzz ${ffmpeg_harfbuzz_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_pixman ${ffmpeg_pixman_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libass ${ffmpeg_libass_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
-#check_libass ${ffmpeg_libass_ver}
 #check_lame ${ffmpeg_lame_ver}
 #check_xvidcore ${ffmpeg_xvidcore_ver}
 #check_libbluray ${ffmpeg_libbluray_ver}

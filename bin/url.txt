@@ -111,6 +111,7 @@ freetype-2.10.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freet
 # fribidi
 # https://github.com/fribidi/fribidi
 fribidi-0.19.7.tar.bz2=https://github.com/fribidi/fribidi/releases/download/0.19.7/fribidi-0.19.7.tar.bz2
+fribidi-1.0.8.tar.bz2=https://github.com/fribidi/fribidi/releases/download/v1.0.8/fribidi-1.0.8.tar.bz2
 
 # gdbm
 gdbm-1.13.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz
