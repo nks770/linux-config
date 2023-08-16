@@ -3,64 +3,73 @@
 # Functions for detecting and building libbluray
 echo 'Loading libbluray...'
 
-function libblurayInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check libbluray
-if [ ! -f ${MODULEPATH}/libbluray/${1} ] ; then
+function get_libbluray_library() {
+case ${1} in
+  1.1.2)
+    echo libbluray.so.2.1.2
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function libblurayDepInstalled() {
+if [ ! -f "${2}/lib/$(get_libbluray_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_libbluray() {
-if libblurayInstalled ${1}; then
-  echo "libbluray ${1} is installed."
+function ff_check_libbluray() {
+echo -n "Checking for presence of libbluray-${1} in ${2}..."
+if libblurayDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_libbluray ${1}
+  echo "not present"
+  ff_build_libbluray ${1} ${2} ${3}
 fi
 }
 
-function build_libbluray() {
+
+function ff_build_libbluray() {
 
 # Get desired version number to install
 libbluray_v=${1}
 if [ -z "${libbluray_v}" ] ; then
-  libbluray_v=1.0.2
+  libbluray_v=1.1.2
 fi
-libbluray_srcdir=libbluray-${libbluray_v}
 
-echo "Installing libbluray ${libbluray_v}..."
-
-case ${1} in
+case ${libbluray_v} in
   1.1.2) # 2019-06-07
-   libxml2_ver=2.9.9     # 2019-01-03
-   freetype_ver=2.9.1    # 2018-05-02
-   fontconfig_ver=2.13.1 # 2018-08-30
-   doxygen_ver=1.8.15    # 2018-12-27
+   libbluray_doxygen_ver=1.8.15    # 2018-12-27
 #   apacheant_ver=1.9.14  # 2019-03-17
   ;;
   *)
-   echo "ERROR: Need review for libbluray ${1}"
+   echo "ERROR: Need review for libbluray ${libbluray_v}"
    exit 4
    ;;
 esac
 
+libbluray_ffmpeg_ver=${3}
+libbluray_libxml2_ver=${ffmpeg_libxml2_ver}
+libbluray_freetype_ver=${ffmpeg_freetype_ver}
+libbluray_fontconfig_ver=${ffmpeg_fontconfig_ver}
+
+libbluray_srcdir=libbluray-${libbluray_v}
+libbluray_prefix=${2}
+
+echo "Installing libbluray-${libbluray_v} in ${libbluray_prefix}..."
+
 check_modules
-check_libxml2 ${libxml2_ver}
-check_freetype_harfbuzz ${freetype_ver}
-check_fontconfig ${fontconfig_ver}
-check_doxygen ${doxygen_ver}
+ff_check_libxml2 ${libbluray_libxml2_ver} ${2} ${3}
+ff_check_freetype ${libbluray_freetype_ver} ${2} ${3}
+ff_check_fontconfig ${libbluray_fontconfig_ver} ${2} ${3}
+check_doxygen ${libbluray_doxygen_ver}
 #check_apacheant ${apacheant_ver}
 
-downloadPackage libbluray-${libbluray_v}.tar.bz2
+downloadPackage ${libbluray_srcdir}.tar.bz2
 
 cd ${tmp}
 
@@ -69,7 +78,7 @@ if [ -d ${tmp}/${libbluray_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfj ${pkg}/libbluray-${libbluray_v}.tar.bz2
+tar xvfj ${pkg}/${libbluray_srcdir}.tar.bz2
 cd ${tmp}/${libbluray_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -120,14 +129,12 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-config="./configure --prefix=${opt}/libbluray-${libbluray_v}"
-
 module purge
-module load libxml2/${libxml2_ver}
-module load freetype/${freetype_ver}
-module load fontconfig/${fontconfig_ver}
-module load doxygen/${doxygen_ver}
+module load ffmpeg-dep/${libbluray_ffmpeg_ver}
+module load doxygen/${libbluray_doxygen_ver}
 #module load apache-ant/${apacheant_ver}
+
+config="./configure --prefix=${libbluray_prefix}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -168,39 +175,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/libbluray
-cat << eof > ${MODULEPATH}/libbluray/${libbluray_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts libbluray-${libbluray_v} into your environment"
-}
-
-set VER ${libbluray_v}
-set PKG ${opt}/libbluray-\$VER
-
-module-whatis   "Loads libbluray-${libbluray_v}"
-conflict libbluray
-module load libxml2/${libxml2_ver}
-module load freetype/${freetype_ver}
-module load fontconfig/${fontconfig_ver}
-prereq libxml2/${libxml2_ver}
-prereq freetype/${freetype_ver}
-prereq fontconfig/${fontconfig_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PATH \$PKG/bin
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${libbluray_srcdir}

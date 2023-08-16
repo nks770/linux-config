@@ -69,7 +69,9 @@ case ${1} in
     ffmpeg_pixman_ver=0.38.4              # 2019-04-10
     ffmpeg_fribidi_ver=1.0.8              # 2019-12-13
     ffmpeg_libass_ver=0.14.0              # 2017-10-31
-#   ffmpeg_libbluray_ver=1.1.2            # 2019-06-07
+    # Miscellaneous extras
+    ffmpeg_libxml2_ver=2.9.10             # 2019-10-30
+    ffmpeg_libbluray_ver=1.1.2            # 2019-06-07
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
 #   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
 #   ffmpeg_lame_ver=3.100                 # 2017-10-13
@@ -202,11 +204,12 @@ ff_check_harfbuzz ${ffmpeg_harfbuzz_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_pixman ${ffmpeg_pixman_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libass ${ffmpeg_libass_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libxml2 ${ffmpeg_libxml2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_lame ${ffmpeg_lame_ver}
 #check_xvidcore ${ffmpeg_xvidcore_ver}
-#check_libbluray ${ffmpeg_libbluray_ver}
 #check_fdkaac ${ffmpeg_fdkaac_ver}
 #check_x264 ${ffmpeg_x264_ver}
 #check_x265 ${ffmpeg_x265_ver}
