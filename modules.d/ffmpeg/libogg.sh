@@ -3,53 +3,55 @@
 # Functions for detecting and building libogg
 echo 'Loading libogg...'
 
-function liboggInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check libogg
-if [ ! -f ${MODULEPATH}/libogg/${1} ] ; then
+function get_libogg_library() {
+case ${1} in
+  1.3.4)
+    echo libogg.so.0.8.4
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function liboggDepInstalled() {
+if [ ! -f "${2}/lib/$(get_libogg_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_libogg() {
-if liboggInstalled ${1}; then
-  echo "libogg ${1} is installed."
+function ff_check_libogg() {
+echo -n "Checking for presence of libogg-${1} in ${2}..."
+if liboggDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_libogg ${1}
+  echo "not present"
+  ff_build_libogg ${1} ${2} ${3}
 fi
 }
 
-function build_libogg() {
+
+function ff_build_libogg() {
 
 # Get desired version number to install
 libogg_v=${1}
 if [ -z "${libogg_v}" ] ; then
   libogg_v=1.3.4
 fi
+
+libogg_ffmpeg_ver=${3}
+
 libogg_srcdir=libogg-${libogg_v}
+libogg_prefix=${2}
 
-echo "Installing libogg ${libogg_v}..."
+echo "Installing libogg-${libogg_v} in ${libogg_prefix}..."
 
-#case ${1} in
-#  1.3.4) # 2019 August 30
-#   libogg_nasm_ver=2.13.03
-#  ;;
-#esac
 
 check_modules
-module purge
-module list
 
-downloadPackage libogg-${libogg_v}.tar.gz
+downloadPackage ${libogg_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -58,10 +60,18 @@ if [ -d ${tmp}/${libogg_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/libogg-${libogg_v}.tar.gz
+tar xvfz ${pkg}/${libogg_srcdir}.tar.gz
 cd ${tmp}/${libogg_srcdir}
 
-config="./configure --prefix=${opt}/libogg-${libogg_v}"
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+module purge
+
+config="./configure --prefix=${libogg_prefix}"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -101,32 +111,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/libogg
-cat << eof > ${MODULEPATH}/libogg/${libogg_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts libogg-${libogg_v} into your environment"
-}
-
-set VER ${libogg_v}
-set PKG ${opt}/libogg-\$VER
-
-module-whatis   "Loads libogg-${libogg_v}"
-conflict libogg
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${libogg_srcdir}

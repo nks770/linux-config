@@ -3,67 +3,77 @@
 # Functions for detecting and building libvorbis
 echo 'Loading libvorbis...'
 
-function libvorbisInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check libvorbis
-if [ ! -f ${MODULEPATH}/libvorbis/${1} ] ; then
+function get_libvorbis_library() {
+case ${1} in
+  1.3.6)
+    echo libvorbis.so.0.4.8
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function libvorbisDepInstalled() {
+if [ ! -f "${2}/lib/$(get_libvorbis_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_libvorbis() {
-if libvorbisInstalled ${1}; then
-  echo "libvorbis ${1} is installed."
+function ff_check_libvorbis() {
+echo -n "Checking for presence of libvorbis-${1} in ${2}..."
+if libvorbisDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_libvorbis ${1}
+  echo "not present"
+  ff_build_libvorbis ${1} ${2} ${3}
 fi
 }
 
-function build_libvorbis() {
+
+function ff_build_libvorbis() {
 
 # Get desired version number to install
 libvorbis_v=${1}
 if [ -z "${libvorbis_v}" ] ; then
   libvorbis_v=1.3.7
 fi
-libvorbis_srcdir=libvorbis-${libvorbis_v}
 
-case ${1} in
+case ${libvorbis_v} in
   1.3.6)              # 2018-03-16
-   libogg_ver=1.3.3   # 2017-11-07
-   doxygen_ver=1.8.14 # 2017-12-25
+#   libogg_ver=1.3.3   # 2017-11-07
+   libvorbis_doxygen_ver=1.8.14 # 2017-12-25
   ;;
   1.3.7)              # 2020-07-04
-   libogg_ver=1.3.4   # 2019-08-30
-   doxygen_ver=1.8.17 # 2019-12-27
+#   libogg_ver=1.3.4   # 2019-08-30
+   libvorbis_doxygen_ver=1.8.18 # 2020-04-12
   ;;
   *)
-   echo "ERROR: Review needed for libvorbis ${1}"
+   echo "ERROR: Review needed for libvorbis ${libvorbis_v}"
    exit 4 # Please review
   ;;
 esac
 
-# Optimized dependency strategy
-if [ "${dependency_strategy}" == "optimized" ] ; then
-  libogg_ver=${global_libogg}
-fi
+## Optimized dependency strategy
+#if [ "${dependency_strategy}" == "optimized" ] ; then
+#  libogg_ver=${global_libogg}
+#fi
 
-echo "Installing libvorbis ${libvorbis_v}..."
+libvorbis_ffmpeg_ver=${3}
+libvorbis_libogg_ver=${ffmpeg_libogg_ver}
+
+libvorbis_srcdir=libvorbis-${libvorbis_v}
+libvorbis_prefix=${2}
+
+echo "Installing ${libvorbis_srcdir} in ${libvorbis_prefix}..."
 
 check_modules
-check_libogg ${libogg_ver}
-check_doxygen ${doxygen_ver}
+ff_check_libogg ${libvorbis_libogg_ver} ${2} ${3}
+check_doxygen ${libvorbis_doxygen_ver}
 
-downloadPackage libvorbis-${libvorbis_v}.tar.gz
+downloadPackage ${libvorbis_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -72,14 +82,20 @@ if [ -d ${tmp}/${libvorbis_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/libvorbis-${libvorbis_v}.tar.gz
+tar xvfz ${pkg}/${libvorbis_srcdir}.tar.gz
 cd ${tmp}/${libvorbis_srcdir}
 
-module purge
-module load libogg/${libogg_ver}
-module load doxygen/${doxygen_ver}
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
 
-config="./configure --prefix=${opt}/libvorbis-${libvorbis_v} --enable-docs"
+module purge
+module load ffmpeg-dep/${libvorbis_ffmpeg_ver}
+module load doxygen/${libvorbis_doxygen_ver}
+
+config="./configure --prefix=${libvorbis_prefix} --enable-docs"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -121,34 +137,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/libvorbis
-cat << eof > ${MODULEPATH}/libvorbis/${libvorbis_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts libvorbis-${libvorbis_v} into your environment"
-}
-
-set VER ${libvorbis_v}
-set PKG ${opt}/libvorbis-\$VER
-
-module-whatis   "Loads libvorbis-${libvorbis_v}"
-conflict libvorbis
-module load libogg/${libogg_ver}
-prereq libogg/${libogg_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${libvorbis_srcdir}

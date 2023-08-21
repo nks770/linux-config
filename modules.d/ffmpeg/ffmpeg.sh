@@ -73,25 +73,28 @@ case ${1} in
     ffmpeg_libxml2_ver=2.9.10             # 2019-10-30
     ffmpeg_libbluray_ver=1.1.2            # 2019-06-07
 #   ffmpeg_nasm_ver=2.14.02               # 2018-12-26
-#   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
-#   ffmpeg_lame_ver=3.100                 # 2017-10-13
-#   ffmpeg_xvidcore_ver=1.3.6             # 2019-12-08
-#   ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08
-#   ffmpeg_x264_ver=20191125              # 2019-11-25
-#   ffmpeg_x265_ver=3.2.1                 # 2019-10-22
-#   ffmpeg_libogg_ver=1.3.5               # 2021-06-03
-#   ffmpeg_libvorbis_ver=1.3.7            # 2020-07-04
-#   ffmpeg_libtheora_ver=1.1.1            # 2009-10-01
-#   ffmpeg_libbs2b_ver=3.1.0-flac1.3.3    # 2009-06-04 / 2019-08-04
-#   ffmpeg_kvazaar_ver=1.3.0              # 2019-07-09
+    # Xiph.org libraries
+    ffmpeg_libogg_ver=1.3.4               # 2019-08-30
+    ffmpeg_libvorbis_ver=1.3.6            # 2018-03-16
+    ffmpeg_libtheora_ver=1.1.1            # 2009-10-01
+    # Audio codecs
+#   ffmpeg_speex_ver=1.2.0    # December 7, 2016
+#   ffmpeg_opus_ver=1.3.1                 # 2019-04-12
 #   ffmpeg_libilbc_ver=2.0.2              # 2014-12-14
-#   ffmpeg_openh264_ver=2.0.0             # 2019-05-08
+#   ffmpeg_lame_ver=3.100                 # 2017-10-13
+#   ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08
 #   ffmpeg_wavpack_ver=5.2.0              # 2019-12-15
 #   ffmpeg_twolame_ver=0.4.0              # 2019-10-11
-#   ffmpeg_opus_ver=1.3.1                 # 2019-04-12
-#   ffmpeg_speex_ver=1.2.0    # December 7, 2016
+#   ffmpeg_libbs2b_ver=3.1.0-flac1.3.3    # 2009-06-04 / 2019-08-04
 #   ffmpeg_opencoreamr_ver=0.1.5 # 2017-03-16
 #   ffmpeg_voamrwbenc_ver=0.1.3  # 2013-07-27
+    # Video codecs
+#   ffmpeg_libaom_ver=1.0.0-errata1-avif  # 2019-12-12
+#   ffmpeg_xvidcore_ver=1.3.6             # 2019-12-08
+#   ffmpeg_x264_ver=20191125              # 2019-11-25
+#   ffmpeg_x265_ver=3.2.1                 # 2019-10-22
+#   ffmpeg_kvazaar_ver=1.3.0              # 2019-07-09
+#   ffmpeg_openh264_ver=2.0.0             # 2019-05-08
 #   ffmpeg_libvpx_ver=1.8.2   # Dec 19, 2019
   ;;
 #  5.1.2) # 2022-09-25
@@ -206,6 +209,9 @@ ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libass ${ffmpeg_libass_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libxml2 ${ffmpeg_libxml2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libogg ${ffmpeg_libogg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libvorbis ${ffmpeg_libvorbis_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_libtheora ${ffmpeg_libtheora_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_lame ${ffmpeg_lame_ver}
@@ -213,9 +219,6 @@ ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_fdkaac ${ffmpeg_fdkaac_ver}
 #check_x264 ${ffmpeg_x264_ver}
 #check_x265 ${ffmpeg_x265_ver}
-#check_libogg ${ffmpeg_libogg_ver}
-#check_libvorbis ${ffmpeg_libvorbis_ver}
-#check_libtheora ${ffmpeg_libtheora_ver}
 #check_libbs2b ${ffmpeg_libbs2b_ver}
 #check_kvazaar ${ffmpeg_kvazaar_ver}
 #check_libilbc ${ffmpeg_libilbc_ver}
