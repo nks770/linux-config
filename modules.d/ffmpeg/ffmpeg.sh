@@ -77,9 +77,9 @@ case ${1} in
     ffmpeg_libogg_ver=1.3.4               # 2019-08-30
     ffmpeg_libvorbis_ver=1.3.6            # 2018-03-16
     ffmpeg_libtheora_ver=1.1.1            # 2009-10-01
+    ffmpeg_speex_ver=1.2.0                # 2016-12-07
+    ffmpeg_opus_ver=1.3.1                 # 2019-04-12
     # Audio codecs
-#   ffmpeg_speex_ver=1.2.0    # December 7, 2016
-#   ffmpeg_opus_ver=1.3.1                 # 2019-04-12
 #   ffmpeg_libilbc_ver=2.0.2              # 2014-12-14
 #   ffmpeg_lame_ver=3.100                 # 2017-10-13
 #   ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08
@@ -212,6 +212,8 @@ ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libogg ${ffmpeg_libogg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libvorbis ${ffmpeg_libvorbis_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libtheora ${ffmpeg_libtheora_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_speex ${ffmpeg_speex_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+ff_check_opus ${ffmpeg_opus_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_nasm ${ffmpeg_nasm_ver}
 #check_libaom ${ffmpeg_libaom_ver}
 #check_lame ${ffmpeg_lame_ver}
@@ -226,8 +228,6 @@ ff_check_libtheora ${ffmpeg_libtheora_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 #check_openjpeg ${ffmpeg_openjpeg_ver}
 #check_wavpack ${ffmpeg_wavpack_ver}
 #check_twolame ${ffmpeg_twolame_ver}
-#check_opus ${ffmpeg_opus_ver}
-#check_speex ${ffmpeg_speex_ver}
 #check_opencoreamr ${ffmpeg_opencoreamr_ver}
 #check_voamrwbenc ${ffmpeg_voamrwbenc_ver}
 #check_libwebp ${ffmpeg_libwebp_ver}

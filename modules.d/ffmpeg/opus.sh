@@ -3,32 +3,37 @@
 # Functions for detecting and building libopus
 echo 'Loading opus...'
 
-function opusInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check opus
-if [ ! -f ${MODULEPATH}/opus/${1} ] ; then
+function get_opus_library() {
+case ${1} in
+  1.3.1)
+    echo libopus.so.0.8.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function opusDepInstalled() {
+if [ ! -f "${2}/lib/$(get_opus_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_opus() {
-if opusInstalled ${1}; then
-  echo "opus ${1} is installed."
+function ff_check_opus() {
+echo -n "Checking for presence of opus-${1} in ${2}..."
+if opusDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_opus ${1}
+  echo "not present"
+  ff_build_opus ${1} ${2} ${3}
 fi
 }
 
-function build_opus() {
+
+function ff_build_opus() {
 
 # Get desired version number to install
 opus_v=${1}
@@ -38,7 +43,7 @@ fi
 
 case ${opus_v} in
   1.3.1) # Apr 12, 2019
-   opus_doxygen_ver=1.8.14
+   opus_doxygen_ver=1.8.15 # 2018-12-27
   ;;
   *)
    echo "ERROR: Review needed for opus ${opus_v}"
@@ -46,8 +51,12 @@ case ${opus_v} in
   ;;
 esac
 
-echo "Installing opus ${opus_v}..."
+opus_ffmpeg_ver=${3}
+
 opus_srcdir=opus-${opus_v}
+opus_prefix=${2}
+
+echo "Installing ${opus_srcdir} in ${opus_prefix}..."
 
 check_modules
 check_doxygen ${opus_doxygen_ver}
@@ -61,7 +70,7 @@ if [ -d ${tmp}/${opus_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/opus-${opus_v}.tar.gz
+tar xvfz ${pkg}/${opus_srcdir}.tar.gz
 cd ${tmp}/${opus_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -82,7 +91,8 @@ module load doxygen/${opus_doxygen_ver}
 #
 # a few lines down.
 
-config="./configure --prefix=${opt}/opus-${opus_v}"
+config="./configure --prefix=${opus_prefix}"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -95,6 +105,16 @@ fi
 ${config}
 
 if [ ${debug} -gt 0 ] ; then
+  echo '# NOTE'
+  echo "# The 'No inline ASM for your platform' message is normal for x86 hosts. It's a bit"
+  echo "# misleading since we added intrinsic optimization. You should be ok on that count"
+  echo '# as long as you have something like'
+  echo '#'
+  echo '#    Intrinsics Optimizations.......: x86 SSE SSE2 SSE4.1 AVX'
+  echo '#    Run-time CPU detection: ........ x86 AVX'
+  echo '#'
+  echo '# a few lines down.'
+  echo ''
   echo '>> Configure complete'
   read k
 fi
@@ -124,33 +144,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/opus
-cat << eof > ${MODULEPATH}/opus/${opus_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts opus-${opus_v} into your environment"
-}
-
-set VER ${opus_v}
-set PKG ${opt}/opus-\$VER
-
-module-whatis   "Loads opus-${opus_v}"
-conflict opus
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path MANPATH \$PKG/share/man
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${opus_srcdir}
