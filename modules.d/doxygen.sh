@@ -39,52 +39,52 @@ doxygen_srcdir=doxygen-${doxygen_v}
 
 case ${doxygen_v} in
   1.8.14) # 2017-12-25
-   cmake_ver=3.10.1 # 2017-12-14
-   python_ver=3.6.4 # 2017-12-19
-   flex_ver=2.6.4    # 2017-05-06
-   bison_ver=3.0.4   # 2015-01-23
-   libxml2_ver=2.9.7 # 2017-11-02
-   if [ "${dependency_strategy}" == "optimized" ] ; then
-     cmake_ver=3.10.1  # 2017-12-14
-     libxml2_ver=2.9.7 # 2017-11-02
-     python_ver=3.6.4  # 2017-12-19
-   fi
+#   doxygen_cmake_ver=3.10.1 # 2017-12-14
+#   doxygen_python_ver=3.6.4 # 2017-12-19
+   doxygen_flex_ver=2.6.4    # 2017-05-06
+   doxygen_bison_ver=3.0.4   # 2015-01-23
+#   doxygen_libxml2_ver=2.9.7 # 2017-11-02
+#   if [ "${dependency_strategy}" == "optimized" ] ; then
+     doxygen_cmake_ver=3.10.1  # 2017-12-14
+     doxygen_libxml2_ver=2.9.7 # 2017-11-02
+     doxygen_python_ver=3.6.4  # 2017-12-19
+#   fi
   ;;
   1.8.15) # 2018-12-27
-   cmake_ver=3.10.2  # 2018-01-18 # last cmake to use ncurses 6.0 (compatibility with python 3.7.2)
-   python_ver=3.7.2  # 2018-12-24
-   flex_ver=2.6.4    # 2017-05-06
-   bison_ver=3.2.4   # 2018-12-24
-   libxml2_ver=2.9.9 # 2019-01-03 # first libxml2 to use xz 5.2.4 (compatibility with python 3.7.2)
-   if [ "${dependency_strategy}" == "optimized" ] ; then
-     cmake_ver=3.13.2  # 2018-12-13
-     libxml2_ver=2.9.8 # 2018-03-05
-     python_ver=3.7.2  # 2018-12-24
-   fi
+#   doxygen_cmake_ver=3.10.2  # 2018-01-18 # last cmake to use ncurses 6.0 (compatibility with python 3.7.2)
+#   doxygen_python_ver=3.7.2  # 2018-12-24
+   doxygen_flex_ver=2.6.4    # 2017-05-06
+   doxygen_bison_ver=3.2.4   # 2018-12-24
+#   doxygen_libxml2_ver=2.9.9 # 2019-01-03 # first libxml2 to use xz 5.2.4 (compatibility with python 3.7.2)
+#   if [ "${dependency_strategy}" == "optimized" ] ; then
+     doxygen_cmake_ver=3.13.2  # 2018-12-13
+     doxygen_libxml2_ver=2.9.8 # 2018-03-05
+     doxygen_python_ver=3.7.2  # 2018-12-24
+#   fi
   ;;
   1.8.16) # 2019-08-08
-   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
-   flex_ver=2.6.4    # 2017-05-06
-   bison_ver=3.4.1   # 2019-05-22
-   libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
-   if [ "${dependency_strategy}" == "optimized" ] ; then
-     cmake_ver=3.15.2  # 2019-08-07
-     libxml2_ver=2.9.9 # 2019-01-03
-     python_ver=3.7.4  # 2019-07-08
-   fi
+#   doxygen_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+#   doxygen_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   doxygen_flex_ver=2.6.4    # 2017-05-06
+   doxygen_bison_ver=3.4.1   # 2019-05-22
+#   doxygen_libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
+#   if [ "${dependency_strategy}" == "optimized" ] ; then
+     doxygen_cmake_ver=3.15.2  # 2019-08-07
+     doxygen_libxml2_ver=2.9.9 # 2019-01-03
+     doxygen_python_ver=3.7.4  # 2019-07-08
+#   fi
   ;;
   1.8.17) # 2019-12-27
-   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
-   flex_ver=2.6.4    # 2017-05-06
-   bison_ver=3.5     # 2019-12-11
-   libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
-   if [ "${dependency_strategy}" == "optimized" ] ; then
-     cmake_ver=3.16.2   # 2019-12-19
-     libxml2_ver=2.9.10 # 2019-10-30
-     python_ver=3.8.1   # 2019-12-18
-   fi
+#   doxygen_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+#   doxygen_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   doxygen_flex_ver=2.6.4    # 2017-05-06
+   doxygen_bison_ver=3.5     # 2019-12-11
+#   doxygen_libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
+#   if [ "${dependency_strategy}" == "optimized" ] ; then
+     doxygen_cmake_ver=3.16.2   # 2019-12-19
+     doxygen_libxml2_ver=2.9.10 # 2019-10-30
+     doxygen_python_ver=3.8.1   # 2019-12-18
+#   fi
   ;;
   *)
    echo "ERROR: Review needed for doxygen ${doxygen_v}"
@@ -94,21 +94,21 @@ esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  bison_ver=${global_bison}
+  doxygen_bison_ver=${global_bison}
 #  cmake_ver=${global_cmake}
-  flex_ver=${global_flex}
+  doxygen_flex_ver=${global_flex}
 fi
 
 echo "Installing Doxygen ${doxygen_v}..."
 
 check_modules
-check_flex ${flex_ver}
-check_cmake ${cmake_ver}
-check_python ${python_ver}
-check_bison ${bison_ver}
-check_libxml2 ${libxml2_ver} # Needed only for testsuite
+check_flex ${doxygen_flex_ver}
+check_cmake ${doxygen_cmake_ver}
+check_python ${doxygen_python_ver}
+check_bison ${doxygen_bison_ver}
+check_libxml2 ${doxygen_libxml2_ver} # Needed only for testsuite
 
-downloadPackage doxygen-${doxygen_v}.src.tar.gz
+downloadPackage ${doxygen_srcdir}.src.tar.gz
 
 cd ${tmp}
 
@@ -116,7 +116,7 @@ if [ -d ${tmp}/${doxygen_srcdir} ] ; then
   rm -rf ${tmp}/${doxygen_srcdir}
 fi
 
-tar xvfz ${pkg}/doxygen-${doxygen_v}.src.tar.gz
+tar xvfz ${pkg}/${doxygen_srcdir}.src.tar.gz
 cd ${tmp}/${doxygen_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -135,8 +135,8 @@ touch runtests.patch
 
 if [ "${doxygen_v}" == "1.8.17" ] ; then
 cat << eof > runtests.patch
---- testing/runtests.py	2019-12-21 05:24:12.000000000 -0600
-+++ testing/runtests.py	2023-06-03 19:38:47.171110936 -0500
+--- testing/runtests.py
++++ testing/runtests.py
 @@ -3,6 +3,7 @@
  from __future__ import print_function
  import argparse, glob, itertools, re, shutil, os, sys
@@ -215,11 +215,11 @@ mkdir -v ${tmp}/${doxygen_srcdir}/build
 cd ${tmp}/${doxygen_srcdir}/build
 
 module purge
-module load flex/${flex_ver} \
-            cmake/${cmake_ver} \
-            Python/${python_ver} \
-	    bison/${bison_ver} \
-	    libxml2/${libxml2_ver}
+module load flex/${doxygen_flex_ver}
+module load cmake/${doxygen_cmake_ver}
+module load Python/${doxygen_python_ver}
+module load bison/${doxygen_bison_ver}
+module load libxml2/${doxygen_libxml2_ver}
 
 if [ ${debug} -gt 0 ] ; then
   #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..

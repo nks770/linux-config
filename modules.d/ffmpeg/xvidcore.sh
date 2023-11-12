@@ -42,7 +42,11 @@ echo "Installing xvidcore ${xvidcore_v}..."
 case ${1} in
   1.3.6) # 2019-12-08
 #   nasm_ver=2.14.02  # 2018-12-26
-   yasm_ver=1.3.0    # 2014-08-10
+   xvidcore_yasm_ver=1.3.0    # 2014-08-10
+  ;;
+  1.3.7) # 2019-12-29
+#   nasm_ver=2.14.02  # 2018-12-26
+   xvidcore_yasm_ver=1.3.0    # 2014-08-10
   ;;
   *)
    echo "ERROR: Need review for xvidcore ${1}"
@@ -52,7 +56,7 @@ esac
 
 check_modules
 #check_nasm ${nasm_ver}
-check_yasm ${yasm_ver}
+check_yasm ${xvidcore_yasm_ver}
 
 downloadPackage xvidcore-${xvidcore_v}.tar.gz
 
@@ -70,7 +74,7 @@ config="./configure --prefix=${opt}/xvidcore-${xvidcore_v}"
 
 module purge
 #module load nasm/${nasm_ver}
-module load yasm/${yasm_ver}
+module load yasm/${xvidcore_yasm_ver}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help

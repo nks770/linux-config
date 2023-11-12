@@ -3,43 +3,49 @@
 # Functions for detecting and building FLAC
 echo 'Loading flac...'
 
-function flacInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check flac
-if [ ! -f ${MODULEPATH}/flac/${1} ] ; then
+function get_flac_library() {
+case ${1} in
+  1.3.3)
+    echo libFLAC.so.8.3.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function flacDepInstalled() {
+if [ ! -f "${2}/lib/$(get_flac_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_flac() {
-if flacInstalled ${1}; then
-  echo "flac ${1} is installed."
+function ff_check_flac() {
+echo -n "Checking for presence of flac-${1} in ${2}..."
+if flacDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_flac ${1}
+  echo "not present"
+  ff_build_flac ${1} ${2} ${3}
 fi
 }
 
-function build_flac() {
+
+function ff_build_flac() {
 
 # Get desired version number to install
 flac_v=${1}
 if [ -z "${flac_v}" ] ; then
-  flac_v=1.3.3
+  echo "ERROR: No flac version specified!"
+  exit 2
 fi
 
 case ${flac_v} in
   1.3.3) # 4 Aug 2019
-   nasm_ver=2.14.02
-   libogg_ver=1.3.4
+   flac_nasm_ver=2.14.02
+#   libogg_ver=1.3.4
   ;;
   *)
    echo "ERROR: Review needed for flac ${flac_v}"
@@ -47,19 +53,24 @@ case ${flac_v} in
   ;;
 esac
 
-# Optimized dependency strategy
-if [ "${dependency_strategy}" == "optimized" ] ; then
-  libogg_ver=${global_libogg}
-fi
+## Optimized dependency strategy
+#if [ "${dependency_strategy}" == "optimized" ] ; then
+#  libogg_ver=${global_libogg}
+#fi
 
-echo "Installing flac ${flac_v}..."
+flac_ffmpeg_ver=${3}
+flac_libogg_ver=${ffmpeg_libogg_ver}
+
 flac_srcdir=flac-${flac_v}
+flac_prefix=${2}
+
+echo "Installing ${flac_srcdir} in ${flac_prefix}..."
 
 check_modules
-check_nasm ${nasm_ver}
-check_libogg ${libogg_ver}
+check_nasm ${flac_nasm_ver}
+ff_check_libogg ${flac_libogg_ver} ${2} ${3}
 
-downloadPackage flac-${flac_v}.tar.xz
+downloadPackage ${flac_srcdir}.tar.xz
 
 cd ${tmp}
 
@@ -68,7 +79,7 @@ if [ -d ${tmp}/${flac_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfJ ${pkg}/flac-${flac_v}.tar.xz
+tar xvfJ ${pkg}/${flac_srcdir}.tar.xz
 cd ${tmp}/${flac_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -77,12 +88,13 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load nasm/${nasm_ver} \
-            libogg/${libogg_ver}
+module load ffmpeg-dep/${flac_ffmpeg_ver}
+module load nasm/${flac_nasm_ver}
 
-config="./configure --prefix=${opt}/flac-${flac_v} \
-            --with-ogg=${opt}/libogg-${libogg_ver} \
+config="./configure --prefix=${flac_prefix} \
+            --with-ogg=${flac_prefix} \
             --disable-xmms-plugin"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -124,36 +136,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/flac
-cat << eof > ${MODULEPATH}/flac/${flac_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts flac-${flac_v} into your environment"
-}
-
-set VER ${flac_v}
-set PKG ${opt}/flac-\$VER
-
-module-whatis   "Loads flac-${flac_v}"
-conflict flac
-module load libogg/${libogg_ver}
-prereq libogg/${libogg_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path PATH \$PKG/bin
-prepend-path MANPATH \$PKG/share/man
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${flac_srcdir}

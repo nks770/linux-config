@@ -133,7 +133,7 @@ proc ModulesHelp { } {
 set VER ${libvpx_v}
 set PKG ${opt}/libvpx-\$VER
 
-module-whatis   "Loads libvpx-${libvpx_v}"
+module-whatis "Loads libvpx-${libvpx_v}"
 conflict libvpx
 
 prepend-path CPATH \$PKG/include

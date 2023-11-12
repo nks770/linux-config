@@ -43,7 +43,7 @@ check_modules
 module purge
 module list
 
-downloadPackage lame-${lame_v}.tar.gz
+downloadPackage ${lame_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -52,7 +52,7 @@ if [ -d ${tmp}/${lame_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/lame-${lame_v}.tar.gz
+tar xvfz ${pkg}/${lame_srcdir}.tar.gz
 cd ${tmp}/${lame_srcdir}
 
 config="./configure --prefix=${opt}/lame-${lame_v}"

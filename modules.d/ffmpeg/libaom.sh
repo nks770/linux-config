@@ -39,27 +39,27 @@ libaom_srcdir=libaom-${libaom_v}
 
 case ${1} in
   1.0.0)              #Mon Jun 25 07:54:59 2018 -0700
-   yasm_ver=1.3.0     # 2014-08-10
-   cmake_ver=3.11.4   # 2018-06-14
-   doxygen_ver=1.8.14 # 2017-12-25
-   python_ver=3.6.5   # 2018-03-28
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_cmake_ver=3.11.4   # 2018-06-14
+   libaom_doxygen_ver=1.8.14 # 2017-12-25
+   libaom_python_ver=3.6.5   # 2018-03-28
   ;;
   1.0.0-errata1-avif) #Thu Dec 12 10:50:24 2019 -0800
-   yasm_ver=1.3.0     # 2014-08-10
-   doxygen_ver=1.8.16 # 2019-08-08
-   cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-   python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_doxygen_ver=1.8.16 # 2019-08-08
+#   libaom_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
+#   libaom_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    libdir=lib # Directory where installed libraries go
-   if [ "${dependency_strategy}" == "optimized" ] ; then
-     cmake_ver=3.15.5   # 2019-10-30
-     python_ver=3.8.0   # 2019-10-14 -- python 3.7.5 could be another option
-   fi
+#   if [ "${dependency_strategy}" == "optimized" ] ; then
+     libaom_cmake_ver=3.15.5   # 2019-10-30
+     libaom_python_ver=3.8.0   # 2019-10-14 -- python 3.7.5 could be another option
+#   fi
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
-   yasm_ver=1.3.0
-   cmake_ver=3.24.2   # 2022-09-13
-   doxygen_ver=1.9.5  # 2022-08-26
-   python_ver=3.10.7  # 2022-09-06
+   libaom_yasm_ver=1.3.0
+   libaom_cmake_ver=3.24.2   # 2022-09-13
+   libaom_doxygen_ver=1.9.5  # 2022-08-26
+   libaom_python_ver=3.10.7  # 2022-09-06
   ;;
   *)
    echo "ERROR: Review needed for libaom ${1}"
@@ -75,10 +75,10 @@ esac
 echo "Installing libaom ${libaom_v}..."
 
 check_modules
-check_yasm ${yasm_ver}
-check_cmake ${cmake_ver}
-check_doxygen ${doxygen_ver}
-check_python ${python_ver}
+check_yasm ${libaom_yasm_ver}
+check_cmake ${libaom_cmake_ver}
+check_doxygen ${libaom_doxygen_ver}
+check_python ${libaom_python_ver}
 
 downloadPackage libaom-${libaom_v}.tar.gz
 
@@ -94,10 +94,10 @@ tar xvfz ${pkg}/libaom-${libaom_v}.tar.gz
 cd ${tmp}/${libaom_srcdir}/build
 
 module purge
-module load yasm/${yasm_ver}
-module load cmake/${cmake_ver}
-module load doxygen/${doxygen_ver}
-module load Python/${python_ver}
+module load yasm/${libaom_yasm_ver}
+module load cmake/${libaom_cmake_ver}
+module load doxygen/${libaom_doxygen_ver}
+module load Python/${libaom_python_ver}
 
 if [ ${debug} -gt 0 ] ; then
   echo ''

@@ -3,32 +3,37 @@
 # Functions for detecting and building TwoLAME
 echo 'Loading twolame...'
 
-function twolameInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check twolame
-if [ ! -f ${MODULEPATH}/twolame/${1} ] ; then
+function get_twolame_library() {
+case ${1} in
+  0.4.0)
+    echo libtwolame.so.0.0.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function twolameDepInstalled() {
+if [ ! -f "${2}/lib/$(get_twolame_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_twolame() {
-if twolameInstalled ${1}; then
-  echo "twolame ${1} is installed."
+function ff_check_twolame() {
+echo -n "Checking for presence of twolame-${1} in ${2}..."
+if twolameDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_twolame ${1}
+  echo "not present"
+  ff_build_twolame ${1} ${2} ${3}
 fi
 }
 
-function build_twolame() {
+
+function ff_build_twolame() {
 
 # Get desired version number to install
 twolame_v=${1}
@@ -36,23 +41,28 @@ if [ -z "${twolame_v}" ] ; then
   twolame_v=0.4.0
 fi
 
-case ${twolame_v} in
-  0.4.0) # 2019-10-11
-   twolame_libsndfile_ver=1.0.28-flac1.3.3 # 2017-04-02 / 2019-08-04
-  ;;
-  *)
-   echo "ERROR: Review needed for twolame ${twolame_v}"
-   exit 4 # Please review
-  ;;
-esac
+#case ${twolame_v} in
+#  0.4.0) # 2019-10-11
+#   twolame_libsndfile_ver=1.0.28-flac1.3.3 # 2017-04-02 / 2019-08-04
+#  ;;
+#  *)
+#   echo "ERROR: Review needed for twolame ${twolame_v}"
+#   exit 4 # Please review
+#  ;;
+#esac
 
-echo "Installing twolame ${twolame_v}..."
+twolame_ffmpeg_ver=${3}
+twolame_libsndfile_ver=${ffmpeg_libsndfile_ver}
+
 twolame_srcdir=twolame-${twolame_v}
+twolame_prefix=${2}
+
+echo "Installing ${twolame_srcdir} in ${twolame_prefix}..."
 
 check_modules
-check_libsndfile ${twolame_libsndfile_ver}
+ff_check_libsndfile ${twolame_libsndfile_ver} ${2} ${3}
 
-downloadPackage twolame-${twolame_v}.tar.gz
+downloadPackage ${twolame_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -61,7 +71,7 @@ if [ -d ${tmp}/${twolame_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/twolame-${twolame_v}.tar.gz
+tar xvfz ${pkg}/${twolame_srcdir}.tar.gz
 cd ${tmp}/${twolame_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -70,9 +80,10 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load libsndfile/${twolame_libsndfile_ver}
+module load ffmpeg-dep/${twolame_ffmpeg_ver}
 
-config="./configure --prefix=${opt}/twolame-${twolame_v}"
+config="./configure --prefix=${twolame_prefix}"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -114,36 +125,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/twolame
-cat << eof > ${MODULEPATH}/twolame/${twolame_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts twolame-${twolame_v} into your environment"
-}
-
-set VER ${twolame_v}
-set PKG ${opt}/twolame-\$VER
-
-module-whatis   "Loads twolame-${twolame_v}"
-conflict twolame
-module load libsndfile/${twolame_libsndfile_ver}
-prereq libsndfile/${twolame_libsndfile_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path PATH \$PKG/bin
-prepend-path MANPATH \$PKG/share/man
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${twolame_srcdir}

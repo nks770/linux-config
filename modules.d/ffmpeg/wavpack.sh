@@ -47,7 +47,7 @@ wavpack_srcdir=wavpack-${wavpack_v}
 
 check_modules
 
-downloadPackage wavpack-${wavpack_v}.tar.bz2
+downloadPackage ${wavpack_srcdir}.tar.bz2
 
 cd ${tmp}
 
@@ -56,7 +56,7 @@ if [ -d ${tmp}/${wavpack_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfj ${pkg}/wavpack-${wavpack_v}.tar.bz2
+tar xvfj ${pkg}/${wavpack_srcdir}.tar.bz2
 cd ${tmp}/${wavpack_srcdir}
 
 if [ ${debug} -gt 0 ] ; then

@@ -33,7 +33,8 @@ function build_python() {
 # Get desired version number to install
 python_v=${1}
 if [ -z "${python_v}" ] ; then
-  python_v=3.11.4
+  echo "ERROR: No Python version specified!"
+  exit 2
 fi
 
 curses_failure=0

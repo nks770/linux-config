@@ -3,32 +3,37 @@
 # Functions for detecting and building libbs2b
 echo 'Loading libbs2b...'
 
-function libbs2bInstalled() {
-# Cannot evaulate if we dont have modules installed
-if [ ! -f /etc/profile.d/modules.sh ] ; then
-  return 1
-fi
-# Load modules if not loaded already
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-# If modules is OK, then check libbs2b
-if [ ! -f ${MODULEPATH}/libbs2b/${1} ] ; then
+function get_libbs2b_library() {
+case ${1} in
+  3.1.0)
+    echo libbs2b.so.0.0.0
+  ;;
+  *)
+    echo ''
+  ;;
+esac
+}
+
+function libbs2bDepInstalled() {
+if [ ! -f "${2}/lib/$(get_libbs2b_library ${1})" ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_libbs2b() {
-if libbs2bInstalled ${1}; then
-  echo "libbs2b ${1} is installed."
+function ff_check_libbs2b() {
+echo -n "Checking for presence of libbs2b-${1} in ${2}..."
+if libbs2bDepInstalled ${1} ${2}; then
+  echo "present"
 else
-  build_libbs2b ${1}
+  echo "not present"
+  ff_build_libbs2b ${1} ${2} ${3}
 fi
 }
 
-function build_libbs2b() {
+
+function ff_build_libbs2b() {
 
 # Get desired version number to install
 libbs2b_v=${1}
@@ -36,24 +41,29 @@ if [ -z "${libbs2b_v}" ] ; then
   libbs2b_v=3.1.0
 fi
 
-case ${libbs2b_v} in
-  3.1.0-flac1.3.3) # 2009-06-04 / 2019-08-04
-   libbs2b_vv=3.1.0
-   libsndfile_ver=1.0.28-flac1.3.3 # 2017-04-02 / 2019-08-04
-  ;;
-  *)
-   echo "ERROR: Review needed for libbs2b ${libbs2b_v}"
-   exit 4 # Please review
-  ;;
-esac
+#case ${libbs2b_v} in
+#  3.1.0-flac1.3.3) # 2009-06-04 / 2019-08-04
+#   libbs2b_vv=3.1.0
+#   libsndfile_ver=1.0.28-flac1.3.3 # 2017-04-02 / 2019-08-04
+#  ;;
+#  *)
+#   echo "ERROR: Review needed for libbs2b ${libbs2b_v}"
+#   exit 4 # Please review
+#  ;;
+#esac
 
-echo "Installing libbs2b ${libbs2b_v}..."
-libbs2b_srcdir=libbs2b-${libbs2b_vv}
+libbs2b_ffmpeg_ver=${3}
+libbs2b_libsndfile_ver=${ffmpeg_libsndfile_ver}
+
+libbs2b_srcdir=libbs2b-${libbs2b_v}
+libbs2b_prefix=${2}
+
+echo "Installing ${libbs2b_srcdir} in ${libbs2b_prefix}..."
 
 check_modules
-check_libsndfile ${libsndfile_ver}
+ff_check_libsndfile ${libbs2b_libsndfile_ver} ${2} ${3}
 
-downloadPackage libbs2b-${libbs2b_vv}.tar.gz
+downloadPackage ${libbs2b_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -62,7 +72,7 @@ if [ -d ${tmp}/${libbs2b_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/libbs2b-${libbs2b_vv}.tar.gz
+tar xvfz ${pkg}/${libbs2b_srcdir}.tar.gz
 cd ${tmp}/${libbs2b_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
@@ -71,9 +81,10 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load libsndfile/${libsndfile_ver}
+module load ffmpeg-dep/${libbs2b_ffmpeg_ver}
 
-config="./configure --prefix=${opt}/libbs2b-${libbs2b_v}"
+config="./configure --prefix=${libbs2b_prefix}"
+
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -115,35 +126,6 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Install complete'
   read k
 fi
-
-# Create the environment module
-if [ -z "${MODULEPATH}" ] ; then
-  source /etc/profile.d/modules.sh
-fi 
-mkdir -pv ${MODULEPATH}/libbs2b
-cat << eof > ${MODULEPATH}/libbs2b/${libbs2b_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts libbs2b-${libbs2b_v} into your environment"
-}
-
-set VER ${libbs2b_v}
-set PKG ${opt}/libbs2b-\$VER
-
-module-whatis   "Loads libbs2b-${libbs2b_v}"
-conflict libbs2b
-module load libsndfile/${libsndfile_ver}
-prereq libsndfile/${libsndfile_ver}
-
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
-prepend-path PATH \$PKG/bin
-
-eof
 
 cd ${root}
 rm -rf ${tmp}/${libbs2b_srcdir}

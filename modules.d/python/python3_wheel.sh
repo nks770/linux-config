@@ -41,6 +41,11 @@ if [ "${2}" == "demjson3" ] ; then
   if [ -z "${pytest}" ] ; then
     pytest="<not found>"
   fi
+elif [ "${2}" == "meson" ] ; then
+  pytest=$(meson --version 2>/dev/null)
+  if [ -z "${pytest}" ] ; then
+    pytest="<not found>"
+  fi
 else
   pytest=$(echo -e "import ${mname}\n${vquery}" | python3 2>/dev/null)
   if [ -z "${pytest}" ] ; then
@@ -95,6 +100,9 @@ fi
 
 mode=whl
 if [ "${wheel_name}" == "demjson" ] || [ "${wheel_name}" == "demjson3" ] ; then
+  wfile=${wheel_name}-${wheel_v}.tar.gz
+  mode=tgz
+elif [ "${wheel_name}" == "meson" ] ; then
   wfile=${wheel_name}-${wheel_v}.tar.gz
   mode=tgz
 else

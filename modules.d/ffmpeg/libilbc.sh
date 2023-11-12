@@ -41,7 +41,7 @@ case ${libilbc_v} in
    libilbc_cmake_ver=3.0.2  # 2014-09-11
   ;;
   3.0.4) # 2020-12-31
-   libilbc_cmake_ver=3.18.5 # 2020-11-18
+   libilbc_cmake_ver=3.19.2 # 2020-12-16
   ;;
   *)
    echo "ERROR: Review needed for libilbc ${libilbc_v}"
@@ -55,7 +55,7 @@ libilbc_srcdir=libilbc-${libilbc_v}
 check_modules
 check_cmake ${libilbc_cmake_ver}
 
-downloadPackage libilbc-${libilbc_v}.tar.gz
+downloadPackage ${libilbc_srcdir}.tar.gz
 
 cd ${tmp}
 
@@ -64,7 +64,7 @@ if [ -d ${tmp}/${libilbc_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/libilbc-${libilbc_v}.tar.gz
+tar xvfz ${pkg}/${libilbc_srcdir}.tar.gz
 mkdir -pv ${tmp}/${libilbc_srcdir}/build
 cd ${tmp}/${libilbc_srcdir}/build
 
@@ -80,12 +80,14 @@ if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
   echo cmake -L -G \"Unix Makefiles\" \
+       -DCMAKE_BUILD_TYPE=Release \
        -DCMAKE_INSTALL_PREFIX=${opt}/libilbc-${libilbc_v} ..
   echo ''
   read k
 fi
 
 cmake -L -G 'Unix Makefiles' \
+      -DCMAKE_BUILD_TYPE=Release \
       -DCMAKE_INSTALL_PREFIX=${opt}/libilbc-${libilbc_v} ..
 
 if [ ${debug} -gt 0 ] ; then
@@ -103,11 +105,12 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-if [ ${run_tests} -gt 0 ] ; then
-  make check
-  echo '>> Tests complete'
-  read k
-fi
+# There is no testsuite for libilbc
+#if [ ${run_tests} -gt 0 ] ; then
+#  ctest
+#  echo '>> Tests complete'
+#  read k
+#fi
 
 make install
 
@@ -140,8 +143,8 @@ conflict libilbc
 prepend-path CPATH \$PKG/include
 prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
-prepend-path LD_LIBRARY_PATH \$PKG/lib64
-prepend-path PKG_CONFIG_PATH \$PKG/lib64/pkgconfig
+prepend-path LD_LIBRARY_PATH \$PKG/lib
+prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
 

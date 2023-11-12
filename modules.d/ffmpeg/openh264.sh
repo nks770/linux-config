@@ -77,8 +77,8 @@ module load nasm/${openh264_nasm_ver}
 
 # Patch to change installation prefix
 cat << eof > prefix.patch
---- Makefile    2019-05-08 07:07:17.000000000 +0000
-+++ Makefile    2021-04-25 06:20:24.866535202 +0000
+--- Makefile
++++ Makefile
 @@ -21,7 +21,7 @@
  CFLAGS_DEBUG=-g
  BUILDTYPE=Release

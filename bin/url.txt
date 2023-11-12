@@ -2,6 +2,15 @@
 ## https://ant.apache.org/
 #apache-ant-1.9.14-src.tar.gz=https://archive.apache.org/dist/ant/source/apache-ant-1.9.14-src.tar.gz
 
+# aribb24
+aribb24-1.0.3.tar.gz=https://github.com/nkoriyama/aribb24/archive/refs/tags/v1.0.3.tar.gz
+
+# autoconf
+autoconf-2.69.tar.gz=https://ftp.gnu.org/gnu/autoconf/autoconf-2.69.tar.gz
+
+# automake
+automake-1.14.1.tar.gz=https://ftp.gnu.org/gnu/automake/automake-1.14.1.tar.gz
+
 # bison
 # https://www.gnu.org/software/bison/
 bison-3.0.4.tar.gz=https://ftp.gnu.org/gnu/bison/bison-3.0.4.tar.gz
@@ -46,6 +55,13 @@ cmake-3.23.1.tar.gz=https://cmake.org/files/v3.23/cmake-3.23.1.tar.gz
 cmake-3.24.0.tar.gz=https://cmake.org/files/v3.24/cmake-3.24.0.tar.gz
 cmake-3.24.2.tar.gz=https://cmake.org/files/v3.24/cmake-3.24.2.tar.gz
 cmake-3.26.3.tar.gz=https://cmake.org/files/v3.26/cmake-3.26.3.tar.gz
+
+# dav1d
+# https://code.videolan.org/videolan/dav1d
+dav1d-0.5.2.tar.gz=https://code.videolan.org/videolan/dav1d/-/archive/0.5.2/dav1d-0.5.2.tar.gz
+
+# davs2
+davs2-1.6.tar.gz=https://github.com/pkuvcl/davs2/archive/refs/tags/1.6.tar.gz
 
 # DejaGnu
 dejagnu-1.6.3.tar.gz=http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
@@ -229,6 +245,10 @@ libpng-1.6.34.tar.gz=https://master.dl.sourceforge.net/project/libpng/libpng16/1
 libpng-1.6.36.tar.gz=https://master.dl.sourceforge.net/project/libpng/libpng16/1.6.36/libpng-1.6.36.tar.gz
 libpng-1.6.37.tar.gz=https://master.dl.sourceforge.net/project/libpng/libpng16/1.6.37/libpng-1.6.37.tar.gz
 
+# libsoxr
+#libsoxr-0.1.3.tar.gz=https://github.com/chirlu/soxr/archive/refs/tags/0.1.3.tar.gz
+soxr-0.1.3-Source.tar.xz=https://cytranet.dl.sourceforge.net/project/soxr/soxr-0.1.3-Source.tar.xz
+
 # libsndfile
 # http://www.mega-nerd.com/libsndfile/
 libsndfile-1.0.28.tar.gz=http://www.mega-nerd.com/libsndfile/files/libsndfile-1.0.28.tar.gz
@@ -236,6 +256,9 @@ libsndfile-1.0.28.tar.gz=http://www.mega-nerd.com/libsndfile/files/libsndfile-1.
 # libtheora
 # https://www.theora.org/
 libtheora-1.1.1.tar.bz2=http://downloads.xiph.org/releases/theora/libtheora-1.1.1.tar.bz2
+
+# libtool
+libtool-2.4.2.tar.gz=https://mirror2.sandyriver.net/pub/software/gnu/libtool/libtool-2.4.2.tar.gz
 
 # libuuid
 libuuid-1.0.3.tar.gz=https://versaweb.dl.sourceforge.net/project/libuuid/libuuid-1.0.3.tar.gz
@@ -280,6 +303,11 @@ m4-1.4.17.tar.gz=http://ftp.gnu.org/gnu/m4/m4-1.4.17.tar.gz
 m4-1.4.18.tar.gz=http://ftp.gnu.org/gnu/m4/m4-1.4.18.tar.gz
 m4-1.4.19.tar.gz=http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz
 
+# meson
+meson-0.52.0.tar.gz=https://files.pythonhosted.org/packages/33/96/9961fb3afbd9a61cb7a216ce2dbf8e8bab45987fa475f5f2c8e6c7817604/meson-0.52.0.tar.gz
+#meson-0.52.0.tar.gz=https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz
+#meson-0.52.1.tar.gz=https://github.com/mesonbuild/meson/releases/download/0.52.1/meson-0.52.1.tar.gz
+
 # nasm
 # https://www.nasm.us/pub/nasm/releasebuilds
 nasm-2.13.01.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13.01.tar.gz
@@ -287,6 +315,11 @@ nasm-2.13.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13
 nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
 nasm-2.14.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz
 nasm-2.15.05.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
+
+# ninja
+# https://ninja-build.org/
+ninja-1.9.0.tar.gz=https://github.com/ninja-build/ninja/archive/refs/tags/v1.9.0.tar.gz
+#ninja-1.9.0.tar.gz=https://files.pythonhosted.org/packages/47/ff/e2ddb9b663fd387437f3aee7befc2376b98410c7375d1e3105c268274cd4/ninja-1.9.0.tar.gz
 
 # ncurses
 # https://invisible-island.net/ncurses/ncurses.html
@@ -331,6 +364,9 @@ openssl-3.0.8.tar.gz=https://www.openssl.org/source/openssl-3.0.8.tar.gz
 # opus (libopus)
 # https://opus-codec.org
 opus-1.3.1.tar.gz=https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
+
+# pkg-config
+pkg-config-0.28.tar.gz=https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
 
 # Python
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
@@ -444,6 +480,10 @@ util-linux-2.34.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linu
 util-linux-2.36.2.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.36/util-linux-2.36.2.tar.gz
 util-linux-2.38.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.38/util-linux-2.38.1.tar.gz
 util-linux-2.39.1.tar.gz=https://mirrors.edge.kernel.org/pub/linux/utils/util-linux/v2.39/util-linux-2.39.1.tar.gz
+
+# vidstab
+# https://github.com/georgmartius/vid.stab
+vid.stab-1.1.0.tar.gz=https://github.com/georgmartius/vid.stab/archive/refs/tags/v1.1.0.tar.gz
 
 # Vim
 vim-8.2.tar.bz2=https://mirror.math.princeton.edu/pub/vim/unix/vim-8.2.tar.bz2

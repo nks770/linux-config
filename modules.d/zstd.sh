@@ -24,7 +24,6 @@ if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
 # If modules is OK, then check zstd
-echo "Debug: ${MODULEPATH}/zstd/${1}"
 if [ ! -f ${MODULEPATH}/zstd/${1} ] ; then
   return 1
 else

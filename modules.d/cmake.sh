@@ -43,79 +43,79 @@ rerun_failures=0
 
 case ${cmake_v} in
 3.0.2) # 2014-09-11
-   ncurses_ver=5.9  # 2011-04-04
+   cmake_ncurses_ver=5.9  # 2011-04-04
    kwsys_warning=1
    ;;
 3.8.1) # 2017-05-02
-   ncurses_ver=6.0  # 2015-08-08
+   cmake_ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
 3.9.0) # 2017-07-18
-   ncurses_ver=6.0  # 2015-08-08
+   cmake_ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
 3.9.6) # 2017-11-10
-   ncurses_ver=6.0  # 2015-08-08
+   cmake_ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
 3.10.1) # 2017-12-14
-   ncurses_ver=6.0  # 2015-08-08
+   cmake_ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
 3.10.2) # 2018-01-18
-   ncurses_ver=6.0  # 2015-08-08
+   cmake_ncurses_ver=6.0  # 2015-08-08
    kwsys_warning=1
    ;;
 3.10.3) # 2018-03-16
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.11.4) # 2018-06-14
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.13.2) # 2018-12-13
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.13.4) # 2019-02-01
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.14.7) # 2019-10-02
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.15.2) # 2019-08-07
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.15.3) # 2019-09-04
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.15.5) # 2019-10-30
-   ncurses_ver=6.1  # 2018-01-27
+   cmake_ncurses_ver=6.1  # 2018-01-27
    kwsys_warning=1
    ;;
 3.16.2) # 2019-12-19
-   ncurses_ver=6.1    # 2018-01-27
-   openssl_ver=1.1.1d # 2019-09-10
+   cmake_ncurses_ver=6.1    # 2018-01-27
+   cmake_openssl_ver=1.1.1d # 2019-09-10
    kwsys_warning=1
    ;;
 3.16.5) # 2020-03-04
-   ncurses_ver=6.2    # 2020-02-12
-   openssl_ver=1.1.1d # 2019-09-10
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1d # 2019-09-10
    kwsys_warning=1
    ;;
 3.19.2) # 2020-12-16
-   ncurses_ver=6.2    # 2020-02-12
-   openssl_ver=1.1.1i # 2020-12-08
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1i # 2020-12-08
    chmod_warning=1
    ;;
 3.24.0) # 2022-08-04
-   ncurses_ver=6.3    # 2021-11-08
-   openssl_ver=1.1.1q # 2022-07-05
+   cmake_ncurses_ver=6.3    # 2021-11-08
+   cmake_openssl_ver=1.1.1q # 2022-07-05
    chmod_warning=0
    rerun_failures=161
    ;;
@@ -127,25 +127,25 @@ esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  ncurses_ver=${global_ncurses}
-  if [ ! -z "${openssl_ver}" ] ; then
-    openssl_ver=${global_openssl}
+  cmake_ncurses_ver=${global_ncurses}
+  if [ ! -z "${cmake_openssl_ver}" ] ; then
+    cmake_openssl_ver=${global_openssl}
   fi
 fi
 
 echo "Installing cmake ${cmake_v}..."
 
 check_modules
-check_ncurses ${ncurses_ver}
-if [ ! -z "${openssl_ver}" ] ; then
-  check_openssl ${openssl_ver}
+check_ncurses ${cmake_ncurses_ver}
+if [ ! -z "${cmake_openssl_ver}" ] ; then
+  check_openssl ${cmake_openssl_ver}
 fi
 
 module purge
 # Note ncurses dependency is to build optional module ccmake (the curses GUI to cmake)
-module load ncurses/${ncurses_ver}
-if [ ! -z "${openssl_ver}" ] ; then
-  module load openssl/${openssl_ver}
+module load ncurses/${cmake_ncurses_ver}
+if [ ! -z "${cmake_openssl_ver}" ] ; then
+  module load openssl/${cmake_openssl_ver}
 fi
 
 downloadPackage cmake-${cmake_v}.tar.gz
@@ -161,7 +161,7 @@ cd ${tmp}/${cmake_srcdir}
 
 config="./configure --prefix=${opt}/cmake-${cmake_v} --parallel=${ncpu}"
 echo "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}"
-export CMAKE_PREFIX_PATH=${opt}/ncurses-${ncurses_ver}
+export CMAKE_PREFIX_PATH=${opt}/ncurses-${cmake_ncurses_ver}
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -195,10 +195,10 @@ if [ ${run_cmake_tests} -gt 0 ] ; then
   # Patch to enable avoid a testsuite failure when compiled with newer GCC
   # I borrowed this update from referencing cmake 3.11.4 (slightly newer)
   # This is for test # "34 - CompileFeatures"
-  if [ "${cmake_v}" == "3.8.1" ] ; then
+  if [ "${cmake_v}" == "3.8.1" ] || [ "${cmake_v}" == "3.10.1" ] || [ "${cmake_v}" == "3.10.2" ] ; then
     cat << eof > testsuite.patch
---- Tests/CompileFeatures/default_dialect.c	2017-05-02 07:59:43.000000000 -0500
-+++ Tests/CompileFeatures/default_dialect.c	2023-05-08 22:40:58.051697690 -0500
+--- Tests/CompileFeatures/default_dialect.c
++++ Tests/CompileFeatures/default_dialect.c
 @@ -1,6 +1,6 @@
  
  #if DEFAULT_C11
@@ -218,55 +218,6 @@ eof
     fi
   fi
 
-  if [ "${cmake_v}" == "3.10.1" ] ; then
-    cat << eof > testsuite.patch
-Index: Tests/CompileFeatures/default_dialect.c
-===================================================================
---- Tests/CompileFeatures/default_dialect.c        2017-12-13 07:25:23.000000000 -0600
-+++ Tests/CompileFeatures/default_dialect.c        2018-06-14 07:57:32.000000000 -0500
-@@ -1,6 +1,6 @@
-
- #if DEFAULT_C11
--#if __STDC_VERSION__ != 201112L
-+#if __STDC_VERSION__ < 201112L
- #error Unexpected value for __STDC_VERSION__.
- #endif
- #elif DEFAULT_C99
-eof
-    patch -Z -b -p0 < testsuite.patch
-    if [ ! $? -eq 0 ] ; then
-      exit 4
-    fi
-    if [ ${debug} -gt 0 ] ; then
-      echo '>> Testsuite patching complete'
-      read k
-    fi
-  fi
-
-  if [ "${cmake_v}" == "3.10.2" ] ; then
-    cat << eof > testsuite.patch
-Index: Tests/CompileFeatures/default_dialect.c
-===================================================================
---- Tests/CompileFeatures/default_dialect.c        2018-01-18 08:48:43.000000000 -0600
-+++ Tests/CompileFeatures/default_dialect.c        2018-06-14 07:57:32.000000000 -0500
-@@ -1,6 +1,6 @@
-
- #if DEFAULT_C11
--#if __STDC_VERSION__ != 201112L
-+#if __STDC_VERSION__ < 201112L
- #error Unexpected value for __STDC_VERSION__.
- #endif
- #elif DEFAULT_C99
-eof
-    patch -Z -b -p0 < testsuite.patch
-    if [ ! $? -eq 0 ] ; then
-      exit 4
-    fi
-    if [ ${debug} -gt 0 ] ; then
-      echo '>> Testsuite patching complete'
-      read k
-    fi
-  fi
 
   export CTEST_OUTPUT_ON_FAILURE=1
 #  export LC_ALL=en_US.UTF-8
@@ -341,7 +292,7 @@ fi
 
 mkdir -pv ${MODULEPATH}/cmake
 
-if [ ! -z "${openssl_ver}" ] ; then
+if [ ! -z "${cmake_openssl_ver}" ] ; then
 cat << eof > ${MODULEPATH}/cmake/${cmake_v}
 #%Module
 
@@ -354,9 +305,9 @@ set PKG ${opt}/cmake-\$VER
 
 module-whatis   "Loads cmake-${cmake_v}"
 conflict cmake
-module load ncurses/${ncurses_ver} openssl/${openssl_ver}
-prereq ncurses/${ncurses_ver}
-prereq openssl/${openssl_ver}
+module load ncurses/${cmake_ncurses_ver} openssl/${cmake_openssl_ver}
+prereq ncurses/${cmake_ncurses_ver}
+prereq openssl/${cmake_openssl_ver}
 
 prepend-path PATH \$PKG/bin
 
@@ -374,8 +325,8 @@ set PKG ${opt}/cmake-\$VER
 
 module-whatis   "Loads cmake-${cmake_v}"
 conflict cmake
-module load ncurses/${ncurses_ver}
-prereq ncurses/${ncurses_ver}
+module load ncurses/${cmake_ncurses_ver}
+prereq ncurses/${cmake_ncurses_ver}
 
 prepend-path PATH \$PKG/bin
 

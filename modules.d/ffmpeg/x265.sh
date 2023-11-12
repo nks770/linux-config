@@ -36,17 +36,17 @@ if [ -z "${x265_v}" ] ; then
   x265_v=3.2.1
 fi
 
-case ${1} in
+case ${x265_v} in
   3.2.1) # Oct 22, 2019
-   cmake_ver=3.14.7 # 2019-10-02 10:48
-   nasm_ver=2.14.02 # 2018-12-26 05:44
+   x265_cmake_ver=3.14.7 # 2019-10-02 10:48
+   x265_nasm_ver=2.14.02 # 2018-12-26 05:44
   ;;
   3.4) # May 29, 2020
-   cmake_ver=3.17.3 # 2020-05-28 08:21
-   nasm_ver=2.14.02 # 2018-12-26 05:44
+   x265_cmake_ver=3.17.3 # 2020-05-28 08:21
+   x265_nasm_ver=2.14.02 # 2018-12-26 05:44
   ;;
   *)
-   echo "ERROR: Need review for x265 ${1}"
+   echo "ERROR: Need review for x265 ${x265_v}"
    exit 4
    ;;
 esac
@@ -61,8 +61,8 @@ echo "Installing x265 ${x265_v}..."
 x265_srcdir=x265-${x265_v}
 
 check_modules
-check_cmake ${cmake_ver}
-check_nasm ${nasm_ver}
+check_cmake ${x265_cmake_ver}
+check_nasm ${x265_nasm_ver}
 
 downloadPackage x265-${x265_v}.tar.gz
 
@@ -82,8 +82,8 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load nasm/${nasm_ver} \
-            cmake/${cmake_ver}
+module load nasm/${x265_nasm_ver}
+module load cmake/${x265_cmake_ver}
 
 if [ ${debug} -gt 0 ] ; then
   #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
