@@ -121,7 +121,11 @@ elif [ "${1}" == "libjpeg-turbo" ] ; then
   check_libjpegturbo 1.5.2
 
 elif [ "${1}" == "ffmpeg" ] ; then
-  check_ffmpeg 4.2.2
+  if [ ! -z "${2}" ] ; then
+    check_ffmpeg ${2}
+  else
+    check_ffmpeg 4.2.2
+  fi
 
 elif [ "${1}" == "base" ] ; then
   for rl in 6.12 6.20 6.21 6.22 ; do

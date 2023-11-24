@@ -8,6 +8,9 @@ case ${1} in
   1.0.3)
     echo libwebp.so.7.0.5
   ;;
+  1.1.0)
+    echo libwebp.so.7.1.0
+  ;;
   *)
     echo ''
   ;;
@@ -37,7 +40,8 @@ function ff_build_libwebp() {
 # Get desired version number to install
 libwebp_v=${1}
 if [ -z "${libwebp_v}" ] ; then
-  libwebp_v=1.0.3
+  echo "ERROR: No libwebp version specified!"
+  exit 2
 fi
 
 libwebp_ffmpeg_ver=${3}
