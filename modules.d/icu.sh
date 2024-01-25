@@ -33,7 +33,8 @@ function build_icu() {
 # Get desired version number to install
 icu_v=${1}
 if [ -z "${icu_v}" ] ; then
-  icu_v=72.1
+  echo "ERROR: No ICU version specified!"
+  exit 2
 fi
 
 case ${icu_v} in
@@ -54,6 +55,9 @@ case ${icu_v} in
    ;;
 65.1) #2019-10-03
    icuarc=icu4c-65_1-src
+   ;;
+67.1) #2020-04-22
+   icuarc=icu4c-67_1-src
    ;;
 69.1) #2021-04-07
    icuarc=icu4c-69_1-src

@@ -8,6 +8,9 @@ case ${1} in
   0.38.4)
     echo libpixman-1.so.0.38.4
   ;;
+  0.40.0)
+    echo libpixman-1.so.0.40.0
+  ;;
   *)
     echo ''
   ;;
@@ -38,11 +41,16 @@ function ff_build_pixman() {
 # Get desired version number to install
 pixman_v=${1}
 if [ -z "${pixman_v}" ] ; then
-  pixman_v=0.38.4
+  echo "ERROR: No pixman version specified!"
+  exit 2
 fi
 
 case ${pixman_v} in
   0.38.4) # 2019-02-01
+   pixman_package=pixman-${pixman_v}.tar.gz
+   pixman_tar=xvfz
+  ;;
+  0.40.0) # 2020-04-19
    pixman_package=pixman-${pixman_v}.tar.gz
    pixman_tar=xvfz
   ;;

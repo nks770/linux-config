@@ -33,45 +33,45 @@ function build_gdbm() {
 # Get desired version number to install
 gdbm_v=${1}
 if [ -z "${gdbm_v}" ] ; then
-  gdbm_v=1.23
+  echo "ERROR: No gdbm version specified!"
+  exit 2
 fi
 
 case ${gdbm_v} in
+1.10) #2011-11-13
+   gdbm_readline_ver=6.2 #2011-02-13
+   gdbm_ncurses_ver=5.9  #2011-04-04
+   gdbm_dejagnu_ver=1.6.3
+   ;;
 1.13) #2017-03-11
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=0
    ;;
 1.14.1) #2018-01-03
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=0
    ;;
 1.18) #2018-08-21
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=0
    ;;
 1.18.1) #2018-10-27
    gdbm_readline_ver=7.0 #2016-09-15
    gdbm_ncurses_ver=6.0  #2015-08-08
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=1
    ;;
 1.19) #2020-12-23
    gdbm_readline_ver=8.1 #2020-12-06
    gdbm_ncurses_ver=6.2  #2020-02-12
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=0
    ;;
 1.23) #2022-02-04
    gdbm_readline_ver=8.1.2 #2022-01-05
    gdbm_ncurses_ver=6.3    #2021-11-08
    gdbm_dejagnu_ver=1.6.3
-   parseopt_patch=0
    ;;
 *)
    echo "ERROR: Need review for gdbm ${gdbm_v}"

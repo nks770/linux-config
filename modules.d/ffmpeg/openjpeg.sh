@@ -37,10 +37,15 @@ function ff_build_openjpeg() {
 # Get desired version number to install
 openjpeg_v=${1}
 if [ -z "${openjpeg_v}" ] ; then
-  openjpeg_v=2.3.1
+  echo "ERROR: No OpenJPEG version specified!"
+  exit 2
 fi
 
 case ${openjpeg_v} in
+  1.5.2) # 2014-03-28
+   openjpeg_cmake_ver=2.8.12.2 # 2014-01-16
+   openjpeg_doxygen_ver=1.8.6  # 2013-12-24
+  ;;
   2.3.1) # Apr 2, 2019
    openjpeg_cmake_ver=3.13.4   # 2019-02-01 13:20
    openjpeg_doxygen_ver=1.8.15 # 2018-12-27

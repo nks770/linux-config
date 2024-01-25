@@ -38,6 +38,13 @@ fi
 doxygen_srcdir=doxygen-${doxygen_v}
 
 case ${doxygen_v} in
+  1.8.6) # 2013-12-24
+   doxygen_flex_ver=2.5.37   # 2012-08-03
+   doxygen_bison_ver=3.0.2   # 2013-12-05
+   doxygen_cmake_ver=2.8.12.1 #2013-11-06
+   doxygen_libxml2_ver=2.9.1 # 2013-04-19
+   doxygen_python_ver=3.3.3  # 2013-11-17
+  ;;
   1.8.14) # 2017-12-25
 #   doxygen_cmake_ver=3.10.1 # 2017-12-14
 #   doxygen_python_ver=3.6.4 # 2017-12-19

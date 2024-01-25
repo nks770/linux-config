@@ -33,10 +33,15 @@ function build_sqlite() {
 # Get desired version number to install
 sqlite_v=${1}
 if [ -z "${sqlite_v}" ] ; then
-  sqlite_v=3.42.0
+  echo "ERROR: No sqlite version specified!"
+  exit 2
 fi
 
 case ${sqlite_v} in
+3.8.1) # 2013-10-17
+   sql_srcdir=sqlite-autoconf-3080100
+   sqlite_zlib_ver=1.2.8  # 2013-04-28
+   ;;
 3.21.0) # 2017-10-24
    sql_srcdir=sqlite-autoconf-3210000
    sqlite_zlib_ver=1.2.11 # 2017-01-15
@@ -59,6 +64,10 @@ case ${sqlite_v} in
    ;;
 3.30.1) # 2019-10-10
    sql_srcdir=sqlite-autoconf-3300100
+   sqlite_zlib_ver=1.2.11 # 2017-01-15
+   ;;
+3.31.1) # 2020-01-27
+   sql_srcdir=sqlite-autoconf-3310100
    sqlite_zlib_ver=1.2.11 # 2017-01-15
    ;;
 3.34.1) # 2021-01-20
@@ -90,7 +99,7 @@ case ${sqlite_v} in
    sqlite_zlib_ver=1.2.13 # 2022-10-12
    ;;
 *)
-   echo "ERROR: Review needed for sqlite ${sqlive_v}"
+   echo "ERROR: Review needed for sqlite ${sqlite_v}"
    exit 4
    ;;
 esac
@@ -125,9 +134,12 @@ fi
 module purge
 module load zlib/${sqlite_zlib_ver}
 
-if [ "${sqlite_v}" == "3.21.0" ] ; then
+if [ "${sqlite_v}" == "3.8.1" ] ; then
+  config="./configure --prefix=${opt}/sqlite-${sqlite_v}"
+  export CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
+elif [ "${sqlite_v}" == "3.21.0" ] ; then
   config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts5"
-  export CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
+  export CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
 else
   config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts3 --enable-fts4 --enable-fts5"
   export CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_FTS3_TOKENIZER=1 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"

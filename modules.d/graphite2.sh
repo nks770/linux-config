@@ -8,6 +8,9 @@ case ${1} in
   1.3.13)
     echo libgraphite2.so.3.2.1
   ;;
+  1.3.14)
+    echo libgraphite2.so.3.2.1
+  ;;
   *)
     echo ''
   ;;
@@ -37,7 +40,8 @@ function ff_build_graphite2() {
 # Get desired version number to install
 graphite2_v=${1}
 if [ -z "${graphite2_v}" ] ; then
-  graphite2_v=1.3.14
+  echo "ERROR: No Graphite2 version specified!"
+  exit 2
 fi
 
 case ${graphite2_v} in
@@ -54,6 +58,11 @@ case ${graphite2_v} in
    graphite2_cmake_ver=3.13.2   # 2018-12-13
    graphite2_doxygen_ver=1.8.14 # 2017-12-25
    graphite2_python_ver=3.7.1   # 2018-10-20
+  ;;
+  1.3.14) # 2020-03-31
+   graphite2_cmake_ver=3.17.0   # 2020-03-20
+   graphite2_doxygen_ver=1.8.17 # 2019-12-27
+   graphite2_python_ver=3.8.2   # 2020-02-24
   ;;
   *)
    echo "ERROR: Review needed for Graphite2 ${graphite2_v}"

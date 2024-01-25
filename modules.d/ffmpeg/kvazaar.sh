@@ -33,12 +33,30 @@ function build_kvazaar() {
 # Get desired version number to install
 kvazaar_v=${1}
 if [ -z "${kvazaar_v}" ] ; then
-  kvazaar_v=1.3.0
+  echo "ERROR: No kvazaar version specified!"
+  exit 2
 fi
 
 case ${kvazaar_v} in
+  0.6.1) # 2015-09-16
+   kvazaar_yasm_ver=1.3.0 # 2014-08-10
+   kvazaar_simple_build=1
+   kvazaar_share_man=0
+  ;;
+  0.7.0) # 2015-09-30
+   kvazaar_yasm_ver=1.3.0 # 2014-08-10
+   kvazaar_simple_build=1
+   kvazaar_share_man=0
+  ;;
   1.3.0) # Jul 9, 2019
-   kvazaar_yasm_ver=1.3.0
+   kvazaar_yasm_ver=1.3.0 # 2014-08-10
+   kvazaar_simple_build=0
+   kvazaar_share_man=1
+  ;;
+  2.0.0) # 2020-04-21
+   kvazaar_yasm_ver=1.3.0 # 2014-08-10
+   kvazaar_simple_build=0
+   kvazaar_share_man=1
   ;;
   *)
    echo "ERROR: Review needed for kvazaar ${kvazaar_v}"
@@ -48,6 +66,7 @@ esac
 
 echo "Installing kvazaar ${kvazaar_v}..."
 kvazaar_srcdir=kvazaar-${kvazaar_v}
+kvazaar_prefix=${opt}/${kvazaar_srcdir}
 
 check_modules
 # Yasm is optional, but some of the optimization will not be compiled in if it's missing.
@@ -73,7 +92,30 @@ fi
 module purge
 module load yasm/${kvazaar_yasm_ver}
 
-config="./configure --prefix=${opt}/kvazaar-${kvazaar_v}"
+if [ ${kvazaar_simple_build} -gt 0 ] ; then
+
+# Patch to change installation prefix
+cat << eof > prefix.patch
+--- src/Makefile
++++ src/Makefile
+@@ -5,7 +5,7 @@
+ 
+ # Installation locations
+ DESTDIR =
+-PREFIX  = /usr/local
++PREFIX  = ${kvazaar_prefix}
+ BINDIR  = \$(PREFIX)/bin
+ INCDIR  = \$(PREFIX)/include
+ LIBDIR  = \$(PREFIX)/lib
+eof
+patch -N -Z -b -p0 < prefix.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+cd ${tmp}/${kvazaar_srcdir}/src
+
+else
+config="./configure --prefix=${kvazaar_prefix}"
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
@@ -84,6 +126,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 ${config}
+fi
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -142,9 +185,11 @@ prepend-path CPLUS_INCLUDE_PATH \$PKG/include
 prepend-path LD_LIBRARY_PATH \$PKG/lib
 prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 prepend-path PATH \$PKG/bin
-prepend-path MANPATH \$PKG/share/man
-
 eof
+if [ ${kvazaar_share_man} -gt 0 ] ; then
+  echo 'prepend-path MANPATH $PKG/share/man' >> ${MODULEPATH}/kvazaar/${kvazaar_v}
+fi
+echo '' >> ${MODULEPATH}/kvazaar/${kvazaar_v}
 
 cd ${root}
 rm -rf ${tmp}/${kvazaar_srcdir}

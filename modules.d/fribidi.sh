@@ -33,15 +33,35 @@ function build_fribidi() {
 # Get desired version number to install
 fribidi_v=${1}
 if [ -z "${fribidi_v}" ] ; then
-  fribidi_v=1.2.13
+  echo "ERROR: No FriBidi version specified!"
+  exit 2
 fi
+
+case ${fribidi_v} in
+0.19.7) #2015-08-06
+   fribidi_arc=bz2
+   fribidi_tar=xvfj
+   ;;
+1.0.8) #2019-12-13
+   fribidi_arc=bz2
+   fribidi_tar=xvfj
+   ;;
+1.0.9) #2020-03-02
+   fribidi_arc=xz
+   fribidi_tar=xvfJ
+   ;;
+*)
+   echo "ERROR: Need review for FriBidi ${fribidi_v}"
+   exit 4
+   ;;
+esac
 
 echo "Installing fribidi ${fribidi_v}..."
 
 check_modules
 module purge
 
-downloadPackage fribidi-${fribidi_v}.tar.bz2
+downloadPackage fribidi-${fribidi_v}.tar.${fribidi_arc}
 
 cd ${tmp}
 
@@ -49,7 +69,7 @@ if [ -d ${tmp}/fribidi-${fribidi_v} ] ; then
   rm -rf ${tmp}/fribidi-${fribidi_v}
 fi
 
-tar xvfj ${pkg}/fribidi-${fribidi_v}.tar.bz2
+tar ${fribidi_tar} ${pkg}/fribidi-${fribidi_v}.tar.${fribidi_arc}
 cd ${tmp}/fribidi-${fribidi_v}
 
 config="./configure --prefix=${opt}/fribidi-${fribidi_v}"

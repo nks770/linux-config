@@ -42,6 +42,20 @@ httlib_failure=0
 sql_deterministic_chk=1
 
 case ${python_v} in
+3.3.3) # 2013-11-17
+   python_gdbm_ver=1.10        #2011-11-13
+   python_readline_ver=6.2     #2011-02-13
+   python_ncurses_ver=5.7      #2008-11-02
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.0.5         #2013-06-30
+   python_openssl_ver=1.0.1e   #2013-02-11
+   python_sqlite_ver=3.8.1     #2013-10-17
+   python_zlib_ver=1.2.8       #2013-04-28
+   python_libffi_ver=3.0.13    #2013-03-17
+   python_utillinux_ver=2.24   #2013-10-21
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   ;;
 3.6.4) # 2017-12-19
    python_gdbm_ver=1.13        #2017-03-11
    python_readline_ver=7.0     #2016-09-15
@@ -160,6 +174,22 @@ case ${python_v} in
    curses_failure=0
    sql_deterministic_chk=0
    ;;
+3.8.2) #2020-02-24
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.4         #2018-04-29
+   python_openssl_ver=1.1.1d   #2019-09-10
+   python_sqlite_ver=3.31.1    #2020-01-27
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.3       #2019-11-23
+   python_utillinux_ver=2.35.1 #2020-01-31
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   curses_failure=0
+   sql_deterministic_chk=0
+   ;;
 3.9.4) #2021-04-04
    python_gdbm_ver=1.19        #2020-12-23
    python_readline_ver=8.1     #2020-12-06
@@ -268,6 +298,11 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
   python_zlib_ver=${global_zlib}
 fi
 
+# Python 3.3 is not compatible with OpenSSL 1.1.x
+if [ "${python_v}" == "3.3.3" ] ; then
+  python_openssl_ver=1.0.1e   #2013-02-11
+fi
+
 echo "Installing Python ${python_v}..."
 python_srcdir=Python-${python_v}
 
@@ -300,6 +335,72 @@ cd ${tmp}/${python_srcdir}
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
+fi
+
+# Patch to fix a segmentation fault with newer GCC
+# Fix for over-aligned GC info
+#
+# https://src.fedoraproject.org/fork/churchyard/rpms/python2/blob/test_support/f/00293-fix-gc-alignment.patch
+#
+if [ "${python_v}" == "3.3.3" ] ; then
+cat << eof > multiple.patch
+--- Include/objimpl.h
++++ Include/objimpl.h
+@@ -241,6 +241,18 @@
+ #define PyObject_GC_Resize(type, op, n) \\
+                 ( (type *) _PyObject_GC_Resize((PyVarObject *)(op), (n)) )
+ 
++/* Former over-aligned definition of PyGC_Head, used to compute the
++   size of the padding for the new version below. */
++union _gc_head;
++union _gc_head_old {
++    struct {
++        union _gc_head *gc_next;
++        union _gc_head *gc_prev;
++        Py_ssize_t gc_refs;
++    } gc;
++    long double dummy;
++};
++
+ /* GC information is stored BEFORE the object structure. */
+ #ifndef Py_LIMITED_API
+ typedef union _gc_head {
+@@ -249,7 +261,8 @@
+         union _gc_head *gc_prev;
+         Py_ssize_t gc_refs;
+     } gc;
+-    long double dummy;  /* force worst-case alignment */
++    double dummy;  /* force worst-case alignment */
++    char dummy_padding[sizeof(union _gc_head_old)];
+ } PyGC_Head;
+ 
+ extern PyGC_Head *_PyGC_generation0;
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
+@@ -899,8 +899,12 @@
+ static void*
+ stack_overflow(void *min_sp, void *max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     void *sp = &buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+eof
+patch -Z -b -p0 < multiple.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 fi
 
 # Patch to fix an issue where test_faulthandler hangs indefinitely
@@ -788,21 +889,42 @@ module load sqlite/${python_sqlite_ver}
 module load gdbm/${python_gdbm_ver}
 module load tk/${python_tk_ver}
 
-if [ "${python_v}" == "3.6.4" ] ; then
+
+if [ ! -z "${LIBFFI_INCLUDE}" ] ; then
+  python_libffi_include=${LIBFFI_INCLUDE}
+else
+  python_libffi_include=${opt}/libffi-${python_libffi_ver}/include
+fi
+
+
+if [ "${python_v}" == "3.3.3" ] ; then
+
+  config="./configure --prefix=${opt}/Python-${python_v} \
+              --enable-shared \
+  	    --with-openssl=${opt}/openssl-${python_openssl_ver} \
+  	    CXX=$(command -v g++)"
+  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${python_libffi_include} -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
+  export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib -L${opt}/openssl-${python_openssl_ver}/lib $(pkg-config --libs tk)"
+
+elif [ "${python_v}" == "3.6.4" ] ; then
+
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
   	    --enable-optimizations \
   	    CXX=$(command -v g++)"
-  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${opt}/libffi-${python_libffi_ver}/include -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
+  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${python_libffi_include} -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
   export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib -L${opt}/openssl-${python_openssl_ver}/lib $(pkg-config --libs tk)"
+
 else
+
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
   	    --with-openssl=${opt}/openssl-${python_openssl_ver} \
   	    --enable-optimizations \
   	    CXX=$(command -v g++)"
-  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${opt}/libffi-${python_libffi_ver}/include -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include"
+  export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${python_libffi_include} -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include"
   export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib $(pkg-config --libs tk)"
+
 fi
 
 export LIBS="-lz -lbz2 -llzma -lffi -luuid -lncurses -lreadline -lsqlite3"

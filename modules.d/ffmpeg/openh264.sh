@@ -33,12 +33,16 @@ function build_openh264() {
 # Get desired version number to install
 openh264_v=${1}
 if [ -z "${openh264_v}" ] ; then
-  openh264_v=2.0.0
+  echo "ERROR: No openh264 version specified!"
+  exit 2
 fi
 
 case ${openh264_v} in
   2.0.0) # May 8, 2019
-   openh264_nasm_ver=2.14.02
+   openh264_nasm_ver=2.14.02 # 2018-12-26
+  ;;
+  2.1.0) # 2020-03-23
+   openh264_nasm_ver=2.14.02 # 2018-12-26
   ;;
   2.3.1) # Sep 20, 2022
    openh264_nasm_ver=2.15.05 # 2020-08-28 09:08

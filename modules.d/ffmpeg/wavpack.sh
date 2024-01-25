@@ -33,7 +33,8 @@ function build_wavpack() {
 # Get desired version number to install
 wavpack_v=${1}
 if [ -z "${wavpack_v}" ] ; then
-  wavpack_v=5.4.0
+  echo "ERROR: No wavpack version specified!"
+  exit 2
 fi
 
 #case ${1} in

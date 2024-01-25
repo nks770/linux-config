@@ -43,6 +43,10 @@ case ${1} in
    x264_srcdir=x264-1771b556ee45207f8711744ccbd5d42a3949b14c
    x264_nasm_ver=2.14.02 # 2018-12-26
   ;;
+  20200425)
+   x264_srcdir=x264-538f09b5b92eda0b6efe25e62fcc8542fc9f025d
+   x264_nasm_ver=2.14.02 # 2018-12-26
+  ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
    x264_nasm_ver=2.14.02 # 2018-12-26

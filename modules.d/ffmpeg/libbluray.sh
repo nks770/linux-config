@@ -8,6 +8,9 @@ case ${1} in
   1.1.2)
     echo libbluray.so.2.1.2
   ;;
+  1.2.0)
+    echo libbluray.so.2.2.0
+  ;;
   *)
     echo ''
   ;;
@@ -38,12 +41,17 @@ function ff_build_libbluray() {
 # Get desired version number to install
 libbluray_v=${1}
 if [ -z "${libbluray_v}" ] ; then
-  libbluray_v=1.1.2
+  echo "ERROR: No libbluray version specified!"
+  exit 2
 fi
 
 case ${libbluray_v} in
   1.1.2) # 2019-06-07
    libbluray_doxygen_ver=1.8.15    # 2018-12-27
+#   apacheant_ver=1.9.14  # 2019-03-17
+  ;;
+  1.2.0) # 2020-03-22
+   libbluray_doxygen_ver=1.8.17    # 2019-12-27
 #   apacheant_ver=1.9.14  # 2019-03-17
   ;;
   *)
@@ -95,10 +103,10 @@ fi
 # recently implemented `isInvalid()` in commit 8f26777b1ce1 ("Fix build failure after
 # Oracle Java CPU for April 2022").
 #
-if [ "${libbluray_v}" == "1.1.2" ] ; then
+if [ "${libbluray_v}" == "1.1.2" ] || [ "${libbluray_v}" == "1.2.0" ] ; then
 cat << eof > BDFileSystem.patch
---- src/libbluray/bdj/java/java/io/BDFileSystem.java	2019-06-07 13:00:28.000000000 -0500
-+++ src/libbluray/bdj/java/java/io/BDFileSystem.java	2023-04-23 22:07:27.866670710 -0500
+--- src/libbluray/bdj/java/java/io/BDFileSystem.java
++++ src/libbluray/bdj/java/java/io/BDFileSystem.java
 @@ -207,6 +207,17 @@
          return fs.isAbsolute(f);
      }

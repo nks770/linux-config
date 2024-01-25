@@ -33,89 +33,147 @@ function build_cmake() {
 # Get desired version number to install
 cmake_v=${1}
 if [ -z "${cmake_v}" ] ; then
-  cmake_v=3.11.4
+  echo "ERROR: No cmake version specified!"
+  exit 2
 fi
 cmake_srcdir=cmake-${cmake_v}
+cmake_prefix=${opt}/${cmake_srcdir}
 
 kwsys_warning=0
 chmod_warning=0
 rerun_failures=0
 
 case ${cmake_v} in
+2.8.12.1) # 2013-11-06
+   cmake_ncurses_ver=5.9  # 2011-04-04
+   cmake_openssl_ver=0
+   cmake_manpath=1
+   kwsys_warning=0
+   ;;
+2.8.12.2) # 2014-01-16
+   cmake_ncurses_ver=5.9  # 2011-04-04
+   cmake_openssl_ver=0
+   cmake_manpath=1
+   kwsys_warning=0
+   ;;
 3.0.2) # 2014-09-11
    cmake_ncurses_ver=5.9  # 2011-04-04
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.8.1) # 2017-05-02
    cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.9.0) # 2017-07-18
    cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.9.6) # 2017-11-10
    cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.10.1) # 2017-12-14
    cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.10.2) # 2018-01-18
    cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.10.3) # 2018-03-16
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.11.4) # 2018-06-14
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.13.2) # 2018-12-13
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.13.4) # 2019-02-01
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.14.7) # 2019-10-02
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.15.2) # 2019-08-07
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.15.3) # 2019-09-04
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.15.5) # 2019-10-30
    cmake_ncurses_ver=6.1  # 2018-01-27
+   cmake_openssl_ver=0
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.16.2) # 2019-12-19
    cmake_ncurses_ver=6.1    # 2018-01-27
    cmake_openssl_ver=1.1.1d # 2019-09-10
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.16.4) # 2020-02-05
+   cmake_ncurses_ver=6.1    # 2018-01-27
+   cmake_openssl_ver=1.1.1d # 2019-09-10
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.16.5) # 2020-03-04
    cmake_ncurses_ver=6.2    # 2020-02-12
    cmake_openssl_ver=1.1.1d # 2019-09-10
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.17.0) # 2020-03-20
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1e # 2020-03-17
+   cmake_manpath=0
    kwsys_warning=1
    ;;
 3.19.2) # 2020-12-16
    cmake_ncurses_ver=6.2    # 2020-02-12
    cmake_openssl_ver=1.1.1i # 2020-12-08
+   cmake_manpath=0
    chmod_warning=1
    ;;
 3.24.0) # 2022-08-04
    cmake_ncurses_ver=6.3    # 2021-11-08
    cmake_openssl_ver=1.1.1q # 2022-07-05
+   cmake_manpath=0
    chmod_warning=0
    rerun_failures=161
    ;;
@@ -127,8 +185,10 @@ esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  cmake_ncurses_ver=${global_ncurses}
-  if [ ! -z "${cmake_openssl_ver}" ] ; then
+  if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+    cmake_ncurses_ver=${global_ncurses}
+  fi
+  if [ ! "${cmake_openssl_ver}" == "0" ] ; then
     cmake_openssl_ver=${global_openssl}
   fi
 fi
@@ -136,15 +196,20 @@ fi
 echo "Installing cmake ${cmake_v}..."
 
 check_modules
-check_ncurses ${cmake_ncurses_ver}
-if [ ! -z "${cmake_openssl_ver}" ] ; then
+if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+  check_ncurses ${cmake_ncurses_ver}
+fi
+if [ ! "${cmake_openssl_ver}" == 0 ] ; then
   check_openssl ${cmake_openssl_ver}
 fi
 
 module purge
+
 # Note ncurses dependency is to build optional module ccmake (the curses GUI to cmake)
-module load ncurses/${cmake_ncurses_ver}
-if [ ! -z "${cmake_openssl_ver}" ] ; then
+if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+  module load ncurses/${cmake_ncurses_ver}
+fi
+if [ ! "${cmake_openssl_ver}" == "0" ] ; then
   module load openssl/${cmake_openssl_ver}
 fi
 
@@ -159,15 +224,57 @@ fi
 tar xvfz ${pkg}/cmake-${cmake_v}.tar.gz
 cd ${tmp}/${cmake_srcdir}
 
-config="./configure --prefix=${opt}/cmake-${cmake_v} --parallel=${ncpu}"
-echo "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}"
-export CMAKE_PREFIX_PATH=${opt}/ncurses-${cmake_ncurses_ver}
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Unzip complete'
+  read k
+fi
+
+if [ "${cmake_v}" == "2.8.12.2" ] || [ "${cmake_v}" == "2.8.12.1" ] ; then
+  cat << eof > CTestTestUpload.patch
+--- Tests/CMakeLists.txt
++++ Tests/CMakeLists.txt
+@@ -1882,17 +1882,6 @@
+     FAIL_REGULAR_EXPRESSION "SegFault")
+ 
+   configure_file(
+-    "\${CMake_SOURCE_DIR}/Tests/CTestTestUpload/test.cmake.in"
+-    "\${CMake_BINARY_DIR}/Tests/CTestTestUpload/test.cmake"
+-    @ONLY ESCAPE_QUOTES)
+-  add_test(CTestTestUpload \${CMAKE_CTEST_COMMAND}
+-    -S "\${CMake_BINARY_DIR}/Tests/CTestTestUpload/test.cmake" -V
+-    --output-log "\${CMake_BINARY_DIR}/Tests/CTestTestUpload/testOut.log"
+-    )
+-  set_tests_properties(CTestTestUpload PROPERTIES
+-    PASS_REGULAR_EXPRESSION "Upload\\\\.xml")
+-
+-  configure_file(
+     "\${CMake_SOURCE_DIR}/Tests/CTestTestConfigFileInBuildDir/test1.cmake.in"
+     "\${CMake_BINARY_DIR}/Tests/CTestTestConfigFileInBuildDir1/test1.cmake"
+     @ONLY ESCAPE_QUOTES)
+eof
+  patch -Z -b -p0 < CTestTestUpload.patch
+  if [ ! $? -eq 0 ] ; then
+    exit 4
+  fi
+  if [ ${debug} -gt 0 ] ; then
+    echo '>> Patching complete'
+    read k
+  fi
+fi
+
+config="./configure --prefix=${cmake_prefix} --parallel=${ncpu}"
+if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+  echo "CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}"
+  export CMAKE_PREFIX_PATH=${opt}/ncurses-${cmake_ncurses_ver}
+fi
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
   echo ''
   module list
-  echo CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}"
+  if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+    echo CMAKE_PREFIX_PATH="${CMAKE_PREFIX_PATH}"
+  fi
   echo ''
   echo ${config}
   read k
@@ -292,7 +399,6 @@ fi
 
 mkdir -pv ${MODULEPATH}/cmake
 
-if [ ! -z "${cmake_openssl_ver}" ] ; then
 cat << eof > ${MODULEPATH}/cmake/${cmake_v}
 #%Module
 
@@ -305,37 +411,32 @@ set PKG ${opt}/cmake-\$VER
 
 module-whatis   "Loads cmake-${cmake_v}"
 conflict cmake
-module load ncurses/${cmake_ncurses_ver} openssl/${cmake_openssl_ver}
-prereq ncurses/${cmake_ncurses_ver}
-prereq openssl/${cmake_openssl_ver}
+eof
+
+if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+  echo "module load ncurses/${cmake_ncurses_ver}" >> ${MODULEPATH}/cmake/${cmake_v}
+fi
+if [ ! "${cmake_openssl_ver}" == "0" ] ; then
+  echo "module load openssl/${cmake_openssl_ver}" >> ${MODULEPATH}/cmake/${cmake_v}
+fi
+
+if [ ! "${cmake_ncurses_ver}" == "0" ] ; then
+  echo "prereq ncurses/${cmake_ncurses_ver}" >> ${MODULEPATH}/cmake/${cmake_v}
+fi
+if [ ! "${cmake_openssl_ver}" == "0" ] ; then
+  echo "prereq openssl/${cmake_openssl_ver}" >> ${MODULEPATH}/cmake/${cmake_v}
+fi
+
+cat << eof >> ${MODULEPATH}/cmake/${cmake_v}
 
 prepend-path PATH \$PKG/bin
-
 eof
-else
-cat << eof > ${MODULEPATH}/cmake/${cmake_v}
-#%Module
-
-proc ModulesHelp { } {
-   puts stderr "Puts cmake-${cmake_v} into your environment"
-}
-
-set VER ${cmake_v}
-set PKG ${opt}/cmake-\$VER
-
-module-whatis   "Loads cmake-${cmake_v}"
-conflict cmake
-module load ncurses/${cmake_ncurses_ver}
-prereq ncurses/${cmake_ncurses_ver}
-
-prepend-path PATH \$PKG/bin
-
-eof
+if [ ${cmake_manpath} -gt 0 ] ; then
+  echo "prepend-path MANPATH \$PKG/man" >> ${MODULEPATH}/cmake/${cmake_v}
 fi
 
 cd ${root}
 rm -rf ${tmp}/${cmake_srcdir}
 
 unset CMAKE_PREFIX_PATH
-
 }

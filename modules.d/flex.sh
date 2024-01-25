@@ -44,7 +44,7 @@ case ${flex_v} in
    texinfo_ver=6.3     # 2016-09-10
    ;;
 *)
-   echo "ERROR: Need review for flex ${1}"
+   echo "ERROR: Need review for flex ${flex_v}"
    exit 4
    ;;
 esac

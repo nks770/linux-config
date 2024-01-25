@@ -33,15 +33,26 @@ function build_libffi() {
 # Get desired version number to install
 libffi_v=${1}
 if [ -z "${libffi_v}" ] ; then
-  libffi_v=3.4.4
+  echo "ERROR: No libffi version specified!"
+  exit 2
 fi
 
 case ${libffi_v} in
+3.0.13)
+   libffi_dejagnu_ver=1.6.3
+   libffi_include_dir=${opt}/libffi-${libffi_v}/lib/libffi-${libffi_v}/include
+   ;;
 3.2.1)
    libffi_dejagnu_ver=1.6.3
+   libffi_include_dir=${opt}/libffi-${libffi_v}/lib/libffi-${libffi_v}/include
+   ;;
+3.3)
+   libffi_dejagnu_ver=1.6.3
+   libffi_include_dir=${opt}/libffi-${libffi_v}/include
    ;;
 3.4.4)
    libffi_dejagnu_ver=1.6.3
+   libffi_include_dir=${opt}/libffi-${libffi_v}/include
    ;;
 *)
    echo "ERROR: Need review for libffi ${libffi_v}"
@@ -69,6 +80,32 @@ cd ${tmp}/${libffi_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
+  read k
+fi
+
+# Patch to fix a testsuite error in libffi 3.0.13
+if [ "${libffi_v}" == "3.0.13" ] ; then
+cat << eof > ffitest.patch
+--- testsuite/libffi.call/ffitest.h
++++ testsuite/libffi.call/ffitest.h
+@@ -15,7 +15,7 @@
+ 
+ #define MAX_ARGS 256
+ 
+-#define CHECK(x) !(x) ? (abort(), 1) : 0
++#define CHECK(x) (void)(!(x) ? (abort(), 1) : 0)
+ 
+ /* Define __UNUSED__ that also other compilers than gcc can run the tests.  */
+ #undef __UNUSED__
+eof
+patch -Z -b -p0 < ffitest.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+fi
+
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
   read k
 fi
 
@@ -139,9 +176,12 @@ set PKG ${opt}/libffi-\$VER
 module-whatis   "Loads libffi-${libffi_v}"
 conflict libffi
 
-prepend-path CPATH \$PKG/include
-prepend-path C_INCLUDE_PATH \$PKG/include
-prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path CPATH ${libffi_include_dir}
+prepend-path C_INCLUDE_PATH ${libffi_include_dir}
+prepend-path CPLUS_INCLUDE_PATH ${libffi_include_dir}
+
+setenv LIBFFI_INCLUDE ${libffi_include_dir}
+
 prepend-path LD_LIBRARY_PATH \$PKG/lib
 prepend-path MANPATH \$PKG/share/man
 prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
