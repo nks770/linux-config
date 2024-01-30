@@ -392,6 +392,36 @@ cat << eof > multiple.patch
      void *sp = &buffer;
      *depth += 1;
      if (sp < min_sp || max_sp < sp)
+--- Modules/signalmodule.c
++++ Modules/signalmodule.c
+@@ -538,7 +538,6 @@
+     int result = -1;
+     PyObject *iterator, *item;
+     long signum;
+-    int err;
+ 
+     sigemptyset(mask);
+ 
+@@ -560,11 +559,14 @@
+         Py_DECREF(item);
+         if (signum == -1 && PyErr_Occurred())
+             goto error;
+-        if (0 < signum && signum < NSIG)
+-            err = sigaddset(mask, (int)signum);
+-        else
+-            err = 1;
+-        if (err) {
++	if (0 < signum && signum < NSIG) {
++		/* bpo-33329: ignore sigaddset() return value as it can fail
++		 * for some reserved signals, but we want the \`range(1, NSIG)\`
++		 * idiom to allow selecting all valid signals.
++		 */
++		(void) sigaddset(mask, (int)signum);
++	}
++	else {
+             PyErr_Format(PyExc_ValueError,
+                          "signal number %ld out of range", signum);
+             goto error;
 eof
 patch -Z -b -p0 < multiple.patch
 if [ ! $? -eq 0 ] ; then
@@ -901,7 +931,6 @@ if [ "${python_v}" == "3.3.3" ] ; then
 
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
-  	    --with-openssl=${opt}/openssl-${python_openssl_ver} \
   	    CXX=$(command -v g++)"
   export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${python_libffi_include} -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
   export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib -L${opt}/openssl-${python_openssl_ver}/lib $(pkg-config --libs tk)"
