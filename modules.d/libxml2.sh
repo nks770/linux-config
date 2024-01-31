@@ -63,54 +63,59 @@ function build_libxml2() {
 # Get desired version number to install
 libxml2_v=${1}
 if [ -z "${libxml2_v}" ] ; then
-  libxml2_v=2.9.9
+  echo "ERROR: No libxml2 version specified!"
+  exit 2
 fi
 
 case ${libxml2_v} in
+2.9.1) # 2013-04-19
+   libxml2_xz_ver=5.0.4    # 2012-06-22
+   libxml2_zlib_ver=1.2.7.3 #2013-04-13
+   libxml2_icu_ver=51.1    # 2013-03-22
+   ;;
 2.9.7) # 2017-11-02
-   xz_ver=5.2.3    # 2016-12-30
-   zlib_ver=1.2.11 # 2017-01-15
-   icu_ver=60.1    # 2017-11-01
+   libxml2_xz_ver=5.2.3    # 2016-12-30
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=60.1    # 2017-11-01
    ;;
 2.9.8) # 2018-03-05
-   xz_ver=5.2.3    # 2016-12-30
-   zlib_ver=1.2.11 # 2017-01-15
-#   icu_ver=60.2    # 2017-12-13
-   icu_ver=61.1    # 2018-03-26 -- for compatibility with freetype 2.9.1
+   libxml2_xz_ver=5.2.3    # 2016-12-30
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=60.2    # 2017-12-13
    ;;
 2.9.9) # 2019-01-03
-   xz_ver=5.2.4    # 2018-04-29
-   zlib_ver=1.2.11 # 2017-01-15
-   icu_ver=63.1    # 2018-10-15
+   libxml2_xz_ver=5.2.4    # 2018-04-29
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=63.1    # 2018-10-15
    ;;
 2.9.10) # 2019-10-30
-   xz_ver=5.2.4    # 2018-04-29
-   zlib_ver=1.2.11 # 2017-01-15
-   icu_ver=65.1    # 2019-10-03
+   libxml2_xz_ver=5.2.4    # 2018-04-29
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=65.1    # 2019-10-03
    ;;
 2.9.11) # 2021-05-13
-   xz_ver=5.2.5    # 2020-03-17
-   zlib_ver=1.2.11 # 2017-01-15
-   icu_ver=69.1    # 2021-04-07
+   libxml2_xz_ver=5.2.5    # 2020-03-17
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=69.1    # 2021-04-07
    ;;
 *)
-   echo "ERROR: Need review for libxml2 ${1}"
+   echo "ERROR: Need review for libxml2 ${libxml2_v}"
    exit 4
    ;;
 esac
 
 # Optimized dependency strategy
 if [ "${dependency_strategy}" == "optimized" ] ; then
-  xz_ver=${global_xz}
-  zlib_ver=${global_zlib}
+  libxml2_xz_ver=${global_xz}
+  libxml2_zlib_ver=${global_zlib}
 fi
 
 echo "Installing libxml2 ${libxml2_v}..."
 
 check_modules
-check_xz ${xz_ver}
-check_zlib ${zlib_ver}
-check_icu ${icu_ver}
+check_xz ${libxml2_xz_ver}
+check_zlib ${libxml2_zlib_ver}
+check_icu ${libxml2_icu_ver}
 
 downloadPackage libxml2-${libxml2_v}.tar.gz
 
@@ -236,11 +241,18 @@ fi
 fi
 
 module purge
-module load xz/${xz_ver}
-module load zlib/${zlib_ver}
-module load icu/${icu_ver}
+module load xz/${libxml2_xz_ver}
+module load zlib/${libxml2_zlib_ver}
+module load icu/${libxml2_icu_ver}
 
-config="./configure --prefix=${opt}/libxml2-${libxml2_v} --with-icu"
+if [ "${libxml2_v}" == "2.9.1" ] ; then
+  config="./configure --prefix=${opt}/libxml2-${libxml2_v} \
+	  --with-lzma=${opt}/xz-${libxml2_xz_ver} \
+	  --with-icu"
+else
+  config="./configure --prefix=${opt}/libxml2-${libxml2_v} \
+	  --with-icu"
+fi
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
@@ -309,10 +321,10 @@ set PKG ${opt}/libxml2-\$VER
 
 module-whatis   "Loads libxml2-${libxml2_v}"
 conflict libxml2
-module load zlib/${zlib_ver} xz/${xz_ver} icu/${icu_ver}
-prereq zlib/${zlib_ver}
-prereq xz/${xz_ver}
-prereq icu/${icu_ver}
+module load zlib/${libxml2_zlib_ver} xz/${libxml2_xz_ver} icu/${libxml2_icu_ver}
+prereq zlib/${libxml2_zlib_ver}
+prereq xz/${libxml2_xz_ver}
+prereq icu/${libxml2_icu_ver}
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include

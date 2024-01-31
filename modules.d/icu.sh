@@ -38,6 +38,9 @@ if [ -z "${icu_v}" ] ; then
 fi
 
 case ${icu_v} in
+51.1) #2013-03-22
+   icuarc=icu4c-51_1-src
+   ;;
 59.1) #2017-04-14
    icuarc=icu4c-59_1-src
    ;;
@@ -93,6 +96,41 @@ cd ${tmp}/icu
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
+fi
+
+# The format/DateFormatTest/TestTwoDigitYear test is now failing, as it has
+# an implicit dependency on the current date. This test is part of the
+# standard make check tests.
+#
+# Issue : This test in test/intltest/dtfmttst.cpp expects the year to be
+# parsed as 1934, but as it is now less than 20 years to 2034/6/4 so this is
+# parsed as 2034.
+if [ "${icu_v}" == "51.1" ] ; then
+cat << eof > TestTwoDigitYear.patch
+--- source/test/intltest/dtfmttst.cpp
++++ source/test/intltest/dtfmttst.cpp
+@@ -1127,8 +1127,8 @@
+         dataerrln("FAIL: SimpleDateFormat constructor - %s", u_errorName(ec));
+         return;
+     }
+-    parse2DigitYear(fmt, "5/6/17", date(117, UCAL_JUNE, 5));
+-    parse2DigitYear(fmt, "4/6/34", date(34, UCAL_JUNE, 4));
++    parse2DigitYear(fmt, "5/6/30", date(130, UCAL_JUNE, 5));
++    parse2DigitYear(fmt, "4/6/50", date(50, UCAL_JUNE, 4));
+ }
+ 
+ // -------------------------------------
+eof
+
+patch -Z -b -p0 < TestTwoDigitYear.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 fi
 
 # With the release of GLIBC 2.26 in August 2017, the nonstandard header
