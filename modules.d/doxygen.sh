@@ -41,57 +41,48 @@ case ${doxygen_v} in
   1.8.6) # 2013-12-24
    doxygen_flex_ver=2.5.37   # 2012-08-03
    doxygen_bison_ver=3.0.2   # 2013-12-05
-   doxygen_cmake_ver=2.8.12.1 #2013-11-06
-   doxygen_libxml2_ver=2.9.1 # 2013-04-19
-   doxygen_python_ver=3.3.3  # 2013-11-17
+#   doxygen_cmake_ver=2.8.12.1 #2013-11-06
+#   doxygen_libxml2_ver=2.9.1 # 2013-04-19
+#   doxygen_python_ver=3.3.3  # 2013-11-17
+   doxygen_python_ver=2.7.6  # 2013-11-10
+   doxygen_build_system=gmake
+   doxygen_manpath=1
   ;;
   1.8.14) # 2017-12-25
-#   doxygen_cmake_ver=3.10.1 # 2017-12-14
-#   doxygen_python_ver=3.6.4 # 2017-12-19
    doxygen_flex_ver=2.6.4    # 2017-05-06
    doxygen_bison_ver=3.0.4   # 2015-01-23
-#   doxygen_libxml2_ver=2.9.7 # 2017-11-02
-#   if [ "${dependency_strategy}" == "optimized" ] ; then
-     doxygen_cmake_ver=3.10.1  # 2017-12-14
-     doxygen_libxml2_ver=2.9.7 # 2017-11-02
-     doxygen_python_ver=3.6.4  # 2017-12-19
-#   fi
+   doxygen_cmake_ver=3.10.1  # 2017-12-14
+   doxygen_libxml2_ver=2.9.7 # 2017-11-02
+   doxygen_python_ver=3.6.4  # 2017-12-19
+   doxygen_build_system=cmake
+   doxygen_manpath=0
   ;;
   1.8.15) # 2018-12-27
-#   doxygen_cmake_ver=3.10.2  # 2018-01-18 # last cmake to use ncurses 6.0 (compatibility with python 3.7.2)
-#   doxygen_python_ver=3.7.2  # 2018-12-24
    doxygen_flex_ver=2.6.4    # 2017-05-06
    doxygen_bison_ver=3.2.4   # 2018-12-24
-#   doxygen_libxml2_ver=2.9.9 # 2019-01-03 # first libxml2 to use xz 5.2.4 (compatibility with python 3.7.2)
-#   if [ "${dependency_strategy}" == "optimized" ] ; then
-     doxygen_cmake_ver=3.13.2  # 2018-12-13
-     doxygen_libxml2_ver=2.9.8 # 2018-03-05
-     doxygen_python_ver=3.7.2  # 2018-12-24
-#   fi
+   doxygen_cmake_ver=3.13.2  # 2018-12-13
+   doxygen_libxml2_ver=2.9.8 # 2018-03-05
+   doxygen_python_ver=3.7.2  # 2018-12-24
+   doxygen_build_system=cmake
+   doxygen_manpath=0
   ;;
   1.8.16) # 2019-08-08
-#   doxygen_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-#   doxygen_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    doxygen_flex_ver=2.6.4    # 2017-05-06
    doxygen_bison_ver=3.4.1   # 2019-05-22
-#   doxygen_libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
-#   if [ "${dependency_strategy}" == "optimized" ] ; then
-     doxygen_cmake_ver=3.15.2  # 2019-08-07
-     doxygen_libxml2_ver=2.9.9 # 2019-01-03
-     doxygen_python_ver=3.7.4  # 2019-07-08
-#   fi
+   doxygen_cmake_ver=3.15.2  # 2019-08-07
+   doxygen_libxml2_ver=2.9.9 # 2019-01-03
+   doxygen_python_ver=3.7.4  # 2019-07-08
+   doxygen_build_system=cmake
+   doxygen_manpath=0
   ;;
   1.8.17) # 2019-12-27
-#   doxygen_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-#   doxygen_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
    doxygen_flex_ver=2.6.4    # 2017-05-06
    doxygen_bison_ver=3.5     # 2019-12-11
-#   doxygen_libxml2_ver=2.9.11 # 2021-05-13 - needed for compatibility with Python 3.7.10 (ref xz 5.2.5)
-#   if [ "${dependency_strategy}" == "optimized" ] ; then
-     doxygen_cmake_ver=3.16.2   # 2019-12-19
-     doxygen_libxml2_ver=2.9.10 # 2019-10-30
-     doxygen_python_ver=3.8.1   # 2019-12-18
-#   fi
+   doxygen_cmake_ver=3.16.2   # 2019-12-19
+   doxygen_libxml2_ver=2.9.10 # 2019-10-30
+   doxygen_python_ver=3.8.1   # 2019-12-18
+   doxygen_build_system=cmake
+   doxygen_manpath=0
   ;;
   *)
    echo "ERROR: Review needed for doxygen ${doxygen_v}"
@@ -110,10 +101,12 @@ echo "Installing Doxygen ${doxygen_v}..."
 
 check_modules
 check_flex ${doxygen_flex_ver}
-check_cmake ${doxygen_cmake_ver}
-check_python ${doxygen_python_ver}
 check_bison ${doxygen_bison_ver}
-check_libxml2 ${doxygen_libxml2_ver} # Needed only for testsuite
+check_python ${doxygen_python_ver}
+if [ "${doxygen_build_system}" == "cmake" ] ; then
+  check_cmake ${doxygen_cmake_ver}
+  check_libxml2 ${doxygen_libxml2_ver} # Needed only for testsuite
+fi
 
 downloadPackage ${doxygen_srcdir}.src.tar.gz
 
@@ -218,34 +211,48 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-mkdir -v ${tmp}/${doxygen_srcdir}/build
-cd ${tmp}/${doxygen_srcdir}/build
+if [ "${doxygen_build_system}" == "cmake" ] ; then
+  mkdir -v ${tmp}/${doxygen_srcdir}/build
+  cd ${tmp}/${doxygen_srcdir}/build
+fi
 
 module purge
 module load flex/${doxygen_flex_ver}
-module load cmake/${doxygen_cmake_ver}
-module load Python/${doxygen_python_ver}
 module load bison/${doxygen_bison_ver}
-module load libxml2/${doxygen_libxml2_ver}
+module load Python/${doxygen_python_ver}
+if [ "${doxygen_build_system}" == "cmake" ] ; then
+  module load cmake/${doxygen_cmake_ver}
+  module load libxml2/${doxygen_libxml2_ver}
+fi
 
 if [ ${debug} -gt 0 ] ; then
-  #cmake -L -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) ..
   echo ''
   module list
   echo ''
+  if [ "${doxygen_build_system}" == "cmake" ] ; then
   echo cmake -L -G \"Unix Makefiles\" \
       -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v} ..
+  else
+    ./configure --help
+    echo ''
+    echo ./configure --prefix ${opt}/doxygen-${doxygen_v} --python python
+    echo ''
+  fi
   read k
 fi
 
+if [ "${doxygen_build_system}" == "cmake" ] ; then
 cmake -L -G "Unix Makefiles" \
       -DPYTHON_EXECUTABLE:FILEPATH=$(which python3) \
       -DCMAKE_BUILD_TYPE=Release \
       -Dbuild_doc=OFF \
       -DCMAKE_INSTALL_PREFIX=${opt}/doxygen-${doxygen_v} ..
+else
+./configure --prefix ${opt}/doxygen-${doxygen_v} --python python
+fi
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Configure complete'
@@ -263,7 +270,6 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-#  make test
   make tests
   if [ "${doxygen_v}" == "1.8.16" ] ; then
     echo ''
@@ -302,9 +308,12 @@ module-whatis   "Loads doxygen-${doxygen_v}"
 conflict doxygen
 
 prepend-path PATH \$PKG/bin
-prepend-path MANPATH \$PKG/share/man
-
 eof
+if [ ${doxygen_manpath} -gt 0 ] ; then
+echo "prepend-path MANPATH \$PKG/man" >> ${MODULEPATH}/doxygen/${doxygen_v}
+fi
+echo "" >> ${MODULEPATH}/doxygen/${doxygen_v}
+
 
 cd ${root}
 rm -rf ${tmp}/${doxygen_srcdir}

@@ -5,6 +5,9 @@ echo 'Loading openjpeg...'
 
 function get_openjpeg_library() {
 case ${1} in
+  1.5.2)
+    echo libopenjpeg.so.1.5.2
+  ;;
   2.3.1)
     echo libopenjp2.so.2.3.1
   ;;
@@ -45,14 +48,17 @@ case ${openjpeg_v} in
   1.5.2) # 2014-03-28
    openjpeg_cmake_ver=2.8.12.2 # 2014-01-16
    openjpeg_doxygen_ver=1.8.6  # 2013-12-24
+   openjpeg_srcdir=openjpeg-version.${openjpeg_v}
   ;;
   2.3.1) # Apr 2, 2019
    openjpeg_cmake_ver=3.13.4   # 2019-02-01 13:20
    openjpeg_doxygen_ver=1.8.15 # 2018-12-27
+   openjpeg_srcdir=openjpeg-${openjpeg_v}
   ;;
   2.5.0) # May 13, 2022
    openjpeg_cmake_ver=3.23.1  # 2022-04-12 10:55
    openjpeg_doxygen_ver=1.9.4 # 2022-05-05
+   openjpeg_srcdir=openjpeg-${openjpeg_v}
   ;;
   *)
    echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
@@ -72,7 +78,6 @@ openjpeg_libpng_lib=$(get_libpng_library ${openjpeg_libpng_ver})
 openjpeg_tiff_lib=$(get_tiff_library ${openjpeg_tiff_ver})
 openjpeg_lcms2_lib=$(get_lcms2_library ${openjpeg_lcms2_ver})
 
-openjpeg_srcdir=openjpeg-${openjpeg_v}
 openjpeg_prefix=${2}
 
 echo "Installing openjpeg-${openjpeg_v} in ${openjpeg_prefix}..."
@@ -110,6 +115,30 @@ module load zlib/${openjpeg_zlib_ver}
 module load libpng/${openjpeg_libpng_ver}
 module load doxygen/${openjpeg_doxygen_ver}
 
+case ${openjpeg_v} in
+  1.5.2)
+     build_options="-DBUILD_DOC=ON \
+       -DBUILD_JPIP=ON \
+       -DBUILD_JPWL=ON \
+       -DBUILD_MJ2=ON \
+       -DJAVA_SOURCE_VERSION=6 \
+       -DJAVA_TARGET_VERSION=1.6" 
+  ;;
+  2.3.1)
+     build_options="-DBUILD_DOC=ON \
+       -DBUILD_JPIP=ON \
+       -DBUILD_JPWL=ON \
+       -DBUILD_MJ2=ON \
+       -DBUILD_LUTS_GENERATOR=ON \
+       -DJAVA_SOURCE_VERSION=6 \
+       -DJAVA_TARGET_VERSION=1.6" 
+  ;;
+  *)
+   echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
+   exit 4 # Please review
+  ;;
+esac
+
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
@@ -122,7 +151,7 @@ if [ ${debug} -gt 0 ] ; then
        -DTIFF_INCLUDE_DIR=${openjpeg_prefix}/include \
        -DLCMS2_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_lcms2_lib} \
        -DLCMS2_INCLUDE_DIR=${openjpeg_prefix}/include \
-       -DBUILD_DOC=ON \
+       ${build_options} \
        -DCMAKE_INSTALL_PREFIX=${openjpeg_prefix} ..
   echo ''
   read k
@@ -137,7 +166,7 @@ cmake -L -G 'Unix Makefiles' \
        -DTIFF_INCLUDE_DIR=${openjpeg_prefix}/include \
        -DLCMS2_LIBRARY=${openjpeg_prefix}/lib/${openjpeg_lcms2_lib} \
        -DLCMS2_INCLUDE_DIR=${openjpeg_prefix}/include \
-       -DBUILD_DOC=ON \
+       ${build_options} \
        -DCMAKE_INSTALL_PREFIX=${openjpeg_prefix} ..
 
 if [ ${debug} -gt 0 ] ; then
@@ -145,7 +174,8 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-make -j ${ncpu}
+#make -j ${ncpu}
+make
 
 if [ ! $? -eq 0 ] ; then
   exit 4

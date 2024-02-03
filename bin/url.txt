@@ -406,6 +406,8 @@ opus-1.3.1.tar.gz=https://archive.mozilla.org/pub/opus/opus-1.3.1.tar.gz
 pkg-config-0.28.tar.gz=https://pkgconfig.freedesktop.org/releases/pkg-config-0.28.tar.gz
 
 # Python
+Python-2.7.6.tgz=https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
+#
 Python-3.3.3.tgz=https://www.python.org/ftp/python/3.3.3/Python-3.3.3.tgz
 #
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz

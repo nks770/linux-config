@@ -42,6 +42,20 @@ httlib_failure=0
 sql_deterministic_chk=1
 
 case ${python_v} in
+2.7.6) # 2013-11-10
+   python_gdbm_ver=1.10        #2011-11-13
+   python_readline_ver=6.2     #2011-02-13
+   python_ncurses_ver=5.7      #2008-11-02
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.0.5         #2013-06-30
+   python_openssl_ver=1.0.1e   #2013-02-11
+   python_sqlite_ver=3.8.1     #2013-10-17
+   python_zlib_ver=1.2.8       #2013-04-28
+   python_libffi_ver=3.0.13    #2013-03-17
+   python_utillinux_ver=2.24   #2013-10-21
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   ;;
 3.3.3) # 2013-11-17
    python_gdbm_ver=1.10        #2011-11-13
    python_readline_ver=6.2     #2011-02-13
@@ -299,7 +313,7 @@ if [ "${dependency_strategy}" == "optimized" ] ; then
 fi
 
 # Python 3.3 is not compatible with OpenSSL 1.1.x
-if [ "${python_v}" == "3.3.3" ] ; then
+if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] ; then
   python_openssl_ver=1.0.1e   #2013-02-11
 fi
 
@@ -927,7 +941,7 @@ else
 fi
 
 
-if [ "${python_v}" == "3.3.3" ] ; then
+if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] ; then
 
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
@@ -965,6 +979,7 @@ if [ ${debug} -gt 0 ] ; then
   echo CPPFLAGS="${CPPFLAGS}"
   echo LDFLAGS="${LDFLAGS}"
   echo LIBS="${LIBS}"
+  echo ''
   echo ${config}
   echo ''
   read k
