@@ -38,6 +38,12 @@ if [ -z "${openh264_v}" ] ; then
 fi
 
 case ${openh264_v} in
+  1.5.0) # Oct 26, 2015
+   openh264_nasm_ver=2.11.08 # 2015-02-21
+  ;;
+  1.6.0) # Jul 12, 2016
+   openh264_nasm_ver=2.12.02 # 2016-07-06
+  ;;
   2.0.0) # May 8, 2019
    openh264_nasm_ver=2.14.02 # 2018-12-26
   ;;

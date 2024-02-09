@@ -37,7 +37,8 @@ function build_ffmpeg() {
 # Get desired version number to install
 ffmpeg_v=${1}
 if [ -z "${ffmpeg_v}" ] ; then
-  ffmpeg_v=4.2.2
+  echo "ERROR: No FFmpeg version specified!"
+  exit 2
 fi
 
 case ${ffmpeg_v} in
@@ -79,7 +80,8 @@ case ${ffmpeg_v} in
     # Audio codecs
     ffmpeg_libilbc_ver=2.0.2              # 2014-12-14 - next Dec 17, 2020
     ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 11/15/2023
-    ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08 - next Apr 28, 2021
+    #ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08 - next Apr 28, 2021
+    ffmpeg_fdkaac_ver=0.1.6               # 2018-03-06 - ffmpeg 2.8 requires fdk-aac < 2.0.0
     ffmpeg_wavpack_ver=5.3.0              # 2020-04-14 - next 2021-01-10
     ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 20 Feb 2022
     ffmpeg_libsndfile_ver=1.0.28          # 2017-04-02 - next Aug 15, 2020
@@ -94,7 +96,8 @@ case ${ffmpeg_v} in
     ffmpeg_x265_ver=3.3                   # 2020-02-17 - next 2020-05-29
     #ffmpeg_kvazaar_ver=2.0.0              # 2020-04-21 - next 2021-10-13 ffmpeg 2.8 requires kvazaar < 0.7.0
     ffmpeg_kvazaar_ver=0.6.1              # 2015-09-16 - N/A
-    ffmpeg_openh264_ver=2.1.0             # 2020-03-03 - next 2020-05-21
+    #ffmpeg_openh264_ver=2.1.0             # 2020-03-03 - next 2020-05-21
+    ffmpeg_openh264_ver=1.5.0             # 2015-10-26 - ffmpeg 2.8 requires openh264 < 1.6.0
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next Jul 30, 2020
     ffmpeg_vidstab_ver=1.1.0              # 2017-05-30 - next May 30, 2022
   ;;
@@ -262,6 +265,10 @@ ffmpeg_zlib_ver=${global_zlib}
 ffmpeg_xz_ver=${global_xz}
 ffmpeg_bzip2_ver=${global_bzip2}
 ffmpeg_openssl_ver=${global_openssl}
+
+if [ "${ffmpeg_v:0:3}" == "2.8" ] ; then
+  ffmpeg_openssl_ver=1.0.2u # 2019-12-20
+fi
 
 check_modules
 # Create the environment module
@@ -489,7 +496,28 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-libvpx \
             --enable-libtwolame \
             --enable-libvidstab"
+#ffconf_extra_libs="-ldl -pthread"
+ffconf_extra_libs=""
+ffconf_cflags="-I${ffmpeg_depdir}/include \
+-I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include \
+-I${opt}/libilbc-${ffmpeg_libilbc_ver}/include \
+-I${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/include \
+-I${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/include \
+-I${opt}/wavpack-${ffmpeg_wavpack_ver}/include \
+-I${opt}/lame-${ffmpeg_lame_ver}/include \
+-I${opt}/soxr-${ffmpeg_soxr_ver}/include \
+-I${opt}/openssl-${ffmpeg_openssl_ver}/include"
+ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
+-L${opt}/xvidcore-${ffmpeg_xvidcore_ver}/lib \
+-L${opt}/libilbc-${ffmpeg_libilbc_ver}/lib \
+-L${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/lib \
+-L${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/lib \
+-L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib \
+-L${opt}/lame-${ffmpeg_lame_ver}/lib \
+-L${opt}/soxr-${ffmpeg_soxr_ver}/lib \
+-L${opt}/openssl-${ffmpeg_openssl_ver}/lib"
 fi
+
 if [ "${ffmpeg_v:0:3}" == "4.1" ] ; then
 ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-gpl \
@@ -528,7 +556,25 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-libvpx \
             --enable-libtwolame \
             --enable-libvidstab"
+ffconf_extra_libs=""
+ffconf_cflags="-I${ffmpeg_depdir}/include \
+-I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include \
+-I${opt}/libilbc-${ffmpeg_libilbc_ver}/include \
+-I${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/include \
+-I${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/include \
+-I${opt}/wavpack-${ffmpeg_wavpack_ver}/include \
+-I${opt}/lame-${ffmpeg_lame_ver}/include \
+-I${opt}/soxr-${ffmpeg_soxr_ver}/include"
+ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
+-L${opt}/xvidcore-${ffmpeg_xvidcore_ver}/lib \
+-L${opt}/libilbc-${ffmpeg_libilbc_ver}/lib \
+-L${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/lib \
+-L${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/lib \
+-L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib \
+-L${opt}/lame-${ffmpeg_lame_ver}/lib \
+-L${opt}/soxr-${ffmpeg_soxr_ver}/lib"
 fi
+
 if [ "${ffmpeg_v:0:3}" == "4.2" ] ; then
 ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-gpl \
@@ -569,7 +615,7 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-libvpx \
             --enable-libtwolame \
             --enable-libvidstab"
-fi
+ffconf_extra_libs=""
 ffconf_cflags="-I${ffmpeg_depdir}/include \
 -I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include \
 -I${opt}/libilbc-${ffmpeg_libilbc_ver}/include \
@@ -586,6 +632,7 @@ ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
 -L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib \
 -L${opt}/lame-${ffmpeg_lame_ver}/lib \
 -L${opt}/soxr-${ffmpeg_soxr_ver}/lib"
+fi
 
 
 if [ ${debug} -gt 0 ] ; then
@@ -593,7 +640,11 @@ if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
   echo ''
-  echo ./configure ${ffconf_opt} --extra-cflags=\"${ffconf_cflags}\" --extra-ldflags=\"${ffconf_ldflgs}\"
+  if [ -z "${ffconf_extra_libs}" ] ; then
+    echo ./configure ${ffconf_opt} --extra-cflags=\"${ffconf_cflags}\" --extra-ldflags=\"${ffconf_ldflgs}\"
+  else
+    echo ./configure ${ffconf_opt} --extra-libs=\"${ffconf_extra_libs}\" --extra-cflags=\"${ffconf_cflags}\" --extra-ldflags=\"${ffconf_ldflgs}\"
+  fi
   echo ''
   echo '>> Press enter to run configure command...'
   echo ''
@@ -601,7 +652,11 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 
-./configure ${ffconf_opt} --extra-cflags="${ffconf_cflags}" --extra-ldflags="${ffconf_ldflgs}"
+if [ -z "${ffconf_extra_libs}" ] ; then
+  ./configure ${ffconf_opt} --extra-cflags="${ffconf_cflags}" --extra-ldflags="${ffconf_ldflgs}"
+else
+  ./configure ${ffconf_opt} --extra-libs="${ffconf_extra_libs}" --extra-cflags="${ffconf_cflags}" --extra-ldflags="${ffconf_ldflgs}"
+fi
 
 
 if [ ${debug} -gt 0 ] ; then

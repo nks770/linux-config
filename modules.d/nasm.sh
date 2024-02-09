@@ -33,7 +33,8 @@ function build_nasm() {
 # Get desired version number to install
 nasm_v=${1}
 if [ -z "${nasm_v}" ] ; then
-  nasm_v=2.13.03
+  echo "ERROR: No nasm version specified!"
+  exit 2
 fi
 
 echo "Installing nasm ${nasm_v}..."

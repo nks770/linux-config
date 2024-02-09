@@ -33,7 +33,8 @@ function build_fdkaac() {
 # Get desired version number to install
 fdkaac_v=${1}
 if [ -z "${fdkaac_v}" ] ; then
-  fdkaac_v=2.0.1
+  echo "ERROR: No fdk-aac version specified!"
+  exit 2
 fi
 fdkaac_srcdir=fdk-aac-${fdkaac_v}
 
