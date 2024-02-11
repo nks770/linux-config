@@ -33,7 +33,8 @@ function build_doxygen() {
 # Get desired version number to install
 doxygen_v=${1}
 if [ -z "${doxygen_v}" ] ; then
-  doxygen_v=1.8.14
+  echo "ERROR: No doxygen version specified!"
+  exit 2
 fi
 doxygen_srcdir=doxygen-${doxygen_v}
 
@@ -81,6 +82,15 @@ case ${doxygen_v} in
    doxygen_cmake_ver=3.16.2   # 2019-12-19
    doxygen_libxml2_ver=2.9.10 # 2019-10-30
    doxygen_python_ver=3.8.1   # 2019-12-18
+   doxygen_build_system=cmake
+   doxygen_manpath=0
+  ;;
+  1.8.18) # 2020-04-12
+   doxygen_flex_ver=2.6.4    # 2017-05-06
+   doxygen_bison_ver=3.5.4   # 2020-04-05
+   doxygen_cmake_ver=3.17.1   # 2020-04-09
+   doxygen_libxml2_ver=2.9.10 # 2019-10-30
+   doxygen_python_ver=3.8.2   # 2020-02-24
    doxygen_build_system=cmake
    doxygen_manpath=0
   ;;

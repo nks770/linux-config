@@ -204,6 +204,22 @@ case ${python_v} in
    curses_failure=0
    sql_deterministic_chk=0
    ;;
+3.8.3) #2020-05-13
+   python_gdbm_ver=1.18.1      #2018-10-27
+   python_readline_ver=7.0     #2016-09-15
+   python_ncurses_ver=6.0      #2015-08-08
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.5         #2020-03-17
+   python_openssl_ver=1.1.1g   #2020-04-21
+   python_sqlite_ver=3.31.1    #2020-01-27
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.3       #2019-11-23
+   python_utillinux_ver=2.35.1 #2020-01-31
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   curses_failure=0
+   sql_deterministic_chk=0
+   ;;
 3.9.4) #2021-04-04
    python_gdbm_ver=1.19        #2020-12-23
    python_readline_ver=8.1     #2020-12-06

@@ -11,6 +11,9 @@ case ${1} in
   2.6.5)
     echo libharfbuzz.so.0.20600.5
   ;;
+  2.6.6)
+    echo libharfbuzz.so.0.20600.6
+  ;;
   *)
     echo ''
   ;;
@@ -41,7 +44,8 @@ function ff_build_harfbuzz() {
 # Get desired version number to install
 harfbuzz_v=${1}
 if [ -z "${harfbuzz_v}" ] ; then
-  harfbuzz_v=2.6.4
+  echo "ERROR: No harfbuzz version specified!"
+  exit 2
 fi
 
 case ${harfbuzz_v} in
@@ -50,6 +54,10 @@ case ${harfbuzz_v} in
    harfbuzz_tar=xvfJ
   ;;
   2.6.5) # 2020-04-17
+   harfbuzz_package=harfbuzz-${harfbuzz_v}.tar.xz
+   harfbuzz_tar=xvfJ
+  ;;
+  2.6.6) # 2020-05-11
    harfbuzz_package=harfbuzz-${harfbuzz_v}.tar.xz
    harfbuzz_tar=xvfJ
   ;;

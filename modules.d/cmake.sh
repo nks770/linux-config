@@ -164,6 +164,18 @@ case ${cmake_v} in
    cmake_manpath=0
    kwsys_warning=1
    ;;
+3.17.1) # 2020-04-09
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1f # 2020-03-31
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.17.2) # 2020-04-28
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1g # 2020-04-21
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
 3.19.2) # 2020-12-16
    cmake_ncurses_ver=6.2    # 2020-02-12
    cmake_openssl_ver=1.1.1i # 2020-12-08

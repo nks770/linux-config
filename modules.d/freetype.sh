@@ -8,6 +8,9 @@ case ${1} in
   2.10.1)
     echo libfreetype.so.6.17.1
   ;;
+  2.10.2)
+    echo libfreetype.so.6.17.2
+  ;;
   *)
     echo ''
   ;;

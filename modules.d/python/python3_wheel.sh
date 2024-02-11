@@ -105,8 +105,15 @@ if [ "${wheel_name}" == "demjson" ] || [ "${wheel_name}" == "demjson3" ] ; then
 elif [ "${wheel_name}" == "meson" ] ; then
   wfile=${wheel_name}-${wheel_v}.tar.gz
   mode=tgz
+elif [ "${wheel_name}" == "wheel" ] ; then
+  wfile=${wheel_name}-${wheel_v}-py2.py3-none-any.whl
 else
   wfile=${wheel_name}-${wheel_v}-py3-none-any.whl
+fi
+
+unset pip_extra_args
+if [ "${wheel_name}" == "meson" ] ; then
+  pip_extra_args=--no-build-isolation
 fi
 
 echo "Installing ${wheel_name} (${module_name}) ${wheel_v} for Python/${python_v}..."
@@ -125,7 +132,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-pip3 install --no-index ${pkg}/${wfile}
+pip3 install --no-index ${pip_extra_args} ${pkg}/${wfile}
 if [ ! $? -eq 0 ] ; then
   exit 4
 fi

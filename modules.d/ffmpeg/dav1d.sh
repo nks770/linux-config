@@ -50,6 +50,13 @@ case ${dav1d_v} in
    dav1d_nasm_ver=2.14.02 # 2018-12-26
    dav1d_doxygen_ver=1.8.16 # 2019-08-08
   ;;
+  0.7.0) # 2020-05-20
+   dav1d_meson_ver=0.54.2 # 2020-05-15
+   dav1d_ninja_ver=1.10.0 # 2020-01-27
+   dav1d_python_ver=3.8.3 # 2020-05-13
+   dav1d_nasm_ver=2.14.02 # 2018-12-26
+   dav1d_doxygen_ver=1.8.18 # 2020-04-12
+  ;;
   *)
    echo "ERROR: Need review for dav1d ${dav1d_v}"
    exit 4
@@ -61,6 +68,10 @@ check_nasm ${dav1d_nasm_ver}
 check_doxygen ${dav1d_doxygen_ver}
 check_ninja ${dav1d_ninja_ver}
 check_python ${dav1d_python_ver}
+#check_p3wheel ${dav1d_python_ver} setuptools 68.0.0
+if [ "${dav1d_meson_ver}" == "0.54.2" ] && [ "${dav1d_python_ver}" == "3.8.3" ] ; then
+  check_p3wheel ${dav1d_python_ver} wheel 0.34.2
+fi
 check_p3wheel ${dav1d_python_ver} meson ${dav1d_meson_ver}
 
 downloadPackage ${dav1d_srcdir}.tar.gz

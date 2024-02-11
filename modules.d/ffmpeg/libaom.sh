@@ -33,11 +33,12 @@ function build_libaom() {
 # Get desired version number to install
 libaom_v=${1}
 if [ -z "${libaom_v}" ] ; then
-  libaom_v=1.0.0
+  echo "ERROR: No libaom version specified!"
+  exit 2
 fi
 libaom_srcdir=libaom-${libaom_v}
 
-case ${1} in
+case ${libaom_v} in
   1.0.0)              #Mon Jun 25 07:54:59 2018 -0700
    libaom_yasm_ver=1.3.0     # 2014-08-10
    libaom_cmake_ver=3.11.4   # 2018-06-14
@@ -47,13 +48,16 @@ case ${1} in
   1.0.0-errata1-avif) #Thu Dec 12 10:50:24 2019 -0800
    libaom_yasm_ver=1.3.0     # 2014-08-10
    libaom_doxygen_ver=1.8.16 # 2019-08-08
-#   libaom_cmake_ver=3.19.2  # 2020-03-04 - earliest cmake that uses ncurses 6.2 and openssl 1.1.1i
-#   libaom_python_ver=3.7.10 # 2021-02-15 - earliest python 3.7 that uses ncurses 6.2 and openssl 1.1.1i
+   libaom_cmake_ver=3.15.5   # 2019-10-30
+   libaom_python_ver=3.8.0   # 2019-10-14
    libdir=lib # Directory where installed libraries go
-#   if [ "${dependency_strategy}" == "optimized" ] ; then
-     libaom_cmake_ver=3.15.5   # 2019-10-30
-     libaom_python_ver=3.8.0   # 2019-10-14 -- python 3.7.5 could be another option
-#   fi
+  ;;
+  2.0.0) #Mon May 18 17:03:09 2020 -0700
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_doxygen_ver=1.8.18 # 2020-04-12
+   libaom_cmake_ver=3.17.2   # 2020-04-28
+   libaom_python_ver=3.8.3   # 2020-05-13
+   libdir=lib # Directory where installed libraries go
   ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    libaom_yasm_ver=1.3.0
@@ -62,15 +66,10 @@ case ${1} in
    libaom_python_ver=3.10.7  # 2022-09-06
   ;;
   *)
-   echo "ERROR: Review needed for libaom ${1}"
+   echo "ERROR: Review needed for libaom ${libaom_v}"
    exit 4 # Please review
   ;;
 esac
-
-## Optimized dependency strategy
-#if [ "${dependency_strategy}" == "optimized" ] ; then
-#  cmake_ver=${global_zlib}
-#fi
 
 echo "Installing libaom ${libaom_v}..."
 

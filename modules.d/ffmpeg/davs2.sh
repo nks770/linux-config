@@ -40,6 +40,11 @@ fi
 case ${davs2_v} in
   1.6 ) # 2019-10-11
    davs2_yasm_ver=1.3.0 # 2014-08-10
+   davs2_assembler=yasm
+  ;;
+  1.7 ) # 2020-04-19
+   davs2_nasm_ver=2.14.02 # 2018-12-26
+   davs2_assembler=nasm
   ;;
   *)
    echo "ERROR: Review needed for davs2 ${davs2_v}"
@@ -52,7 +57,12 @@ davs2_srcdir=davs2-${davs2_v}
 davs2_prefix=${opt}/${davs2_srcdir}
 
 check_modules
-check_yasm ${davs2_yasm_ver}
+if [ "${davs2_assembler}" == "yasm" ] ; then
+  check_yasm ${davs2_yasm_ver}
+fi
+if [ "${davs2_assembler}" == "nasm" ] ; then
+  check_nasm ${davs2_nasm_ver}
+fi
 
 downloadPackage davs2-${davs2_v}.tar.gz
 
@@ -272,7 +282,12 @@ fi
 cd ${tmp}/${davs2_srcdir}/build/linux
 
 module purge
-module load yasm/${davs2_yasm_ver}
+if [ "${davs2_assembler}" == "yasm" ] ; then
+  module load yasm/${davs2_yasm_ver}
+fi
+if [ "${davs2_assembler}" == "nasm" ] ; then
+  module load nasm/${davs2_nasm_ver}
+fi
 
 config="./configure --prefix=${davs2_prefix} --enable-shared"
 
