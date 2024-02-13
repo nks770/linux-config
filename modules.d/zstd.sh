@@ -8,6 +8,9 @@ case ${1} in
   1.4.4)
     echo libzstd.so.1.4.4
   ;;
+  1.4.5)
+    echo libzstd.so.1.4.5
+  ;;
   *)
     echo ''
   ;;
@@ -53,8 +56,14 @@ case ${zstd_v} in
   1.4.4) # 2019-11-05
     zstd_cmake_ver=3.15.5 # 2019-10-30
     zstd_zlib_ver=1.2.11      #2017-01-15
-    zstd_xz_ver=5.2.3         #2016-12-30
+    zstd_xz_ver=5.2.4         #2018-04-29
     zstd_lz4_ver=1.9.2        #2019-08-15
+  ;;
+  1.4.5) # 2020-05-22
+    zstd_cmake_ver=3.17.2 # 2020-04-28
+    zstd_zlib_ver=1.2.11      #2017-01-15
+    zstd_xz_ver=5.2.5         #2020-03-17
+    zstd_lz4_ver=1.9.2        #2019-08-15 - next 2020-11-15 (1.9.3)
   ;;
   *)
    echo "ERROR: Review needed for zstd ${zstd_v}"

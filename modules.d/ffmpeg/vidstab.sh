@@ -41,6 +41,9 @@ case ${vidstab_v} in
   1.1.0 ) # 2017-05-30
    vidstab_cmake_ver=3.8.1  # 2017-05-02
   ;;
+  1.1.1 ) # 2020-05-30
+   vidstab_cmake_ver=3.17.3 # 2020-05-28
+  ;;
   *)
    echo "ERROR: Review needed for vidstab ${vidstab_v}"
    exit 4 # Please review

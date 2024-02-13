@@ -8,6 +8,9 @@ case ${1} in
   2.9)
     echo liblcms2.so.2.0.8
   ;;
+  2.10)
+    echo liblcms2.so.2.0.10
+  ;;
   *)
     echo ''
   ;;
@@ -37,7 +40,8 @@ function ff_build_lcms2() {
 # Get desired version number to install
 lcms2_v=${1}
 if [ -z "${lcms2_v}" ] ; then
-  lcms2_v=2.9
+  echo "ERROR: No lcms2 version specified!"
+  exit 2
 fi
 
 lcms2_ffmpeg_ver=${3}

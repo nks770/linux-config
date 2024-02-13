@@ -33,7 +33,8 @@ function build_x264() {
 # Get desired version number to install
 x264_v=${1}
 if [ -z "${x264_v}" ] ; then
-  x264_v=20191125
+  echo "ERROR: No x264 version specified!"
+  exit 2
 fi
 
 echo "Installing x264 ${x264_v}..."
@@ -47,12 +48,16 @@ case ${1} in
    x264_srcdir=x264-538f09b5b92eda0b6efe25e62fcc8542fc9f025d
    x264_nasm_ver=2.14.02 # 2018-12-26
   ;;
+  20200615) # 2022-06-15
+   x264_srcdir=x264-4c9b076be684832b9141f5b6c03aaf302adca0e4
+   x264_nasm_ver=2.14.02 # 2018-12-26
+  ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
    x264_nasm_ver=2.14.02 # 2018-12-26
   ;;
   *)
-   echo "ERROR: Need review for x264 ${1}"
+   echo "ERROR: Need review for x264 ${x264_v}"
    exit 4
    ;;
 esac
