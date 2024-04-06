@@ -11,6 +11,9 @@ case ${1} in
   2.10)
     echo liblcms2.so.2.0.10
   ;;
+  2.11)
+    echo liblcms2.so.2.0.10
+  ;;
   *)
     echo ''
   ;;

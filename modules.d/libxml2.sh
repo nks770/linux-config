@@ -73,6 +73,11 @@ case ${libxml2_v} in
    libxml2_zlib_ver=1.2.7.3 #2013-04-13
    libxml2_icu_ver=51.1    # 2013-03-22
    ;;
+2.9.4) # 2016-05-23
+   libxml2_xz_ver=5.2.2    # 2015-09-29
+   libxml2_zlib_ver=1.2.8  # 2013-04-28
+   libxml2_icu_ver=57.1    # 2016-03-23
+   ;;
 2.9.7) # 2017-11-02
    libxml2_xz_ver=5.2.3    # 2016-12-30
    libxml2_zlib_ver=1.2.11 # 2017-01-15

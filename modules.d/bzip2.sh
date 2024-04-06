@@ -33,7 +33,8 @@ function build_bzip2() {
 # Get desired version number to install
 bzip2_v=${1}
 if [ -z "${bzip2_v}" ] ; then
-  bzip2_v=1.0.8
+  echo "ERROR: No bzip2 version specified!"
+  exit 2
 fi
 
 echo "Installing bzip2 ${bzip2_v}..."
@@ -213,7 +214,9 @@ cat << eof > makefile.patch
 eof
 fi
 patch -p1 -b < makefile.patch
-
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
 if [ ${debug} -gt 0 ] ; then
   echo '>> Patching complete'
   read k

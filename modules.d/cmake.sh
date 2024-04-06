@@ -62,6 +62,24 @@ case ${cmake_v} in
    cmake_manpath=0
    kwsys_warning=1
    ;;
+3.6.1) # 2016-07-22
+   cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.6.2) # 2016-09-07
+   cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.6.3) # 2016-11-03
+   cmake_ncurses_ver=6.0  # 2015-08-08
+   cmake_openssl_ver=0
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
 3.8.1) # 2017-05-02
    cmake_ncurses_ver=6.0  # 2015-08-08
    cmake_openssl_ver=0
@@ -320,7 +338,7 @@ if [ ${run_cmake_tests} -gt 0 ] ; then
   # Patch to enable avoid a testsuite failure when compiled with newer GCC
   # I borrowed this update from referencing cmake 3.11.4 (slightly newer)
   # This is for test # "34 - CompileFeatures"
-  if [ "${cmake_v}" == "3.8.1" ] || [ "${cmake_v}" == "3.10.1" ] || [ "${cmake_v}" == "3.10.2" ] ; then
+  if [ "${cmake_v:0:4}" == "3.6." ] || [ "${cmake_v}" == "3.8.1" ] || [ "${cmake_v}" == "3.9.0" ] || [ "${cmake_v}" == "3.10.1" ] || [ "${cmake_v}" == "3.10.2" ] ; then
     cat << eof > testsuite.patch
 --- Tests/CompileFeatures/default_dialect.c
 +++ Tests/CompileFeatures/default_dialect.c

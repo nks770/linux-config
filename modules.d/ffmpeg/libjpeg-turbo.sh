@@ -14,6 +14,9 @@ case ${1} in
   2.0.4)
     echo libjpeg.so.62.3.0
   ;;
+  2.0.5)
+    echo libjpeg.so.62.3.0
+  ;;
   *)
     echo ''
   ;;
@@ -50,7 +53,8 @@ function build_libjpegturbo() {
 # Get desired version number to install
 libjpegturbo_v=${1}
 if [ -z "${libjpegturbo_v}" ] ; then
-  libjpegturbo_v=4.1.0
+  echo "ERROR: No libjpeg-turbo version specified!"
+  exit 2
 fi
 
 case ${libjpegturbo_v} in
@@ -66,6 +70,11 @@ case ${libjpegturbo_v} in
   ;;
   2.0.4) # 2019-12-31
    libjpegturbo_cmake_ver=3.16.2 # 2019-12-19
+   libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
+   libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
+  ;;
+  2.0.5) # 2020-06-23
+   libjpegturbo_cmake_ver=3.17.3 # 2020-05-28
    libjpegturbo_nasm_ver=2.14.02 # 2018-12-26
    libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
   ;;

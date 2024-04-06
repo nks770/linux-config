@@ -42,6 +42,14 @@ case ${sqlite_v} in
    sql_srcdir=sqlite-autoconf-3080100
    sqlite_zlib_ver=1.2.8  # 2013-04-28
    ;;
+3.13.0) # 2016-05-18
+   sql_srcdir=sqlite-autoconf-3130000
+   sqlite_zlib_ver=1.2.8  # 2013-04-28
+   ;;
+3.15.2) # 2016-11-28
+   sql_srcdir=sqlite-autoconf-3150200
+   sqlite_zlib_ver=1.2.8  # 2013-04-28
+   ;;
 3.21.0) # 2017-10-24
    sql_srcdir=sqlite-autoconf-3210000
    sqlite_zlib_ver=1.2.11 # 2017-01-15
@@ -137,7 +145,7 @@ module load zlib/${sqlite_zlib_ver}
 if [ "${sqlite_v}" == "3.8.1" ] ; then
   config="./configure --prefix=${opt}/sqlite-${sqlite_v}"
   export CPPFLAGS="-DSQLITE_ENABLE_FTS3=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1"
-elif [ "${sqlite_v}" == "3.21.0" ] ; then
+elif [ "${sqlite_v}" == "3.13.0" ] || [ "${sqlite_v}" == "3.15.2" ] || [ "${sqlite_v}" == "3.21.0" ] ; then
   config="./configure --prefix=${opt}/sqlite-${sqlite_v} --enable-fts5"
   export CPPFLAGS="-DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1"
 else

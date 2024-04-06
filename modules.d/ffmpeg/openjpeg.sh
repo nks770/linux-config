@@ -8,6 +8,12 @@ case ${1} in
   1.5.2)
     echo libopenjpeg.so.1.5.2
   ;;
+  2.1.2)
+    echo libopenjp2.so.2.1.2
+  ;;
+  2.2.0)
+    echo libopenjp2.so.2.2.0
+  ;;
   2.3.1)
     echo libopenjp2.so.2.3.1
   ;;
@@ -49,6 +55,16 @@ case ${openjpeg_v} in
    openjpeg_cmake_ver=2.8.12.2 # 2014-01-16
    openjpeg_doxygen_ver=1.8.6  # 2013-12-24
    openjpeg_srcdir=openjpeg-version.${openjpeg_v}
+  ;;
+  2.1.2) # 2016-09-28
+   openjpeg_cmake_ver=3.6.2    # 2016-09-07
+   openjpeg_doxygen_ver=1.8.12 # 2016-09-05
+   openjpeg_srcdir=openjpeg-${openjpeg_v}
+  ;;
+  2.2.0) # 2017-08-09
+   openjpeg_cmake_ver=3.9.0    # 2017-07-18
+   openjpeg_doxygen_ver=1.8.13 # 2016-12-29
+   openjpeg_srcdir=openjpeg-${openjpeg_v}
   ;;
   2.3.1) # Apr 2, 2019
    openjpeg_cmake_ver=3.13.4   # 2019-02-01 13:20
@@ -101,12 +117,80 @@ fi
 cd ${tmp}
 tar xvfz ${pkg}/openjpeg-${openjpeg_v}.tar.gz
 mkdir -pv ${tmp}/${openjpeg_srcdir}/build
-cd ${tmp}/${openjpeg_srcdir}/build
+cd ${tmp}/${openjpeg_srcdir}
 
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
 fi
+
+# Fix build issue of JPWL by adding opj_image_data_alloc() and opj_image_data_free() to src/lib/openmj2
+# https://github.com/uclouvain/openjpeg/commit/1e387de74273c4dac618df94475556541c1caf3e
+if [ "${openjpeg_v}" == "2.2.0" ] ; then
+cat << eof > openmj2.patch
+--- src/lib/openmj2/openjpeg.c
++++ src/lib/openmj2/openjpeg.c
+@@ -372,3 +372,18 @@
+         opj_free(cstr_info->numdecompos);
+     }
+ }
++
++void* OPJ_CALLCONV opj_image_data_alloc(size_t size)
++{
++    /* NOTE: this defers from libopenjp2 where we use opj_aligned_malloc */
++    void* ret = opj_malloc(size);
++    /* printf("opj_image_data_alloc %p\\n", ret); */
++    return ret;
++}
++
++void OPJ_CALLCONV opj_image_data_free(void* ptr)
++{
++    /* NOTE: this defers from libopenjp2 where we use opj_aligned_free */
++    /* printf("opj_image_data_free %p\\n", ptr); */
++    opj_free(ptr);
++}
+--- src/lib/openmj2/openjpeg.h
++++ src/lib/openmj2/openjpeg.h
+@@ -763,6 +763,27 @@
+ */
+ OPJ_API void OPJ_CALLCONV opj_image_destroy(opj_image_t *image);
+ 
++/**
++ * Allocator for opj_image_t->comps[].data
++ * To be paired with opj_image_data_free.
++ *
++ * @param   size    number of bytes to allocate
++ *
++ * @return  a new pointer if successful, NULL otherwise.
++ * @since 2.2.0
++*/
++OPJ_API void* OPJ_CALLCONV opj_image_data_alloc(size_t size);
++
++/**
++ * Destructor for opj_image_t->comps[].data
++ * To be paired with opj_image_data_alloc.
++ *
++ * @param   ptr    Pointer to free
++ *
++ * @since 2.2.0
++*/
++OPJ_API void OPJ_CALLCONV opj_image_data_free(void* ptr);
++
+ /*
+ ==========================================================
+    stream functions definitions
+eof
+patch -Z -b -p0 < openmj2.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+cd ${tmp}/${openjpeg_srcdir}/build
 
 module purge
 module load ffmpeg-dep/${openjpeg_ffmpeg_ver}
@@ -123,6 +207,20 @@ case ${openjpeg_v} in
        -DBUILD_MJ2=ON \
        -DJAVA_SOURCE_VERSION=6 \
        -DJAVA_TARGET_VERSION=1.6" 
+  ;;
+  2.1.2)
+     build_options="-DBUILD_DOC=ON \
+       -DBUILD_JPIP=ON \
+       -DBUILD_JPWL=ON \
+       -DBUILD_MJ2=ON \
+       -DBUILD_LUTS_GENERATOR=ON"
+  ;;
+  2.2.0)
+     build_options="-DBUILD_DOC=ON \
+       -DBUILD_JPIP=ON \
+       -DBUILD_JPWL=ON \
+       -DBUILD_MJ2=ON \
+       -DBUILD_LUTS_GENERATOR=ON"
   ;;
   2.3.1)
      build_options="-DBUILD_DOC=ON \

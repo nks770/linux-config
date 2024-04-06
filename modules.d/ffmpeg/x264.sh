@@ -43,18 +43,27 @@ case ${1} in
   20191125)
    x264_srcdir=x264-1771b556ee45207f8711744ccbd5d42a3949b14c
    x264_nasm_ver=2.14.02 # 2018-12-26
+   x264_fix_bash_completion_dir=0
   ;;
   20200425)
    x264_srcdir=x264-538f09b5b92eda0b6efe25e62fcc8542fc9f025d
    x264_nasm_ver=2.14.02 # 2018-12-26
+   x264_fix_bash_completion_dir=0
   ;;
-  20200615) # 2022-06-15
+  20200615) # 2020-06-15
    x264_srcdir=x264-4c9b076be684832b9141f5b6c03aaf302adca0e4
    x264_nasm_ver=2.14.02 # 2018-12-26
+   x264_fix_bash_completion_dir=0
+  ;;
+  20200702) # 2020-07-02
+   x264_srcdir=x264-4c2aafd864dd201832ec2be0fef4484925146650
+   x264_nasm_ver=2.15.02 # 2020-07-01
+   x264_fix_bash_completion_dir=1
   ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
-   x264_nasm_ver=2.14.02 # 2018-12-26
+   x264_nasm_ver=2.15.05 # 2020-08-28
+   x264_fix_bash_completion_dir=0
   ;;
   *)
    echo "ERROR: Need review for x264 ${x264_v}"
@@ -80,6 +89,30 @@ cd ${tmp}/${x264_srcdir}
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
+fi
+
+if [ "${x264_srcdir}" == "x264-4c2aafd864dd201832ec2be0fef4484925146650" ] ; then
+cat << eof > bash-completion.patch
+--- configure
++++ configure
+@@ -1530,7 +1530,7 @@
+     echo 'default: cli' >> config.mak
+     echo 'install: install-cli' >> config.mak
+     if pkg_check bash-completion ; then
+-        echo "BASHCOMPLETIONSDIR=\$(\$PKGCONFIG --variable=completionsdir bash-completion)" >> config.mak
++        echo "BASHCOMPLETIONSDIR=${opt}/x264-${x264_v}/share/bash-completion/completions" >> config.mak
+     fi
+ fi
+ 
+eof
+patch -N -Z -b -p0 < bash-completion.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
 fi
 
 config="./configure --prefix=${opt}/x264-${x264_v} \

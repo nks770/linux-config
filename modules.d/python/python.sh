@@ -70,6 +70,34 @@ case ${python_v} in
    python_tcl_ver=8.6.13
    python_tk_ver=8.6.13
    ;;
+3.5.2) # 2016-06-27
+   python_gdbm_ver=1.12        #2016-05-16
+   python_readline_ver=6.3     #2014-02-26
+   python_ncurses_ver=5.9      #2011-04-04
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.2         #2015-09-29
+   python_openssl_ver=1.0.2h   #2016-05-03
+   python_sqlite_ver=3.13.0    #2016-05-18
+   python_zlib_ver=1.2.8       #2013-04-28
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.28   #2016-04-12
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   ;;
+3.6.0) # 2016-12-23
+   python_gdbm_ver=1.12        #2016-05-16
+   python_readline_ver=6.3     #2014-02-26
+   python_ncurses_ver=5.9      #2011-04-04
+   python_bzip2_ver=1.0.6      #2010-09-20
+   python_xz_ver=5.2.2         #2015-09-29
+   python_openssl_ver=1.1.0c   #2016-11-10
+   python_sqlite_ver=3.15.2    #2016-11-28
+   python_zlib_ver=1.2.8       #2013-04-28
+   python_libffi_ver=3.2.1     #2014-11-12
+   python_utillinux_ver=2.29   #2016-11-08
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   ;;
 3.6.4) # 2017-12-19
    python_gdbm_ver=1.13        #2017-03-11
    python_readline_ver=7.0     #2016-09-15
@@ -332,6 +360,9 @@ fi
 if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] ; then
   python_openssl_ver=1.0.1e   #2013-02-11
 fi
+if [ "${python_v}" == "3.5.2" ] ; then
+  python_openssl_ver=1.0.2h   #2016-05-03
+fi
 
 echo "Installing Python ${python_v}..."
 python_srcdir=Python-${python_v}
@@ -452,6 +483,389 @@ cat << eof > multiple.patch
              PyErr_Format(PyExc_ValueError,
                           "signal number %ld out of range", signum);
              goto error;
+eof
+patch -Z -b -p0 < multiple.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+if [ "${python_v}" == "3.5.2" ] ; then
+cat << eof > multiple.patch
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
+@@ -951,18 +951,15 @@
+ }
+ 
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-Py_uintptr_t
++static Py_uintptr_t
+ stack_overflow(Py_uintptr_t min_sp, Py_uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     *
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     Py_uintptr_t sp = (Py_uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+--- Modules/signalmodule.c
++++ Modules/signalmodule.c
+@@ -740,7 +740,6 @@
+     int result = -1;
+     PyObject *iterator, *item;
+     long signum;
+-    int err;
+ 
+     sigemptyset(mask);
+ 
+@@ -762,11 +761,14 @@
+         Py_DECREF(item);
+         if (signum == -1 && PyErr_Occurred())
+             goto error;
+-        if (0 < signum && signum < NSIG)
+-            err = sigaddset(mask, (int)signum);
+-        else
+-            err = 1;
+-        if (err) {
++	if (0 < signum && signum < NSIG) {
++		/* bpo-33329: ignore sigaddset() return value as it can fail
++		 * for some reserved signals, but we want the \`range(1, NSIG)\`
++		 * idiom to allow selecting all valid signals.
++		 */
++		(void) sigaddset(mask, (int)signum);
++	}
++	else {
+             PyErr_Format(PyExc_ValueError,
+                          "signal number %ld out of range", signum);
+             goto error;
+--- Lib/test/test_logging.py
++++ Lib/test/test_logging.py
+@@ -1619,7 +1619,7 @@
+         SysLogHandlerTest.tearDown(self)
+         os.remove(self.address)
+ 
+-@unittest.skipUnless(threading, 'Threading required for this test.')
++@unittest.skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:645)')
+ class HTTPHandlerTest(BaseTest):
+     """Test for HTTPHandler."""
+ 
+--- Lib/test/test_poplib.py
++++ Lib/test/test_poplib.py
+@@ -11,7 +11,7 @@
+ import time
+ import errno
+ 
+-from unittest import TestCase, skipUnless
++from unittest import TestCase, skipUnless, skip
+ from test import support as test_support
+ threading = test_support.import_module('threading')
+ 
+@@ -346,7 +346,7 @@
+         resp = self.client.stls()
+         self.assertEqual(resp, expected)
+ 
+-    @requires_ssl
++    @skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:645)')
+     def test_stls_context(self):
+         expected = b'+OK Begin TLS negotiation'
+         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+--- Lib/test/test_urllib2net.py
++++ Lib/test/test_urllib2net.py
+@@ -95,6 +95,7 @@
+     # XXX The rest of these tests aren't very good -- they don't check much.
+     # They do sometimes catch some major disasters, though.
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp(self):
+         urls = [
+             'ftp://ftp.debian.org/debian/README',
+@@ -177,6 +178,7 @@
+             opener.open(request)
+             self.assertEqual(request.get_header('User-agent'),'Test-Agent')
+ 
++    @unittest.skip('ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:645)')
+     def test_sites_no_connection_close(self):
+         # Some sites do not send Connection: close header.
+         # Verify that those work properly. (#issue12576)
+@@ -289,6 +291,7 @@
+ 
+     FTP_HOST = 'ftp://ftp.debian.org/debian/'
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_basic(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST, timeout=None):
+@@ -296,6 +299,7 @@
+             self.addCleanup(u.close)
+             self.assertIsNone(u.fp.fp.raw._sock.gettimeout())
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_default_timeout(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST):
+@@ -307,6 +311,7 @@
+                 socket.setdefaulttimeout(None)
+             self.assertEqual(u.fp.fp.raw._sock.gettimeout(), 60)
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_no_timeout(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST):
+@@ -318,6 +323,7 @@
+                 socket.setdefaulttimeout(None)
+             self.assertIsNone(u.fp.fp.raw._sock.gettimeout())
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_timeout(self):
+         with support.transient_internet(self.FTP_HOST):
+             u = _urlopen_with_retry(self.FTP_HOST, timeout=60)
+eof
+patch -Z -b -p0 < multiple.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
+# test_socket.py issue - re: "test_aead_aes_gcm fails on Kernel 4.9"
+# https://bugs.python.org/issue29324
+if [ "${python_v}" == "3.6.0" ] ; then
+cat << eof > multiple.patch
+--- Modules/faulthandler.c
++++ Modules/faulthandler.c
+@@ -1065,18 +1065,14 @@
+ #if defined(HAVE_SIGALTSTACK) && defined(HAVE_SIGACTION)
+ #define FAULTHANDLER_STACK_OVERFLOW
+ 
+-#ifdef __INTEL_COMPILER
+-   /* Issue #23654: Turn off ICC's tail call optimization for the
+-    * stack_overflow generator. ICC turns the recursive tail call into
+-    * a loop. */
+-#  pragma intel optimization_level 0
+-#endif
+-static
+-uintptr_t
++static uintptr_t
+ stack_overflow(uintptr_t min_sp, uintptr_t max_sp, size_t *depth)
+ {
+-    /* allocate 4096 bytes on the stack at each call */
+-    unsigned char buffer[4096];
++    /* allocate (at least) 4096 bytes on the stack at each call
++     * Fix test_faulthandler on GCC 10. Use the "volatile" keyword in
++     * \`\`faulthandler._stack_overflow()\`\` to prevent tail call optimization on any
++     * compiler, rather than relying on compiler specific pragma. */
++    volatile unsigned char buffer[4096];
+     uintptr_t sp = (uintptr_t)&buffer;
+     *depth += 1;
+     if (sp < min_sp || max_sp < sp)
+--- Modules/signalmodule.c
++++ Modules/signalmodule.c
+@@ -735,7 +735,6 @@
+     int result = -1;
+     PyObject *iterator, *item;
+     long signum;
+-    int err;
+ 
+     sigemptyset(mask);
+ 
+@@ -757,11 +756,14 @@
+         Py_DECREF(item);
+         if (signum == -1 && PyErr_Occurred())
+             goto error;
+-        if (0 < signum && signum < NSIG)
+-            err = sigaddset(mask, (int)signum);
+-        else
+-            err = 1;
+-        if (err) {
++	if (0 < signum && signum < NSIG) {
++		/* bpo-33329: ignore sigaddset() return value as it can fail
++		 * for some reserved signals, but we want the \`range(1, NSIG)\`
++		 * idiom to allow selecting all valid signals.
++		 */
++		(void) sigaddset(mask, (int)signum);
++	}
++	else {
+             PyErr_Format(PyExc_ValueError,
+                          "signal number %ld out of range", signum);
+             goto error;
+--- Lib/test/test_logging.py
++++ Lib/test/test_logging.py
+@@ -1677,7 +1677,7 @@
+         SysLogHandlerTest.tearDown(self)
+         os.remove(self.address)
+ 
+-@unittest.skipUnless(threading, 'Threading required for this test.')
++@unittest.skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:749)')
+ class HTTPHandlerTest(BaseTest):
+     """Test for HTTPHandler."""
+ 
+--- Lib/test/test_poplib.py
++++ Lib/test/test_poplib.py
+@@ -10,7 +10,7 @@
+ import os
+ import errno
+ 
+-from unittest import TestCase, skipUnless
++from unittest import TestCase, skipUnless, skip
+ from test import support as test_support
+ threading = test_support.import_module('threading')
+ 
+@@ -347,7 +347,7 @@
+         resp = self.client.stls()
+         self.assertEqual(resp, expected)
+ 
+-    @requires_ssl
++    @skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:749)')
+     def test_stls_context(self):
+         expected = b'+OK Begin TLS negotiation'
+         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+--- Lib/test/test_socket.py
++++ Lib/test/test_socket.py
+@@ -5456,7 +5456,7 @@
+             self.assertEqual(len(dec), msglen * multiplier)
+             self.assertEqual(dec, msg * multiplier)
+ 
+-    @support.requires_linux_version(4, 3)  # see test_aes_cbc
++    @support.requires_linux_version(4, 9)  # see issue29324
+     def test_aead_aes_gcm(self):
+         key = bytes.fromhex('c939cc13397c1d37de6ae0e1cb7c423c')
+         iv = bytes.fromhex('b3d8cc017cbb89b39e0f67e2')
+@@ -5479,8 +5479,7 @@
+                 op.sendmsg_afalg(op=socket.ALG_OP_ENCRYPT, iv=iv,
+                                  assoclen=assoclen, flags=socket.MSG_MORE)
+                 op.sendall(assoc, socket.MSG_MORE)
+-                op.sendall(plain, socket.MSG_MORE)
+-                op.sendall(b'\\x00' * taglen)
++                op.sendall(plain)
+                 res = op.recv(assoclen + len(plain) + taglen)
+                 self.assertEqual(expected_ct, res[assoclen:-taglen])
+                 self.assertEqual(expected_tag, res[-taglen:])
+@@ -5488,7 +5487,7 @@
+             # now with msg
+             op, _ = algo.accept()
+             with op:
+-                msg = assoc + plain + b'\\x00' * taglen
++                msg = assoc + plain
+                 op.sendmsg_afalg([msg], op=socket.ALG_OP_ENCRYPT, iv=iv,
+                                  assoclen=assoclen)
+                 res = op.recv(assoclen + len(plain) + taglen)
+@@ -5499,7 +5498,7 @@
+             pack_uint32 = struct.Struct('I').pack
+             op, _ = algo.accept()
+             with op:
+-                msg = assoc + plain + b'\\x00' * taglen
++                msg = assoc + plain
+                 op.sendmsg(
+                     [msg],
+                     ([socket.SOL_ALG, socket.ALG_SET_OP, pack_uint32(socket.ALG_OP_ENCRYPT)],
+@@ -5507,7 +5506,7 @@
+                      [socket.SOL_ALG, socket.ALG_SET_AEAD_ASSOCLEN, pack_uint32(assoclen)],
+                     )
+                 )
+-                res = op.recv(len(msg))
++                res = op.recv(len(msg) + taglen)
+                 self.assertEqual(expected_ct, res[assoclen:-taglen])
+                 self.assertEqual(expected_tag, res[-taglen:])
+ 
+@@ -5517,8 +5516,8 @@
+                 msg = assoc + expected_ct + expected_tag
+                 op.sendmsg_afalg([msg], op=socket.ALG_OP_DECRYPT, iv=iv,
+                                  assoclen=assoclen)
+-                res = op.recv(len(msg))
+-                self.assertEqual(plain, res[assoclen:-taglen])
++                res = op.recv(len(msg) - taglen)
++                self.assertEqual(plain, res[assoclen:])
+ 
+     @support.requires_linux_version(4, 3)  # see test_aes_cbc
+     def test_drbg_pr_sha256(self):
+--- Lib/test/test_urllib2net.py
++++ Lib/test/test_urllib2net.py
+@@ -95,6 +95,7 @@
+     # XXX The rest of these tests aren't very good -- they don't check much.
+     # They do sometimes catch some major disasters, though.
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp(self):
+         urls = [
+             'ftp://ftp.debian.org/debian/README',
+@@ -177,6 +178,7 @@
+             opener.open(request)
+             self.assertEqual(request.get_header('User-agent'),'Test-Agent')
+ 
++    @unittest.skip('ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:749)')
+     def test_sites_no_connection_close(self):
+         # Some sites do not send Connection: close header.
+         # Verify that those work properly. (#issue12576)
+@@ -289,6 +291,7 @@
+ 
+     FTP_HOST = 'ftp://ftp.debian.org/debian/'
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_basic(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST, timeout=None):
+@@ -296,6 +299,7 @@
+             self.addCleanup(u.close)
+             self.assertIsNone(u.fp.fp.raw._sock.gettimeout())
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_default_timeout(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST):
+@@ -307,6 +311,7 @@
+                 socket.setdefaulttimeout(None)
+             self.assertEqual(u.fp.fp.raw._sock.gettimeout(), 60)
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_no_timeout(self):
+         self.assertIsNone(socket.getdefaulttimeout())
+         with support.transient_internet(self.FTP_HOST):
+@@ -318,6 +323,7 @@
+                 socket.setdefaulttimeout(None)
+             self.assertIsNone(u.fp.fp.raw._sock.gettimeout())
+ 
++    @unittest.skip("ERROR: Resource 'ftp://ftp.debian.org/debian/' is not available")
+     def test_ftp_timeout(self):
+         with support.transient_internet(self.FTP_HOST):
+             u = _urlopen_with_retry(self.FTP_HOST, timeout=60)
+--- Lib/test/test_ftplib.py
++++ Lib/test/test_ftplib.py
+@@ -16,7 +16,7 @@
+ except ImportError:
+     ssl = None
+ 
+-from unittest import TestCase, skipUnless
++from unittest import TestCase, skipUnless, skip
+ from test import support
+ from test.support import HOST, HOSTv6
+ threading = support.import_module('threading')
+@@ -926,6 +926,7 @@
+         self.client.ccc()
+         self.assertRaises(ValueError, self.client.sock.unwrap)
+ 
++    @skip('ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:749)')
+     def test_check_hostname(self):
+         self.client.quit()
+         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 eof
 patch -Z -b -p0 < multiple.patch
 if [ ! $? -eq 0 ] ; then
@@ -957,7 +1371,7 @@ else
 fi
 
 
-if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] ; then
+if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] || [ "${python_v}" == "3.5.2" ] ; then
 
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \
@@ -965,7 +1379,7 @@ if [ "${python_v}" == "2.7.6" ] || [ "${python_v}" == "3.3.3" ] ; then
   export CPPFLAGS="-I${opt}/zlib-${python_zlib_ver}/include -I${opt}/bzip2-${python_bzip2_ver}/include -I${opt}/xz-${python_xz_ver}/include -I${python_libffi_include} -I${opt}/util-linux-${python_utillinux_ver}/include/uuid -I${opt}/ncurses-${python_ncurses_ver}/include/ncurses -I${opt}/readline-${python_readline_ver}/include -I${opt}/sqlite-${python_sqlite_ver}/include -I${opt}/gdbm-${python_gdbm_ver}/include -I${opt}/tcl-${python_tcl_ver}/include -I${opt}/tk-${python_tk_ver}/include -I${opt}/openssl-${python_openssl_ver}/include"
   export LDFLAGS="-L${opt}/zlib-${python_zlib_ver}/lib -L${opt}/bzip2-${python_bzip2_ver}/lib -L${opt}/xz-${python_xz_ver}/lib -L${opt}/libffi-${python_libffi_ver}/lib -L${opt}/util-linux-${python_utillinux_ver}/lib -L${opt}/ncurses-${python_ncurses_ver}/lib -L${opt}/readline-${python_readline_ver}/lib -L${opt}/sqlite-${python_sqlite_ver}/lib -L${opt}/gdbm-${python_gdbm_ver}/lib -L${opt}/openssl-${python_openssl_ver}/lib $(pkg-config --libs tk)"
 
-elif [ "${python_v}" == "3.6.4" ] ; then
+elif [ "${python_v}" == "3.6.0" ] || [ "${python_v}" == "3.6.4" ] ; then
 
   config="./configure --prefix=${opt}/Python-${python_v} \
               --enable-shared \

@@ -57,6 +57,13 @@ case ${dav1d_v} in
    dav1d_nasm_ver=2.14.02 # 2018-12-26
    dav1d_doxygen_ver=1.8.18 # 2020-04-12
   ;;
+  0.7.1) # 2020-06-21
+   dav1d_meson_ver=0.54.2 # 2020-05-15 (or 0.54.3 2020-06-15)
+   dav1d_ninja_ver=1.10.0 # 2020-01-27
+   dav1d_python_ver=3.8.3 # 2020-05-13
+   dav1d_nasm_ver=2.14.02 # 2018-12-26
+   dav1d_doxygen_ver=1.8.18 # 2020-04-12
+  ;;
   *)
    echo "ERROR: Need review for dav1d ${dav1d_v}"
    exit 4

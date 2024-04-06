@@ -53,8 +53,7 @@ case ${ffmpeg_v} in
     ffmpeg_tiff_ver=4.1.0                 # 2019-11-03 - next 2020-Dec-19
     ffmpeg_libwebp_ver=1.1.0              # 2020-01-06 - next Sat Jan 30 03:08:45 2021
     ffmpeg_lcms2_ver=2.9                  # 2017-11-25 - next May 26, 2020
-    #ffmpeg_openjpeg_ver=2.3.1             # 2019-04-02 - next Dec 28, 2020 ffmpeg 2.8 requires openjpeg < 2.0
-    ffmpeg_openjpeg_ver=1.5.2             # 2014-03-28 - N/A
+    ffmpeg_openjpeg_ver=1.5.2             # 2014-03-28 - maximum version; ffmpeg 2.8 requires openjpeg < 2.0
     # Font rendering libraries and dependencies
     ffmpeg_utillinux_ver=2.35.1           # 2020-01-31 - next 2020-05-20
     ffmpeg_expat_ver=2.2.9                # 2019-09-25 - next Oct 3, 2020
@@ -80,8 +79,7 @@ case ${ffmpeg_v} in
     # Audio codecs
     ffmpeg_libilbc_ver=2.0.2              # 2014-12-14 - next Dec 17, 2020
     ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 11/15/2023
-    #ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08 - next Apr 28, 2021
-    ffmpeg_fdkaac_ver=0.1.6               # 2018-03-06 - ffmpeg 2.8 requires fdk-aac < 2.0.0
+    ffmpeg_fdkaac_ver=0.1.6               # 2018-03-06 - maximum version; ffmpeg 2.8 requires fdk-aac < 2.0.0
     ffmpeg_wavpack_ver=5.3.0              # 2020-04-14 - next 2021-01-10
     ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 20 Feb 2022
     ffmpeg_libsndfile_ver=1.0.28          # 2017-04-02 - next Aug 15, 2020
@@ -94,12 +92,65 @@ case ${ffmpeg_v} in
     ffmpeg_xvidcore_ver=1.3.7             # 2019-12-29 - latest as of 11/15/2023
     ffmpeg_x264_ver=20200425              # 2020-04-25 - next 2020-05-24
     ffmpeg_x265_ver=3.3                   # 2020-02-17 - next 2020-05-29
-    #ffmpeg_kvazaar_ver=2.0.0              # 2020-04-21 - next 2021-10-13 ffmpeg 2.8 requires kvazaar < 0.7.0
-    ffmpeg_kvazaar_ver=0.6.1              # 2015-09-16 - N/A
-    #ffmpeg_openh264_ver=2.1.0             # 2020-03-03 - next 2020-05-21
-    ffmpeg_openh264_ver=1.5.0             # 2015-10-26 - ffmpeg 2.8 requires openh264 < 1.6.0
+    ffmpeg_kvazaar_ver=0.6.1              # 2015-09-16 - maximum version; ffmpeg 2.8 requires kvazaar < 0.7.0
+    ffmpeg_openh264_ver=1.5.0             # 2015-10-26 - maximum version; ffmpeg 2.8 requires openh264 < 1.6.0
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next Jul 30, 2020
     ffmpeg_vidstab_ver=1.1.0              # 2017-05-30 - next May 30, 2022
+  ;;
+  3.2.15) # 2020-07-02 20:22
+    # Compression libraries
+    ffmpeg_zstd_ver=1.4.5                 # 2020-05-22 - next 2020-12-16 (1.4.7)
+    # Image processing libraries
+    ffmpeg_jbigkit_ver=2.1                # 2014-04-08 - latest as of 2024-02-09
+    ffmpeg_giflib_ver=5.2.1               # 2019-06-24 - latest as of 2024-02-09
+    ffmpeg_libpng_ver=1.6.37              # 2019-04-15 - next 2022-09-16 (1.6.38)
+    ffmpeg_libjpegturbo_ver=2.0.5         # 2020-06-23 - next 2020-11-16 (2.0.6)
+    ffmpeg_tiff_ver=4.1.0                 # 2019-11-03 - next 2020-12-19 (4.2.0)
+    ffmpeg_libwebp_ver=1.1.0              # 2020-01-06 - next 2021-01-30 (1.2.0)
+    ffmpeg_lcms2_ver=2.11                 # 2020-06-16 - next 2021-02-06 (2.12)
+    ffmpeg_openjpeg_ver=2.1.2             # 2016-09-28 - maximum version; ffmpeg 3.2 requires openjpeg < 2.2.0
+    # Font rendering libraries and dependencies
+    ffmpeg_utillinux_ver=2.35.2           # 2020-05-20 - next 2020-07-23 (2.36)
+    ffmpeg_expat_ver=2.2.9                # 2019-09-25 - next 2020-10-03 (2.2.10)
+    ffmpeg_icu_ver=67.1                   # 2020-04-22 - next 2020-10-27 (68.1)
+    ffmpeg_graphite2_ver=1.3.14           # 2020-03-31 - latest as of 2024-02-09
+    ffmpeg_freetype_ver=2.10.2            # 2020-05-09 - next 2020-10-01 (2.10.3)
+    ffmpeg_fontconfig_ver=2.13.92         # 2019-08-09 - next 2020-11-27 (2.13.93)
+    ffmpeg_harfbuzz_ver=2.6.8             # 2020-06-22 - next 2020-07-25 (2.7.0)
+    ffmpeg_cairo_ver=1.16.0               # 2018-10-19 - next 2023-09-23 (1.18.0)
+    ffmpeg_pixman_ver=0.40.0              # 2020-04-19 - next 2022-10-18 (0.42.0)
+    ffmpeg_fribidi_ver=1.0.9              # 2020-03-02 - next 2020-07-05 (1.0.10)
+    ffmpeg_libass_ver=0.14.0              # 2017-10-31 - next 2020-10-26 (0.15.0)
+    # Miscellaneous extras
+    ffmpeg_libxml2_ver=2.9.10             # 2019-10-30 - next 2021-05-13 (2.9.11)
+    ffmpeg_libbluray_ver=1.2.0            # 2020-03-22 - next 2020-10-24 (1.2.1)
+    ffmpeg_nasm_ver=2.14.02               # 2018-12-26 - maximum version; this version of ffmpeg generates x86inc.asm errors when compiled with nasm 2.15.x
+    # Xiph.org libraries
+    ffmpeg_libogg_ver=1.3.4               # 2019-08-30 - next 2021-06-03 (1.3.5)
+    ffmpeg_libvorbis_ver=1.3.6            # 2018-03-16 - next 2020-07-04 (1.3.7)
+    ffmpeg_libtheora_ver=1.1.1            # 2009-10-01 - latest as of 2024-02-09
+    ffmpeg_speex_ver=1.2.0                # 2016-12-07 - next 2022-06-16 (1.2.1)
+    ffmpeg_opus_ver=1.3.1                 # 2019-04-12 - next 2023-04-18 (1.4)
+    # Audio codecs
+    ffmpeg_libilbc_ver=2.0.2              # 2014-12-14 - next 2020-12-17 (3.0.0)
+    ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 2024-02-09
+    ffmpeg_fdkaac_ver=0.1.6               # 2018-03-06 - maximum version; ffmpeg 3.2 requires fdk-aac < 2.0.0
+    ffmpeg_wavpack_ver=5.3.0              # 2020-04-14 - next 2021-01-10 (5.4.0)
+    ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 2022-02-20 (1.3.4)
+    ffmpeg_libsndfile_ver=1.0.28          # 2017-04-02 - next 2020-08-15 (1.0.29)
+    ffmpeg_twolame_ver=0.4.0              # 2019-10-11 - latest as of 2024-02-09
+    ffmpeg_libbs2b_ver=3.1.0              # 2009-06-04 - latest as of 2024-02-09
+    ffmpeg_opencoreamr_ver=0.1.5          # 2017-03-16 - next 2022-08-01 (0.1.6)
+    ffmpeg_voamrwbenc_ver=0.1.3           # 2013-07-27 - latest as of 2024-02-09
+    ffmpeg_soxr_ver=0.1.3                 # 2018-02-24 - latest as of 2024-02-09
+    # Video codecs
+    ffmpeg_xvidcore_ver=1.3.7             # 2019-12-29 - latest as of 2024-02-09
+    ffmpeg_x264_ver=20200702              # 2020-07-02 - next 2020-07-14
+    ffmpeg_x265_ver=3.4                   # 2020-05-29 - next 2021-01-22 (3.4.1)
+    ffmpeg_kvazaar_ver=2.0.0              # 2020-04-21 - next 2021-10-13 (2.1.0)
+    ffmpeg_openh264_ver=2.1.1             # 2020-05-21 - next 2022-01-27 (2.2.0)
+    ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next 2020-07-30 (1.9.0)
+    ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
   ;;
   4.1.5) # 2020-01-07
     # Compression libraries
@@ -311,7 +362,6 @@ case ${ffmpeg_v} in
     ffmpeg_libtheora_ver=1.1.1            # 2009-10-01 - latest as of 2024-02-09
     ffmpeg_speex_ver=1.2.0                # 2016-12-07 - next 2022-06-16 (1.2.1)
     ffmpeg_opus_ver=1.3.1                 # 2019-04-12 - next 2023-04-18 (1.4)
-#    ffmpeg_rav1e_ver=0.3.2                # 2020-05-28 - next 2020-09-09 (0.3.4)
     # Audio codecs
     ffmpeg_libilbc_ver=2.0.2              # 2014-12-14 - next 2020-12-17 (3.0.0)
     ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 2024-02-09
@@ -544,9 +594,9 @@ ff_check_harfbuzz ${ffmpeg_harfbuzz_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_pixman ${ffmpeg_pixman_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libass ${ffmpeg_libass_ver} ${ffmpeg_depdir} ${ffmpeg_v}
-if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
-  ff_check_libxml2 ${ffmpeg_libxml2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
-fi
+#if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
+ff_check_libxml2 ${ffmpeg_libxml2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
+#fi
 ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libogg ${ffmpeg_libogg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libvorbis ${ffmpeg_libvorbis_ver} ${ffmpeg_depdir} ${ffmpeg_v}
@@ -635,6 +685,60 @@ ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
 -L${opt}/lame-${ffmpeg_lame_ver}/lib \
 -L${opt}/soxr-${ffmpeg_soxr_ver}/lib \
 -L${opt}/openssl-${ffmpeg_openssl_ver}/lib"
+fi
+
+if [ "${ffmpeg_v:0:3}" == "3.2" ] ; then
+ffconf_opt="--prefix=${ffmpeg_prefix} \
+            --enable-gpl \
+            --enable-version3 \
+            --enable-nonfree \
+            --enable-shared \
+            --enable-openssl \
+            --enable-libfontconfig \
+            --enable-libfreetype \
+            --enable-libfribidi \
+            --enable-libfdk-aac \
+            --enable-libbluray \
+            --enable-libass \
+            --enable-libmp3lame \
+            --enable-libxvid \
+            --enable-libvorbis \
+            --enable-libtheora \
+            --enable-libx264 \
+            --enable-libx265 \
+            --enable-libbs2b \
+            --enable-libkvazaar \
+            --enable-libilbc \
+            --enable-libopencore-amrnb \
+            --enable-libopencore-amrwb \
+            --enable-libopenh264 \
+            --enable-libopus \
+            --enable-libopenjpeg \
+            --enable-libsoxr \
+            --enable-libspeex \
+            --enable-libvo-amrwbenc \
+            --enable-libwavpack \
+            --enable-libwebp \
+            --enable-libvpx \
+            --enable-libtwolame \
+            --enable-libvidstab"
+ffconf_extra_libs=""
+ffconf_cflags="-I${ffmpeg_depdir}/include \
+-I${opt}/xvidcore-${ffmpeg_xvidcore_ver}/include \
+-I${opt}/libilbc-${ffmpeg_libilbc_ver}/include \
+-I${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/include \
+-I${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/include \
+-I${opt}/wavpack-${ffmpeg_wavpack_ver}/include \
+-I${opt}/lame-${ffmpeg_lame_ver}/include \
+-I${opt}/soxr-${ffmpeg_soxr_ver}/include"
+ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
+-L${opt}/xvidcore-${ffmpeg_xvidcore_ver}/lib \
+-L${opt}/libilbc-${ffmpeg_libilbc_ver}/lib \
+-L${opt}/opencore-amr-${ffmpeg_opencoreamr_ver}/lib \
+-L${opt}/vo-amrwbenc-${ffmpeg_voamrwbenc_ver}/lib \
+-L${opt}/wavpack-${ffmpeg_wavpack_ver}/lib \
+-L${opt}/lame-${ffmpeg_lame_ver}/lib \
+-L${opt}/soxr-${ffmpeg_soxr_ver}/lib"
 fi
 
 if [ "${ffmpeg_v:0:3}" == "4.1" ] ; then

@@ -43,6 +43,11 @@ case ${openssl_v} in
    cert_error_warn=1
    openssl_manpath=etc/ssl/man
    ;;
+1.0.2h) # 2016-05-03
+   openssl_zlib_ver=1.2.8  # 2013-04-28
+   cert_error_warn=1
+   openssl_manpath=etc/ssl/man
+   ;;
 1.0.2u) # 2019-12-20
    openssl_zlib_ver=1.2.11 # 2017-01-15
    cert_error_warn=1
@@ -638,7 +643,7 @@ fi
 ${config}
 
 if [ ${debug} -gt 0 ] ; then
-  if [ "${openssl_v}" == "1.0.1e" ] || [ "${openssl_v}" == "1.0.2u" ] ; then
+  if [ "${openssl_v}" == "1.0.1e" ] || [ "${openssl_v}" == "1.0.2h" ] || [ "${openssl_v}" == "1.0.2u" ] ; then
     echo '>> Configure complete'
     echo ''
     read k
@@ -654,7 +659,7 @@ if [ ${debug} -gt 0 ] ; then
   fi
 fi
 
-if [ "${openssl_v}" == "1.0.1e" ] || [ "${openssl_v}" == "1.0.2u" ] ; then
+if [ "${openssl_v}" == "1.0.1e" ] || [ "${openssl_v}" == "1.0.2h" ] || [ "${openssl_v}" == "1.0.2u" ] ; then
   make depend
   if [ ! $? -eq 0 ] ; then
     echo "ERROR: 'make depend' failed with return code $?"

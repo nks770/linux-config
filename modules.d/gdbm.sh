@@ -40,6 +40,11 @@ fi
 case ${gdbm_v} in
 1.10) #2011-11-13
    gdbm_readline_ver=6.2 #2011-02-13
+   gdbm_ncurses_ver=5.7  #2008-11-02
+   gdbm_dejagnu_ver=1.6.3
+   ;;
+1.12) #2016-05-16
+   gdbm_readline_ver=6.3 #2014-02-26
    gdbm_ncurses_ver=5.9  #2011-04-04
    gdbm_dejagnu_ver=1.6.3
    ;;
@@ -112,9 +117,9 @@ fi
 
 # Patch to enable compilation with GCC 8
 # https://bugs.gentoo.org/705898
-if [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
+if [ "${gdbm_v}" == "1.12" ] || [ "${gdbm_v}" == "1.13" ] || [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
 
-if [ "${gdbm_v}" == "1.13" ] ; then
+if [ "${gdbm_v}" == "1.12" ] || [ "${gdbm_v}" == "1.13" ] ; then
 cat << eof > parseopt.patch
 --- src/parseopt.c
 +++ src/parseopt.c

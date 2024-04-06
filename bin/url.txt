@@ -45,6 +45,9 @@ cmake-2.8.12.tar.gz=https://cmake.org/files/v2.8/cmake-2.8.12.tar.gz
 cmake-2.8.12.1.tar.gz=https://cmake.org/files/v2.8/cmake-2.8.12.1.tar.gz
 cmake-2.8.12.2.tar.gz=https://cmake.org/files/v2.8/cmake-2.8.12.2.tar.gz
 cmake-3.0.2.tar.gz=https://cmake.org/files/v3.0/cmake-3.0.2.tar.gz
+cmake-3.6.1.tar.gz=https://cmake.org/files/v3.6/cmake-3.6.1.tar.gz
+cmake-3.6.2.tar.gz=https://cmake.org/files/v3.6/cmake-3.6.2.tar.gz
+cmake-3.6.3.tar.gz=https://cmake.org/files/v3.6/cmake-3.6.3.tar.gz
 cmake-3.8.1.tar.gz=https://cmake.org/files/v3.8/cmake-3.8.1.tar.gz
 cmake-3.9.0.tar.gz=https://cmake.org/files/v3.9/cmake-3.9.0.tar.gz
 cmake-3.9.6.tar.gz=https://cmake.org/files/v3.9/cmake-3.9.6.tar.gz
@@ -77,6 +80,7 @@ cmake-3.26.3.tar.gz=https://cmake.org/files/v3.26/cmake-3.26.3.tar.gz
 # https://code.videolan.org/videolan/dav1d
 dav1d-0.5.2.tar.gz=https://code.videolan.org/videolan/dav1d/-/archive/0.5.2/dav1d-0.5.2.tar.gz
 dav1d-0.7.0.tar.gz=https://code.videolan.org/videolan/dav1d/-/archive/0.7.0/dav1d-0.7.0.tar.gz
+dav1d-0.7.1.tar.gz=https://code.videolan.org/videolan/dav1d/-/archive/0.7.1/dav1d-0.7.1.tar.gz
 
 # davs2
 davs2-1.6.tar.gz=https://github.com/pkuvcl/davs2/archive/refs/tags/1.6.tar.gz
@@ -87,6 +91,8 @@ dejagnu-1.6.3.tar.gz=http://ftp.gnu.org/gnu/dejagnu/dejagnu-1.6.3.tar.gz
 
 # doxygen
 doxygen-1.8.6.src.tar.gz=https://master.dl.sourceforge.net/project/doxygen/rel-1.8.6/doxygen-1.8.6.src.tar.gz
+doxygen-1.8.12.src.tar.gz=https://master.dl.sourceforge.net/project/doxygen/rel-1.8.12/doxygen-1.8.12.src.tar.gz
+doxygen-1.8.13.src.tar.gz=https://master.dl.sourceforge.net/project/doxygen/rel-1.8.13/doxygen-1.8.13.src.tar.gz
 doxygen-1.8.14.src.tar.gz=https://cfhcable.dl.sourceforge.net/project/doxygen/rel-1.8.14/doxygen-1.8.14.src.tar.gz
 doxygen-1.8.15.src.tar.gz=https://cytranet.dl.sourceforge.net/project/doxygen/rel-1.8.15/doxygen-1.8.15.src.tar.gz
 doxygen-1.8.16.src.tar.gz=https://master.dl.sourceforge.net/project/doxygen/rel-1.8.16/doxygen-1.8.16.src.tar.gz
@@ -127,6 +133,7 @@ fdk-aac-2.0.2.tar.gz=https://downloads.sourceforge.net/opencore-amr/fdk-aac-2.0.
 
 # FFmpeg
 ffmpeg-2.8.16.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-2.8.16.tar.gz
+ffmpeg-3.2.15.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.2.15.tar.gz
 ffmpeg-4.1.5.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.1.5.tar.gz
 ffmpeg-4.2.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.gz
 ffmpeg-4.2.3.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.3.tar.gz
@@ -161,6 +168,7 @@ fribidi-1.0.9.tar.xz=https://github.com/fribidi/fribidi/releases/download/v1.0.9
 
 # gdbm
 gdbm-1.10.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.10.tar.gz
+gdbm-1.12.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.12.tar.gz
 gdbm-1.13.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.13.tar.gz
 gdbm-1.18.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.18.tar.gz
 gdbm-1.18.1.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.18.1.tar.gz
@@ -191,6 +199,7 @@ harfbuzz-2.6.4.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.6
 harfbuzz-2.6.5.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.6.5/harfbuzz-2.6.5.tar.xz
 harfbuzz-2.6.6.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.6.6/harfbuzz-2.6.6.tar.xz
 harfbuzz-2.6.7.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.6.7/harfbuzz-2.6.7.tar.xz
+harfbuzz-2.6.8.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.6.8/harfbuzz-2.6.8.tar.xz
 
 # help2man
 # https://www.gnu.org/software/help2man/
@@ -200,6 +209,7 @@ help2man-1.49.3.tar.xz=https://ftp.gnu.org/gnu/help2man/help2man-1.49.3.tar.xz
 # ICU
 # https://github.com/unicode-org/icu
 icu4c-51_1-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/51.1/icu4c-51_1-src.tgz
+icu4c-57_1-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/57.1/icu4c-57_1-src.tgz
 icu4c-59_1-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/59.1/icu4c-59_1-src.tgz
 icu4c-60_1-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/60.1/icu4c-60_1-src.tgz
 icu4c-60_2-src.tgz=https://master.dl.sourceforge.net/project/icu/ICU4C/60.2/icu4c-60_2-src.tgz
@@ -274,6 +284,7 @@ jpegsrc.v9e.tar.gz=http://www.ijg.org/files/jpegsrc.v9e.tar.gz
 libjpeg-turbo-1.5.2.tar.gz=https://zenlayer.dl.sourceforge.net/project/libjpeg-turbo/1.5.2/libjpeg-turbo-1.5.2.tar.gz
 libjpeg-turbo-2.0.3.tar.gz=https://phoenixnap.dl.sourceforge.net/project/libjpeg-turbo/2.0.3/libjpeg-turbo-2.0.3.tar.gz
 libjpeg-turbo-2.0.4.tar.gz=https://phoenixnap.dl.sourceforge.net/project/libjpeg-turbo/2.0.4/libjpeg-turbo-2.0.4.tar.gz
+libjpeg-turbo-2.0.5.tar.gz=https://cytranet.dl.sourceforge.net/project/libjpeg-turbo/2.0.5/libjpeg-turbo-2.0.5.tar.gz
 libjpeg-turbo-2.1.3.tar.gz=https://cfhcable.dl.sourceforge.net/project/libjpeg-turbo/2.1.3/libjpeg-turbo-2.1.3.tar.gz
 
 # libogg
@@ -328,6 +339,7 @@ libwebp-1.2.4.tar.gz=https://storage.googleapis.com/downloads.webmproject.org/re
 # libxml2
 # https://gitlab.gnome.org/GNOME/libxml2/-/wikis/home
 libxml2-2.9.1.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.1.tar.gz
+libxml2-2.9.4.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.4.tar.gz
 libxml2-2.9.7.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.7.tar.gz
 libxml2-2.9.8.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.8.tar.gz
 libxml2-2.9.9.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.9.tar.gz
@@ -338,6 +350,7 @@ libxml2-2.9.11.tar.gz=http://xmlsoft.org/sources/libxml2-2.9.11.tar.gz
 # http://www.littlecms.com/
 lcms2-2.9.tar.gz=https://newcontinuum.dl.sourceforge.net/project/lcms/lcms/2.9/lcms2-2.9.tar.gz
 lcms2-2.10.tar.gz=https://master.dl.sourceforge.net/project/lcms/lcms/2.10/lcms2-2.10.tar.gz
+lcms2-2.11.tar.gz=https://zenlayer.dl.sourceforge.net/project/lcms/lcms/2.11/lcms2-2.11.tar.gz
 
 # lz4
 # https://lz4.org/
@@ -365,6 +378,8 @@ nasm-2.13.01.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.01/nasm-2.13
 nasm-2.13.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.02/nasm-2.13.02.tar.gz
 nasm-2.13.03.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.13.03/nasm-2.13.03.tar.gz
 nasm-2.14.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.14.02/nasm-2.14.02.tar.gz
+nasm-2.15.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15/nasm-2.15.tar.gz
+nasm-2.15.02.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15.02/nasm-2.15.02.tar.gz
 nasm-2.15.05.tar.gz=https://www.nasm.us/pub/nasm/releasebuilds/2.15.05/nasm-2.15.05.tar.gz
 
 # ninja
@@ -401,11 +416,14 @@ openh264-2.3.1.tar.gz=https://github.com/cisco/openh264/archive/refs/tags/v2.3.1
 # openjpeg
 # https://github.com/uclouvain/openjpeg
 openjpeg-1.5.2.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/version.1.5.2.tar.gz
+openjpeg-2.1.2.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.1.2.tar.gz
+openjpeg-2.2.0.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.2.0.tar.gz
 openjpeg-2.3.1.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.3.1.tar.gz
 openjpeg-2.5.0.tar.gz=https://github.com/uclouvain/openjpeg/archive/refs/tags/v2.5.0.tar.gz
 
 # OpenSSL
 openssl-1.0.1e.tar.gz=https://www.openssl.org/source/openssl-1.0.1e.tar.gz
+openssl-1.0.2h.tar.gz=https://www.openssl.org/source/openssl-1.0.2h.tar.gz
 openssl-1.0.2u.tar.gz=https://www.openssl.org/source/openssl-1.0.2u.tar.gz
 openssl-1.1.0g.tar.gz=https://www.openssl.org/source/openssl-1.1.0g.tar.gz
 openssl-1.1.0l.tar.gz=https://www.openssl.org/source/openssl-1.1.0l.tar.gz
@@ -432,6 +450,9 @@ Python-2.7.6.tgz=https://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz
 #
 Python-3.3.3.tgz=https://www.python.org/ftp/python/3.3.3/Python-3.3.3.tgz
 #
+Python-3.5.2.tgz=https://www.python.org/ftp/python/3.5.2/Python-3.5.2.tgz
+#
+Python-3.6.0.tgz=https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz
 Python-3.6.4.tgz=https://www.python.org/ftp/python/3.6.4/Python-3.6.4.tgz
 #
 Python-3.7.1.tgz=https://www.python.org/ftp/python/3.7.1/Python-3.7.1.tgz
@@ -486,9 +507,6 @@ rarlinux-x64-622.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-622.tar.gz
 rarlinux-x64-623.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-623.tar.gz
 rarlinux-x64-624.tar.gz=https://www.rarlab.com/rar/rarlinux-x64-624.tar.gz
 
-# rav1e
-rav1e-0.3.2.tar.gz=https://github.com/xiph/rav1e/archive/refs/tags/v0.3.2.tar.gz
-
 # readline
 readline-7.0.tar.gz=http://ftp.gnu.org/gnu/readline/readline-7.0.tar.gz
 readline-8.1.tar.gz=http://ftp.gnu.org/gnu/readline/readline-8.1.tar.gz
@@ -512,6 +530,8 @@ speex-1.2.1.tar.gz=http://downloads.xiph.org/releases/speex/speex-1.2.1.tar.gz
 
 # sqlite
 sqlite-autoconf-3080100.tar.gz=https://sqlite.org/2013/sqlite-autoconf-3080100.tar.gz
+sqlite-autoconf-3130000.tar.gz=https://sqlite.org/2016/sqlite-autoconf-3130000.tar.gz
+sqlite-autoconf-3150200.tar.gz=https://sqlite.org/2016/sqlite-autoconf-3150200.tar.gz
 sqlite-autoconf-3210000.tar.gz=https://sqlite.org/2017/sqlite-autoconf-3210000.tar.gz
 sqlite-autoconf-3250200.tar.gz=https://sqlite.org/2018/sqlite-autoconf-3250200.tar.gz
 sqlite-autoconf-3260000.tar.gz=https://sqlite.org/2018/sqlite-autoconf-3260000.tar.gz
@@ -586,6 +606,7 @@ wheel-0.34.2-py2.py3-none-any.whl=https://files.pythonhosted.org/packages/8c/23/
 x264-20191125.tar.gz=https://code.videolan.org/videolan/x264/-/archive/1771b556ee45207f8711744ccbd5d42a3949b14c/x264-1771b556ee45207f8711744ccbd5d42a3949b14c.tar.gz
 x264-20200425.tar.gz=https://code.videolan.org/videolan/x264/-/archive/538f09b5b92eda0b6efe25e62fcc8542fc9f025d/x264-538f09b5b92eda0b6efe25e62fcc8542fc9f025d.tar.gz
 x264-20200615.tar.gz=https://code.videolan.org/videolan/x264/-/archive/4c9b076be684832b9141f5b6c03aaf302adca0e4/x264-4c9b076be684832b9141f5b6c03aaf302adca0e4.tar.gz
+x264-20200702.tar.gz=https://code.videolan.org/videolan/x264/-/archive/4c2aafd864dd201832ec2be0fef4484925146650/x264-4c2aafd864dd201832ec2be0fef4484925146650.tar.gz
 x264-20220601.tar.gz=https://code.videolan.org/videolan/x264/-/archive/baee400fa9ced6f5481a728138fed6e867b0ff7f/x264-baee400fa9ced6f5481a728138fed6e867b0ff7f.tar.gz
 
 # x265

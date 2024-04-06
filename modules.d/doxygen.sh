@@ -49,6 +49,24 @@ case ${doxygen_v} in
    doxygen_build_system=gmake
    doxygen_manpath=1
   ;;
+  1.8.12) # 2016-09-05
+   doxygen_flex_ver=2.6.1    # 2016-03-01
+   doxygen_bison_ver=3.0.4   # 2015-01-23
+   doxygen_cmake_ver=3.6.1   # 2016-07-22
+   doxygen_libxml2_ver=2.9.4 # 2016-05-23
+   doxygen_python_ver=3.5.2  # 2016-06-27
+   doxygen_build_system=cmake
+   doxygen_manpath=0
+  ;;
+  1.8.13) # 2016-12-29
+   doxygen_flex_ver=2.6.2    # 2016-10-24
+   doxygen_bison_ver=3.0.4   # 2015-01-23
+   doxygen_cmake_ver=3.6.3   # 2016-11-03
+   doxygen_libxml2_ver=2.9.4 # 2016-05-23
+   doxygen_python_ver=3.6.0  # 2016-12-23
+   doxygen_build_system=cmake
+   doxygen_manpath=0
+  ;;
   1.8.14) # 2017-12-25
    doxygen_flex_ver=2.6.4    # 2017-05-06
    doxygen_bison_ver=3.0.4   # 2015-01-23
