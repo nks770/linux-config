@@ -5,8 +5,8 @@ opt=/opt
 pkg=${root}/packages
 tmp=${root}/temp
 
-debug=0
-run_tests=0
+debug=1
+run_tests=1
 run_cairo_tests=0
 run_cmake_tests=1
 dependency_strategy=optimized
@@ -109,10 +109,14 @@ elif [ "${1}" == "rar" ] ; then
   check_rarlinux 6.22
 
 elif [ "${1}" == "python" ] ; then
-  for pv in 3.9.4 3.9.16 3.10.{9..10} 3.11.2 3.11.4 ; do
-    check_python ${pv}
-    python_extensions ${pv}
-  done
+  if [ ! -z "${2}" ] ; then
+    check_python ${2}
+  else
+    for pv in 3.9.4 3.9.16 3.10.{9..10} 3.11.2 3.11.4 ; do
+      check_python ${pv}
+      python_extensions ${pv}
+    done
+  fi
 
 #elif [ "${1}" == "screen" ] ; then
 #  check_screen 4.8.0

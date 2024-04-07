@@ -916,6 +916,36 @@ cat << eof > multiple.patch
      uintptr_t sp = (uintptr_t)&buffer;
      *depth += 1;
      if (sp < min_sp || max_sp < sp)
+--- Modules/signalmodule.c
++++ Modules/signalmodule.c
+@@ -759,7 +759,6 @@
+     int result = -1;
+     PyObject *iterator, *item;
+     long signum;
+-    int err;
+ 
+     sigemptyset(mask);
+ 
+@@ -781,11 +780,14 @@
+         Py_DECREF(item);
+         if (signum == -1 && PyErr_Occurred())
+             goto error;
+-        if (0 < signum && signum < NSIG)
+-            err = sigaddset(mask, (int)signum);
+-        else
+-            err = 1;
+-        if (err) {
++	if (0 < signum && signum < NSIG) {
++		/* bpo-33329: ignore sigaddset() return value as it can fail
++		 * for some reserved signals, but we want the \`range(1, NSIG)\`
++		 * idiom to allow selecting all valid signals.
++		 */
++		(void) sigaddset(mask, (int)signum);
++	}
++	else {
+             PyErr_Format(PyExc_ValueError,
+                          "signal number %ld out of range", signum);
+             goto error;
 --- Lib/test/test_logging.py
 +++ Lib/test/test_logging.py
 @@ -1742,7 +1742,7 @@
@@ -923,61 +953,59 @@ cat << eof > multiple.patch
          super(IPv6SysLogHandlerTest, self).tearDown()
  
 -@unittest.skipUnless(threading, 'Threading required for this test.')
-+@unittest.skip('Skipping this test because it is broken and causes the build to hang.')
++@unittest.skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:777)')
  class HTTPHandlerTest(BaseTest):
      """Test for HTTPHandler."""
  
 --- Lib/test/test_poplib.py
 +++ Lib/test/test_poplib.py
-@@ -10,13 +10,15 @@
+@@ -10,7 +10,7 @@
  import os
  import errno
  
 -from unittest import TestCase, skipUnless
-+from unittest import TestCase, skipUnless, SkipTest
++from unittest import TestCase, skipUnless, skip
  from test import support as test_support
  threading = test_support.import_module('threading')
  
- HOST = test_support.HOST
- PORT = 0
+@@ -349,7 +349,7 @@
+         resp = self.client.stls()
+         self.assertEqual(resp, expected)
  
-+raise SkipTest('Skipping test_poplib because it is unstable in Python 3.6 and can hang.')
-+
- SUPPORTS_SSL = False
- if hasattr(poplib, 'POP3_SSL'):
-     import ssl
---- Lib/test/test_multiprocessing_fork.py
-+++ Lib/test/test_multiprocessing_fork.py
-@@ -6,6 +6,7 @@
- if support.PGO:
-     raise unittest.SkipTest("test is not helpful for PGO")
+-    @requires_ssl
++    @skip('ssl.SSLError: [SSL: SSLV3_ALERT_CERTIFICATE_EXPIRED] sslv3 alert certificate expired (_ssl.c:777)')
+     def test_stls_context(self):
+         expected = b'+OK Begin TLS negotiation'
+         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
+--- Lib/test/test_urllib2net.py
++++ Lib/test/test_urllib2net.py
+@@ -177,6 +177,7 @@
+             opener.open(request)
+             self.assertEqual(request.get_header('User-agent'),'Test-Agent')
  
-+raise unittest.SkipTest('Skipping test_multiprocessing_fork because it is unstable in Python 3.6 and can hang.')
++    @unittest.skip('sl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:777)')
+     def test_sites_no_connection_close(self):
+         # Some sites do not send Connection: close header.
+         # Verify that those work properly. (#issue12576)
+--- Lib/test/test_ftplib.py
++++ Lib/test/test_ftplib.py
+@@ -16,7 +16,7 @@
+ except ImportError:
+     ssl = None
  
- test._test_multiprocessing.install_tests_in_module_dict(globals(), 'fork')
+-from unittest import TestCase, skipUnless
++from unittest import TestCase, skipUnless, skip
+ from test import support
+ from test.support import HOST, HOSTv6
+ threading = support.import_module('threading')
+@@ -939,6 +939,7 @@
+         self.client.ccc()
+         self.assertRaises(ValueError, self.client.sock.unwrap)
  
---- Lib/test/test_multiprocessing_forkserver.py
-+++ Lib/test/test_multiprocessing_forkserver.py
-@@ -6,6 +6,8 @@
- if support.PGO:
-     raise unittest.SkipTest("test is not helpful for PGO")
- 
-+raise unittest.SkipTest('Skipping test_multiprocessing_forkserver because it is unstable in Python 3.6 and can hang.')
-+
- test._test_multiprocessing.install_tests_in_module_dict(globals(), 'forkserver')
- 
- if __name__ == '__main__':
---- Lib/test/test_multiprocessing_spawn.py
-+++ Lib/test/test_multiprocessing_spawn.py
-@@ -6,6 +6,8 @@
- if support.PGO:
-     raise unittest.SkipTest("test is not helpful for PGO")
- 
-+raise unittest.SkipTest('Skipping test_multiprocessing_spawn because it is unstable in Python 3.6 and can hang.')
-+
- test._test_multiprocessing.install_tests_in_module_dict(globals(), 'spawn')
- 
- if __name__ == '__main__':
++    @skip('ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:777)')
+     def test_check_hostname(self):
+         self.client.quit()
+         ctx = ssl.SSLContext(ssl.PROTOCOL_TLSv1)
 eof
 patch -Z -b -p0 < multiple.patch
 if [ ! $? -eq 0 ] ; then

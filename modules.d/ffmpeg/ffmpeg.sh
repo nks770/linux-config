@@ -594,9 +594,7 @@ ff_check_harfbuzz ${ffmpeg_harfbuzz_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_pixman ${ffmpeg_pixman_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_cairo ${ffmpeg_cairo_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libass ${ffmpeg_libass_ver} ${ffmpeg_depdir} ${ffmpeg_v}
-#if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
 ff_check_libxml2 ${ffmpeg_libxml2_ver} ${ffmpeg_depdir} ${ffmpeg_v}
-#fi
 ff_check_libbluray ${ffmpeg_libbluray_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libogg ${ffmpeg_libogg_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 ff_check_libvorbis ${ffmpeg_libvorbis_ver} ${ffmpeg_depdir} ${ffmpeg_v}
