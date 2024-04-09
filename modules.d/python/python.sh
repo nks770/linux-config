@@ -983,7 +983,7 @@ cat << eof > multiple.patch
              opener.open(request)
              self.assertEqual(request.get_header('User-agent'),'Test-Agent')
  
-+    @unittest.skip('sl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:777)')
++    @unittest.skip('ssl.SSLError: [SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed (_ssl.c:777)')
      def test_sites_no_connection_close(self):
          # Some sites do not send Connection: close header.
          # Verify that those work properly. (#issue12576)

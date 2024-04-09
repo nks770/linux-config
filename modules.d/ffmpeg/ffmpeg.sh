@@ -207,6 +207,7 @@ case ${ffmpeg_v} in
     ffmpeg_openh264_ver=2.0.0             # 2019-05-08 - next Mar 3, 2020
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next Jul 30, 2020
     ffmpeg_davs2_ver=1.6                  # 2018-11-15 - next Apr 19, 2020
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.0              # 2017-05-30 - next May 30, 2022
   ;;
   4.2.2) # 2019-12-31 23:58
@@ -266,6 +267,7 @@ case ${ffmpeg_v} in
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19
     ffmpeg_dav1d_ver=0.5.2                # 2019-12-04
     ffmpeg_davs2_ver=1.6                  # 2018-11-15
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.0              # 2017-05-30
   ;;
   4.2.3) # 2020-05-21 20:14
@@ -325,6 +327,7 @@ case ${ffmpeg_v} in
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next 2020-07-30 (1.9.0)
     ffmpeg_dav1d_ver=0.7.0                # 2020-05-20 - next 2020-06-21 (0.7.1)
     ffmpeg_davs2_ver=1.7                  # 2020-04-19 - latest as of 2024-02-09
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.0              # 2017-05-30 - next 2022-05-30 (1.1.1)
   ;;
   4.3) # 2020-06-15 21:54
@@ -384,6 +387,7 @@ case ${ffmpeg_v} in
     ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next 2020-07-30 (1.9.0)
     ffmpeg_dav1d_ver=0.7.0                # 2020-05-20 - next 2020-06-21 (0.7.1)
     ffmpeg_davs2_ver=1.7                  # 2020-04-19 - latest as of 2024-02-09
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
   ;;
 #  5.1.2) # 2022-09-25
@@ -462,7 +466,6 @@ conflict ffmpeg-dep
 
 module load libpng/${ffmpeg_libpng_ver}
 module load libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
-module load openssl/${ffmpeg_openssl_ver}
 module load zlib/${ffmpeg_zlib_ver}
 module load xz/${ffmpeg_xz_ver}
 module load jbigkit/${ffmpeg_jbigkit_ver}
@@ -482,6 +485,7 @@ eof
 if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
   echo "module load libaom/${ffmpeg_libaom_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "module load davs2/${ffmpeg_davs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
+  echo "module load xavs2/${ffmpeg_xavs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
 cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 module load xvidcore/${ffmpeg_xvidcore_ver}
@@ -500,7 +504,6 @@ module load vidstab/${ffmpeg_vidstab_ver}
 
 prereq libpng/${ffmpeg_libpng_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
-prereq openssl/${ffmpeg_openssl_ver}
 prereq zlib/${ffmpeg_zlib_ver}
 prereq xz/${ffmpeg_xz_ver}
 prereq jbigkit/${ffmpeg_jbigkit_ver}
@@ -520,6 +523,7 @@ eof
 if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
   echo "prereq libaom/${ffmpeg_libaom_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "prereq davs2/${ffmpeg_davs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
+  echo "prereq xavs2/${ffmpeg_xavs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
 cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 prereq xvidcore/${ffmpeg_xvidcore_ver}
@@ -567,6 +571,7 @@ check_voamrwbenc ${ffmpeg_voamrwbenc_ver}
 if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] ; then
   check_libaom ${ffmpeg_libaom_ver}
   check_davs2 ${ffmpeg_davs2_ver}
+  check_xavs2 ${ffmpeg_xavs2_ver}
 fi
 check_xvidcore ${ffmpeg_xvidcore_ver}
 check_x264 ${ffmpeg_x264_ver}
@@ -627,6 +632,7 @@ fi
 module purge
 module load ffmpeg-dep/${ffmpeg_v}
 module load nasm/${ffmpeg_nasm_ver}
+module load openssl/${ffmpeg_openssl_ver}
 
 if [ "${ffmpeg_v:0:3}" == "2.8" ] ; then
 ffconf_opt="--prefix=${ffmpeg_prefix} \
@@ -747,6 +753,7 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-shared \
             --enable-openssl \
             --enable-libdavs2 \
+            --enable-libxavs2 \
             --enable-libaom \
             --enable-libfontconfig \
             --enable-libfreetype \
@@ -805,6 +812,7 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-openssl \
             --enable-libdav1d \
             --enable-libdavs2 \
+            --enable-libxavs2 \
             --enable-libaom \
             --enable-libfontconfig \
             --enable-libfreetype \
@@ -864,6 +872,7 @@ ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-openssl \
             --enable-libdav1d \
             --enable-libdavs2 \
+            --enable-libxavs2 \
             --enable-libaom \
             --enable-libfontconfig \
             --enable-libfreetype \
@@ -972,6 +981,8 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 # Create the environment module
+module purge
+
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
@@ -1000,6 +1011,22 @@ prepend-path PATH \$PKG/bin
 prepend-path MANPATH \$PKG/share/man
 
 eof
+
+grep -v 'prepend-path' ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v} > ${MODULEPATH}/ffmpeg-dep/temp
+cat << eof >> ${MODULEPATH}/ffmpeg-dep/temp
+module load openssl/${ffmpeg_openssl_ver}
+prereq openssl/${ffmpeg_openssl_ver}
+
+prepend-path CPATH \$PKG/include
+prepend-path C_INCLUDE_PATH \$PKG/include
+prepend-path CPLUS_INCLUDE_PATH \$PKG/include
+prepend-path LD_LIBRARY_PATH \$PKG/lib
+prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
+prepend-path PATH \$PKG/bin
+prepend-path MANPATH \$PKG/share/man
+
+eof
+mv -fv ${MODULEPATH}/ffmpeg-dep/temp ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 
 cd ${root}
 rm -rf ${tmp}/${ffmpeg_srcdir}
