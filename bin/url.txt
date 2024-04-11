@@ -137,6 +137,7 @@ ffmpeg-3.2.15.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.2.15.tar.gz
 ffmpeg-3.4.8.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.4.8.tar.gz
 ffmpeg-4.0.6.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.0.6.tar.gz
 ffmpeg-4.1.5.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.1.5.tar.gz
+ffmpeg-4.1.6.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.1.6.tar.gz
 ffmpeg-4.2.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.2.tar.gz
 ffmpeg-4.2.3.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.3.tar.gz
 ffmpeg-4.2.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.2.4.tar.gz
@@ -167,6 +168,7 @@ freetype-2.10.2.tar.gz=https://download.savannah.gnu.org/releases/freetype/freet
 fribidi-0.19.7.tar.bz2=https://github.com/fribidi/fribidi/releases/download/0.19.7/fribidi-0.19.7.tar.bz2
 fribidi-1.0.8.tar.bz2=https://github.com/fribidi/fribidi/releases/download/v1.0.8/fribidi-1.0.8.tar.bz2
 fribidi-1.0.9.tar.xz=https://github.com/fribidi/fribidi/releases/download/v1.0.9/fribidi-1.0.9.tar.xz
+fribidi-1.0.10.tar.xz=https://github.com/fribidi/fribidi/releases/download/v1.0.10/fribidi-1.0.10.tar.xz
 
 # gdbm
 gdbm-1.10.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.10.tar.gz
