@@ -8,6 +8,9 @@ case ${1} in
   1.3.6)
     echo libvorbis.so.0.4.8
   ;;
+  1.3.7)
+    echo libvorbis.so.0.4.9
+  ;;
   *)
     echo ''
   ;;
