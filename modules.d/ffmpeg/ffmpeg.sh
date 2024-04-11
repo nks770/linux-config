@@ -674,6 +674,66 @@ case ${ffmpeg_v} in
     ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
   ;;
+  4.3.1) # 2020-07-11
+    # Compression libraries
+    ffmpeg_zstd_ver=1.4.5                 # 2020-05-22 - next 2020-12-16 (1.4.7)
+    # Image processing libraries
+    ffmpeg_jbigkit_ver=2.1                # 2014-04-08 - latest as of 2024-02-09
+    ffmpeg_giflib_ver=5.2.1               # 2019-06-24 - latest as of 2024-02-09
+    ffmpeg_libpng_ver=1.6.37              # 2019-04-15 - next 2022-09-16 (1.6.38)
+    ffmpeg_libjpegturbo_ver=2.0.5         # 2020-06-23 - next 2020-11-16 (2.0.6)
+    ffmpeg_tiff_ver=4.1.0                 # 2019-11-03 - next 2020-12-19 (4.2.0)
+    ffmpeg_libwebp_ver=1.1.0              # 2020-01-06 - next 2021-01-30 (1.2.0)
+    ffmpeg_lcms2_ver=2.11                 # 2020-06-16 - next 2021-02-06 (2.12)
+    ffmpeg_openjpeg_ver=2.3.1             # 2019-04-02 - next 2020-12-28 (2.4.0)
+    # Font rendering libraries and dependencies
+    ffmpeg_aribb24_ver=1.0.3              # 2014-08-18 - latest as of 2024-02-09
+    ffmpeg_utillinux_ver=2.35.2           # 2020-05-20 - next 2020-07-23 (2.36)
+    ffmpeg_expat_ver=2.2.9                # 2019-09-25 - next 2020-10-03 (2.2.10)
+    ffmpeg_icu_ver=67.1                   # 2020-04-22 - next 2020-10-27 (68.1)
+    ffmpeg_graphite2_ver=1.3.14           # 2020-03-31 - latest as of 2024-02-09
+    ffmpeg_freetype_ver=2.10.2            # 2020-05-09 - next 2020-10-01 (2.10.3)
+    ffmpeg_fontconfig_ver=2.13.92         # 2019-08-09 - next 2020-11-27 (2.13.93)
+    ffmpeg_harfbuzz_ver=2.6.8             # 2020-06-22 - next 2020-07-25 (2.7.0)
+    ffmpeg_cairo_ver=1.16.0               # 2018-10-19 - next 2023-09-23 (1.18.0)
+    ffmpeg_pixman_ver=0.40.0              # 2020-04-19 - next 2022-10-18 (0.42.0)
+    ffmpeg_fribidi_ver=1.0.10             # 2020-07-05 - next 2021-09-23 (1.0.11)
+    ffmpeg_libass_ver=0.14.0              # 2017-10-31 - next 2020-10-26 (0.15.0)
+    # Miscellaneous extras
+    ffmpeg_libxml2_ver=2.9.10             # 2019-10-30 - next 2021-05-13 (2.9.11)
+    ffmpeg_libbluray_ver=1.2.0            # 2020-03-22 - next 2020-10-24 (1.2.1)
+    ffmpeg_nasm_ver=2.15.02               # 2020-07-01 - next 2020-07-17 (2.15.03)
+    # Xiph.org libraries
+    ffmpeg_libogg_ver=1.3.4               # 2019-08-30 - next 2021-06-03 (1.3.5)
+    ffmpeg_libvorbis_ver=1.3.7            # 2020-07-04 - latest as of 2024-04-10
+    ffmpeg_libtheora_ver=1.1.1            # 2009-10-01 - latest as of 2024-02-09
+    ffmpeg_speex_ver=1.2.0                # 2016-12-07 - next 2022-06-16 (1.2.1)
+    ffmpeg_opus_ver=1.3.1                 # 2019-04-12 - next 2023-04-18 (1.4)
+    # Audio codecs
+    ffmpeg_libilbc_ver=2.0.2              # 2014-12-14 - next 2020-12-17 (3.0.0)
+    ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 2024-02-09
+    ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08 - next 2021-04-28 (2.0.2)
+    ffmpeg_wavpack_ver=5.3.0              # 2020-04-14 - next 2021-01-10 (5.4.0)
+    ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 2022-02-20 (1.3.4)
+    ffmpeg_libsndfile_ver=1.0.28          # 2017-04-02 - next 2020-08-15 (1.0.29)
+    ffmpeg_twolame_ver=0.4.0              # 2019-10-11 - latest as of 2024-02-09
+    ffmpeg_libbs2b_ver=3.1.0              # 2009-06-04 - latest as of 2024-02-09
+    ffmpeg_opencoreamr_ver=0.1.5          # 2017-03-16 - next 2022-08-01 (0.1.6)
+    ffmpeg_voamrwbenc_ver=0.1.3           # 2013-07-27 - latest as of 2024-02-09
+    ffmpeg_soxr_ver=0.1.3                 # 2018-02-24 - latest as of 2024-02-09
+    # Video codecs
+    ffmpeg_libaom_ver=2.0.0               # 2020-05-18 - next 2020-11-25 (2.0.1)
+    ffmpeg_xvidcore_ver=1.3.7             # 2019-12-29 - latest as of 2024-02-09
+    ffmpeg_x264_ver=20200702              # 2020-07-02 - next 2020-07-14
+    ffmpeg_x265_ver=3.4                   # 2020-05-29 - next 2021-01-22 (3.4.1)
+    ffmpeg_kvazaar_ver=2.0.0              # 2020-04-21 - next 2021-10-13 (2.1.0)
+    ffmpeg_openh264_ver=2.1.1             # 2020-05-21 - next 2022-01-27 (2.2.0)
+    ffmpeg_libvpx_ver=1.8.2               # 2019-12-19 - next 2020-07-30 (1.9.0)
+    ffmpeg_dav1d_ver=0.7.1                # 2020-06-20 - next 2020-11-23 (0.8.0)
+    ffmpeg_davs2_ver=1.7                  # 2020-04-19 - latest as of 2024-02-09
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
+    ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
+  ;;
 #  5.1.2) # 2022-09-25
 #   ffmpeg_nasm_ver=2.15.05   # 2020-08-28
 #   ffmpeg_libaom_ver=3.5.0   # 2022-09-21
