@@ -8,6 +8,9 @@ case ${1} in
   2.13.92)
     echo libfontconfig.so.1.12.0
   ;;
+  2.13.93)
+    echo libfontconfig.so.1.12.0
+  ;;
   *)
     echo ''
   ;;
@@ -37,10 +40,11 @@ function ff_build_fontconfig() {
 # Get desired version number to install
 fontconfig_v=${1}
 if [ -z "${fontconfig_v}" ] ; then
-  fontconfig_v=2.12.6
+  echo "ERROR: No fontconfig version specified!"
+  exit 2
 fi
 
-case ${1} in
+case ${fontconfig_v} in
   2.12.6) # 2017-09-21
 #   freetype_ver=2.8.1 # 2017-09-16
 #   fontconfig_expat_ver=2.2.4    # 2017-08-19
@@ -64,8 +68,14 @@ case ${1} in
    fontconfig_gperf_ver=3.1        # 2017-01-05
 #   fontconfig_utillinux_ver=2.34   # 2019-06-14
   ;;
+  2.13.93) # 2020-11-28
+#   freetype_ver=2.10.0  # 2019-03-15
+#   fontconfig_expat_ver=2.2.7      # 2019-06-19
+   fontconfig_gperf_ver=3.1        # 2017-01-05 - latest as of 2024-04-20
+#   fontconfig_utillinux_ver=2.34   # 2019-06-14
+  ;;
   *)
-   echo "ERROR: Need review for fontconfig ${1}"
+   echo "ERROR: Need review for fontconfig ${fontconfig_v}"
    exit 4
    ;;
 esac
@@ -110,6 +120,18 @@ cd ${tmp}/${fontconfig_srcdir}
 if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
+fi
+
+if [ "${fontconfig_v}" == "2.13.93" ] ; then
+  # Known issue where sgml files are not generated
+  # https://gitlab.freedesktop.org/fontconfig/fontconfig/-/issues/272
+  for i in doc/*.fncs; do
+    touch -r $i ${i//.fncs/.sgml}
+  done
+  if [ ${debug} -gt 0 ] ; then
+    echo '>> Patching complete'
+    read k
+  fi
 fi
 
 module purge

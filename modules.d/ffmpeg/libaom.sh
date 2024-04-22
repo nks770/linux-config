@@ -59,6 +59,13 @@ case ${libaom_v} in
    libaom_python_ver=3.8.3   # 2020-05-13
    libdir=lib # Directory where installed libraries go
   ;;
+  2.0.2) #Tue Feb 09 19:16:45 2021 -0800
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_doxygen_ver=1.9.1  # 2021-01-08
+   libaom_cmake_ver=3.19.4   # 2021-01-28
+   libaom_python_ver=3.9.1   # 2020-12-07
+   libdir=lib # Directory where installed libraries go
+  ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    libaom_yasm_ver=1.3.0
    libaom_cmake_ver=3.24.2   # 2022-09-13
@@ -117,6 +124,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+#make
 make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then

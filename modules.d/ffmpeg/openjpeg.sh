@@ -17,6 +17,9 @@ case ${1} in
   2.3.1)
     echo libopenjp2.so.2.3.1
   ;;
+  2.4.0)
+    echo libopenjp2.so.2.4.0
+  ;;
   *)
     echo ''
   ;;
@@ -69,6 +72,11 @@ case ${openjpeg_v} in
   2.3.1) # Apr 2, 2019
    openjpeg_cmake_ver=3.13.4   # 2019-02-01 13:20
    openjpeg_doxygen_ver=1.8.15 # 2018-12-27
+   openjpeg_srcdir=openjpeg-${openjpeg_v}
+  ;;
+  2.4.0) # Dec 28, 2020
+   openjpeg_cmake_ver=3.19.2   # 2020-12-16
+   openjpeg_doxygen_ver=1.9.0  # 2020-12-27
    openjpeg_srcdir=openjpeg-${openjpeg_v}
   ;;
   2.5.0) # May 13, 2022
@@ -231,6 +239,13 @@ case ${openjpeg_v} in
        -DJAVA_SOURCE_VERSION=6 \
        -DJAVA_TARGET_VERSION=1.6" 
   ;;
+  2.4.0)
+     build_options="-DBUILD_DOC=ON \
+       -DBUILD_JPIP=ON \
+       -DBUILD_JPWL=ON \
+       -DBUILD_MJ2=ON \
+       -DBUILD_LUTS_GENERATOR=ON"
+  ;;
   *)
    echo "ERROR: Review needed for openjpeg ${openjpeg_v}"
    exit 4 # Please review
@@ -272,8 +287,8 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
-#make -j ${ncpu}
-make
+make -j ${ncpu}
+#make
 
 if [ ! $? -eq 0 ] ; then
   exit 4

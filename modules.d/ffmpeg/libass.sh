@@ -8,6 +8,9 @@ case ${1} in
   0.14.0)
     echo libass.so.9.0.2
   ;;
+  0.15.0)
+    echo libass.so.9.1.1
+  ;;
   *)
     echo ''
   ;;
@@ -38,12 +41,16 @@ function ff_build_libass() {
 # Get desired version number to install
 libass_v=${1}
 if [ -z "${libass_v}" ] ; then
-  libass_v=0.14.0
+  echo "ERROR: No libass version specified!"
+  exit 2
 fi
 
 case ${libass_v} in
   0.14.0) # 2017-10-31
    libass_nasm_ver=2.13.01      # 2017-05-01
+  ;;
+  0.15.0) # 2020-10-26
+   libass_nasm_ver=2.15.05      # 2020-08-28
   ;;
 #  0.16.0) # 2022-05-12
 #   nasm_ver=2.15.05     # 2020-08-28

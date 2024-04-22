@@ -8,6 +8,9 @@ case ${1} in
   4.1.0)
     echo libtiff.so.5.5.0
   ;;
+  4.2.0)
+    echo libtiff.so.5.6.0
+  ;;
   *)
     echo ''
   ;;
@@ -41,7 +44,8 @@ tiff_use_cmake=1
 # Get desired version number to install
 tiff_v=${1}
 if [ -z "${tiff_v}" ] ; then
-  tiff_v=4.1.0
+  echo "ERROR: No tiff version specified!"
+  exit 2
 fi
 
 case ${tiff_v} in
@@ -50,6 +54,9 @@ case ${tiff_v} in
   ;;
   4.1.0) # 2019-Nov-03
    tiff_cmake_ver=3.15.5 # 2019-10-30
+  ;;
+  4.2.0) # 2020-Dec-19
+   tiff_cmake_ver=3.19.2 # 2020-12-16
   ;;
   4.4.0) # 2022-May-27 14:53
    tiff_cmake_ver=3.21.6 # 2022-03-04
@@ -68,6 +75,7 @@ tiff_jbigkit_ver=${ffmpeg_jbigkit_ver}
 tiff_libjpegturbo_ver=${ffmpeg_libjpegturbo_ver}
 tiff_zstd_ver=${ffmpeg_zstd_ver}
 tiff_libwebp_ver=${ffmpeg_libwebp_ver}
+tiff_libdeflate_ver=${ffmpeg_libdeflate_ver}
 
 tiff_zlib_lib=$(get_zlib_library ${tiff_zlib_ver})
 tiff_xz_lib=$(get_xz_library ${tiff_xz_ver})
@@ -130,6 +138,14 @@ if [ -f "${tiff_prefix}/lib/${tiff_libwebp_lib}" ] ; then
   tiff_libwebp_cmake="-DWEBP_LIBRARY=${tiff_prefix}/lib/${tiff_libwebp_lib} -DWEBP_INCLUDE_DIR=${tiff_prefix}/include"
 fi
 
+# libdeflate support for tiff 4.2.0 and above
+unset tiff_libdeflate_cmake
+if [ "${tiff_v}" == "4.2.0" ] ; then
+  tiff_libdeflate_lib=$(get_libdeflate_library ${tiff_libdeflate_ver})
+  tiff_libdeflate_cmake="-DDEFLATE_INCLUDE_DIR=${opt}/libdeflate-${tiff_libdeflate_ver}/include \
+                         -DDEFLATE_LIBRARY=${opt}/libdeflate-${tiff_libdeflate_ver}/lib/${tiff_libdeflate_lib}"
+fi
+
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
@@ -141,6 +157,7 @@ if [ ${debug} -gt 0 ] ; then
       -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
       ${tiff_libwebp_cmake} \
+      ${tiff_libdeflate_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
   read k
 fi
@@ -152,6 +169,7 @@ cmake -L -G "Unix Makefiles" \
       -DLIBLZMA_LIBRARY=${opt}/xz-${tiff_xz_ver}/lib/${tiff_xz_lib} -DLIBLZMA_INCLUDE_DIR=${opt}/xz-${tiff_xz_ver}/include \
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
       ${tiff_libwebp_cmake} \
+      ${tiff_libdeflate_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
 
 else

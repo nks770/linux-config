@@ -40,14 +40,22 @@ case ${x265_v} in
   3.2.1) # Oct 22, 2019
    x265_cmake_ver=3.14.7 # 2019-10-02 10:48
    x265_nasm_ver=2.14.02 # 2018-12-26 05:44
+   x265_srcdir=x265-${x265_v}
   ;;
   3.3) # 2020-02-17
    x265_cmake_ver=3.16.4 # 2020-02-05
    x265_nasm_ver=2.14.02 # 2018-12-26 05:44
+   x265_srcdir=x265-${x265_v}
   ;;
   3.4) # May 29, 2020
    x265_cmake_ver=3.17.3 # 2020-05-28 08:21
    x265_nasm_ver=2.14.02 # 2018-12-26 05:44
+   x265_srcdir=x265-${x265_v}
+  ;;
+  3.4.1) # Jan 22, 2021
+   x265_cmake_ver=3.19.3 # 2021-01-13
+   x265_nasm_ver=2.14.02 # maximum version - using nasm 2.15.x produces tons of warnings during compile
+   x265_srcdir=multicoreware-x265_git-57022ba54264
   ;;
   *)
    echo "ERROR: Need review for x265 ${x265_v}"
@@ -61,8 +69,6 @@ esac
 #fi
 
 echo "Installing x265 ${x265_v}..."
-
-x265_srcdir=x265-${x265_v}
 
 check_modules
 check_cmake ${x265_cmake_ver}

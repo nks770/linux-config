@@ -64,6 +64,13 @@ case ${dav1d_v} in
    dav1d_nasm_ver=2.14.02 # 2018-12-26
    dav1d_doxygen_ver=1.8.18 # 2020-04-12
   ;;
+  0.8.1) # 2021-01-02
+   dav1d_meson_ver=0.56.0 # 2020-10-30
+   dav1d_ninja_ver=1.10.2 # 2020-11-28
+   dav1d_python_ver=3.9.1 # 2020-12-07
+   dav1d_nasm_ver=2.15.05 # 2020-08-28
+   dav1d_doxygen_ver=1.9.0 # 2020-12-27
+  ;;
   *)
    echo "ERROR: Need review for dav1d ${dav1d_v}"
    exit 4
@@ -78,6 +85,9 @@ check_python ${dav1d_python_ver}
 #check_p3wheel ${dav1d_python_ver} setuptools 68.0.0
 if [ "${dav1d_meson_ver}" == "0.54.2" ] && [ "${dav1d_python_ver}" == "3.8.3" ] ; then
   check_p3wheel ${dav1d_python_ver} wheel 0.34.2
+fi
+if [ "${dav1d_meson_ver}" == "0.56.0" ] && [ "${dav1d_python_ver}" == "3.9.1" ] ; then
+  check_p3wheel ${dav1d_python_ver} wheel 0.36.1
 fi
 check_p3wheel ${dav1d_python_ver} meson ${dav1d_meson_ver}
 

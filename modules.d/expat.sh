@@ -33,7 +33,8 @@ function build_expat() {
 # Get desired version number to install
 expat_v=${1}
 if [ -z "${expat_v}" ] ; then
-  expat_v=2.2.4
+  echo "ERROR: No expat version specified!"
+  exit 2
 fi
 
 echo "Installing expat ${expat_v}..."

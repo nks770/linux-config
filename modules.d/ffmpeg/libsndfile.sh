@@ -8,6 +8,9 @@ case ${1} in
   1.0.28)
     echo libsndfile.so.1.0.28
   ;;
+  1.0.31)
+    echo libsndfile.so.1.0.31
+  ;;
   *)
     echo ''
   ;;
@@ -38,23 +41,25 @@ function ff_build_libsndfile() {
 # Get desired version number to install
 libsndfile_v=${1}
 if [ -z "${libsndfile_v}" ] ; then
-  libsndfile_v=1.0.28
+  echo "ERROR: No libsndfile version specified!"
+  exit 2
 fi
 
-#case ${libsndfile_v} in
-#  1.0.28-flac1.3.3) # 2017-04-02
-#   libsndfile_vv=1.0.28
-#   libogg_ver=1.3.2 # 2014-05-27
-##   libvorbis_ver=1.3.5 # 2015-03-03
-#   libvorbis_ver=1.3.7 # 2020-07-04
-#   flac_ver=1.3.3 # 2019-08-04
-#  ;;
-#  *)
-#   echo "ERROR: Review needed for libsndfile ${libsndfile_v}"
-#   exit 4 # Please review
-#  ;;
-#esac
-#
+case ${libsndfile_v} in
+  1.0.28) # 2017-04-02
+   libsndfile_ext=tar.gz
+   libsndfile_args=xvfz
+  ;;
+  1.0.31) # 2021-01-24
+   libsndfile_ext=tar.bz2
+   libsndfile_args=xvfj
+  ;;
+  *)
+   echo "ERROR: Review needed for libsndfile ${libsndfile_v}"
+   exit 4 # Please review
+  ;;
+esac
+
 ## Optimized dependency strategy
 #if [ "${dependency_strategy}" == "optimized" ] ; then
 #  libogg_ver=${global_libogg}
@@ -64,6 +69,7 @@ libsndfile_ffmpeg_ver=${3}
 libsndfile_libogg_ver=${ffmpeg_libogg_ver}
 libsndfile_libvorbis_ver=${ffmpeg_libvorbis_ver}
 libsndfile_flac_ver=${ffmpeg_flac_ver}
+libsndfile_opus_ver=${ffmpeg_opus_ver}
 
 libsndfile_srcdir=libsndfile-${libsndfile_v}
 libsndfile_prefix=${2}
@@ -74,8 +80,9 @@ check_modules
 ff_check_libogg ${libsndfile_libogg_ver} ${2} ${3}
 ff_check_libvorbis ${libsndfile_libvorbis_ver} ${2} ${3}
 ff_check_flac ${libsndfile_flac_ver} ${2} ${3}
+ff_check_opus ${libsndfile_opus_ver} ${2} ${3}
 
-downloadPackage ${libsndfile_srcdir}.tar.gz
+downloadPackage ${libsndfile_srcdir}.${libsndfile_ext}
 
 cd ${tmp}
 
@@ -84,7 +91,7 @@ if [ -d ${tmp}/${libsndfile_srcdir} ] ; then
 fi
 
 cd ${tmp}
-tar xvfz ${pkg}/${libsndfile_srcdir}.tar.gz
+tar ${libsndfile_args} ${pkg}/${libsndfile_srcdir}.${libsndfile_ext}
 cd ${tmp}/${libsndfile_srcdir}
 
 if [ ${debug} -gt 0 ] ; then

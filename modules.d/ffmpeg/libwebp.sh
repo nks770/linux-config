@@ -11,6 +11,9 @@ case ${1} in
   1.1.0)
     echo libwebp.so.7.1.0
   ;;
+  1.2.0)
+    echo libwebp.so.7.1.1
+  ;;
   *)
     echo ''
   ;;

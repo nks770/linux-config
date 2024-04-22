@@ -11,6 +11,9 @@ case ${1} in
   1.4.5)
     echo libzstd.so.1.4.5
   ;;
+  1.4.8)
+    echo libzstd.so.1.4.8
+  ;;
   *)
     echo ''
   ;;
@@ -49,7 +52,8 @@ zstd_use_cmake=0
 # Get desired version number to install
 zstd_v=${1}
 if [ -z "${zstd_v}" ] ; then
-  zstd_v=1.4.4
+  echo "ERROR: No zstd version specified!"
+  exit 2
 fi
 
 case ${zstd_v} in
@@ -64,6 +68,12 @@ case ${zstd_v} in
     zstd_zlib_ver=1.2.11      #2017-01-15
     zstd_xz_ver=5.2.5         #2020-03-17
     zstd_lz4_ver=1.9.2        #2019-08-15 - next 2020-11-15 (1.9.3)
+  ;;
+  1.4.8) # 2020-12-18
+    zstd_cmake_ver=3.19.0 # 2020-11-18
+    zstd_zlib_ver=1.2.11      #2017-01-15
+    zstd_xz_ver=5.2.5         #2020-03-17
+    zstd_lz4_ver=1.9.3        #2020-11-15 - next 2022-08-15 (1.9.4)
   ;;
   *)
    echo "ERROR: Review needed for zstd ${zstd_v}"

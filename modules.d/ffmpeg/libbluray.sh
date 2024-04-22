@@ -11,6 +11,9 @@ case ${1} in
   1.2.0)
     echo libbluray.so.2.2.0
   ;;
+  1.2.1)
+    echo libbluray.so.2.3.0
+  ;;
   *)
     echo ''
   ;;
@@ -52,6 +55,10 @@ case ${libbluray_v} in
   ;;
   1.2.0) # 2020-03-22
    libbluray_doxygen_ver=1.8.17    # 2019-12-27
+#   apacheant_ver=1.9.14  # 2019-03-17
+  ;;
+  1.2.1) # 2020-10-24
+   libbluray_doxygen_ver=1.8.20    # 2020-08-24
 #   apacheant_ver=1.9.14  # 2019-03-17
   ;;
   *)
@@ -108,6 +115,34 @@ cat << eof > BDFileSystem.patch
 --- src/libbluray/bdj/java/java/io/BDFileSystem.java
 +++ src/libbluray/bdj/java/java/io/BDFileSystem.java
 @@ -207,6 +207,17 @@
+         return fs.isAbsolute(f);
+     }
+ 
++    public boolean isInvalid(File f) {
++        try {
++            Method m = fs.getClass().getDeclaredMethod("isInvalid", new Class[] { File.class });
++            Object[] args = new Object[] {(Object)f};
++            Boolean result = (Boolean)m.invoke(fs, args);
++            return result.booleanValue();
++        } finally {
++            return false;
++        }
++    }
++
+     public String resolve(File f) {
+         if (!booted)
+             return fs.resolve(f);
+eof
+patch -Z -b -p0 < BDFileSystem.patch
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+fi
+if [ "${libbluray_v}" == "1.2.1" ] ; then
+cat << eof > BDFileSystem.patch
+--- src/libbluray/bdj/java/java/io/BDFileSystem.java
++++ src/libbluray/bdj/java/java/io/BDFileSystem.java
+@@ -227,6 +227,17 @@
          return fs.isAbsolute(f);
      }
  

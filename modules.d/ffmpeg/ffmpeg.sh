@@ -41,6 +41,8 @@ if [ -z "${ffmpeg_v}" ] ; then
   exit 2
 fi
 
+ffmpeg_libdeflate_ver=0
+
 case ${ffmpeg_v} in
   2.8.16) # 2020-04-28
     # Compression libraries
@@ -734,6 +736,67 @@ case ${ffmpeg_v} in
     ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 04/08/2024
     ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
   ;;
+  4.3.2) # 2021-02-20
+    # Compression libraries
+    ffmpeg_zstd_ver=1.4.8                 # 2020-12-18 - next 2021-03-03 (1.4.9)
+    ffmpeg_libdeflate_ver=1.7             # 2020-11-09 - next 2021-07-15 (1.8)
+    # Image processing libraries
+    ffmpeg_jbigkit_ver=2.1                # 2014-04-08 - latest as of 2024-02-09
+    ffmpeg_giflib_ver=5.2.1               # 2019-06-24 - latest as of 2024-02-09
+    ffmpeg_libpng_ver=1.6.37              # 2019-04-15 - next 2022-09-16 (1.6.38)
+    ffmpeg_libjpegturbo_ver=2.0.6         # 2020-11-16 - next 2021-04-23 (2.1.0)
+    ffmpeg_tiff_ver=4.2.0                 # 2020-12-19 - next 2021-04-16 (4.3.0)
+    ffmpeg_libwebp_ver=1.2.0              # 2021-01-30 - next 2021-08-13 (1.2.1)
+    ffmpeg_lcms2_ver=2.12                 # 2021-02-06 - next 2022-01-29 (2.13)
+    ffmpeg_openjpeg_ver=2.4.0             # 2020-12-28 - next 2022-05-13 (2.5.0)
+    # Font rendering libraries and dependencies
+    ffmpeg_aribb24_ver=1.0.3              # 2014-08-18 - latest as of 2024-02-09
+    ffmpeg_utillinux_ver=2.36.2           # 2021-02-12 - next 2021-06-01 (2.37)
+    ffmpeg_expat_ver=2.2.10               # 2020-10-03 - next 2021-03-24 (2.3.0)
+    ffmpeg_icu_ver=68.2                   # 2020-12-16 - next 2021-04-07 (69.1)
+    ffmpeg_graphite2_ver=1.3.14           # 2020-03-31 - latest as of 2024-02-09
+    ffmpeg_freetype_ver=2.10.4            # 2020-10-20 - next 2021-07-19 (2.11.0)
+    ffmpeg_fontconfig_ver=2.13.93         # 2020-11-27 - next 2021-06-28 (2.13.94)
+    ffmpeg_harfbuzz_ver=2.7.4             # 2020-12-26 - next 2021-03-16 (2.8.0)
+    ffmpeg_cairo_ver=1.16.0               # 2018-10-19 - next 2023-09-23 (1.18.0)
+    ffmpeg_pixman_ver=0.40.0              # 2020-04-19 - next 2022-10-18 (0.42.0)
+    ffmpeg_fribidi_ver=1.0.10             # 2020-07-05 - next 2021-09-23 (1.0.11)
+    ffmpeg_libass_ver=0.15.0              # 2020-10-26 - next 2021-05-01 (0.15.1)
+    # Miscellaneous extras
+    ffmpeg_libxml2_ver=2.9.10             # 2019-10-30 - next 2021-05-13 (2.9.11)
+    ffmpeg_libbluray_ver=1.2.1            # 2020-10-24 - next 2021-04-05 (1.3.0)
+    ffmpeg_nasm_ver=2.15.05               # 2020-08-28 - next 2022-12-20 (2.16)
+    # Xiph.org libraries
+    ffmpeg_libogg_ver=1.3.4               # 2019-08-30 - next 2021-06-03 (1.3.5)
+    ffmpeg_libvorbis_ver=1.3.7            # 2020-07-04 - latest as of 2024-04-10
+    ffmpeg_libtheora_ver=1.1.1            # 2009-10-01 - latest as of 2024-02-09
+    ffmpeg_speex_ver=1.2.0                # 2016-12-07 - next 2022-06-16 (1.2.1)
+    ffmpeg_opus_ver=1.3.1                 # 2019-04-12 - next 2023-04-18 (1.4)
+    # Audio codecs
+    ffmpeg_libilbc_ver=3.0.4              # 2020-12-31 - latest as of 2024-04-11
+    ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 2024-02-09
+    ffmpeg_fdkaac_ver=2.0.1               # 2019-10-08 - next 2021-04-28 (2.0.2)
+    ffmpeg_wavpack_ver=5.4.0              # 2021-01-10 - next 2022-07-07 (5.5.0)
+    ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 2022-02-20 (1.3.4)
+    ffmpeg_libsndfile_ver=1.0.31          # 2021-01-24 - next 2022-03-27 (1.1.0)
+    ffmpeg_twolame_ver=0.4.0              # 2019-10-11 - latest as of 2024-02-09
+    ffmpeg_libbs2b_ver=3.1.0              # 2009-06-04 - latest as of 2024-02-09
+    ffmpeg_opencoreamr_ver=0.1.5          # 2017-03-16 - next 2022-08-01 (0.1.6)
+    ffmpeg_voamrwbenc_ver=0.1.3           # 2013-07-27 - latest as of 2024-02-09
+    ffmpeg_soxr_ver=0.1.3                 # 2018-02-24 - latest as of 2024-02-09
+    # Video codecs
+    ffmpeg_libaom_ver=2.0.2               # 2021-02-09 - next 2021-03-23 (3.0.0)
+    ffmpeg_xvidcore_ver=1.3.7             # 2019-12-29 - latest as of 2024-02-09
+    ffmpeg_x264_ver=20210211              # 2021-02-11 - next 2021-04-12
+    ffmpeg_x265_ver=3.4.1                 # 2021-01-22 - next 2021-03-16 (3.5)
+    ffmpeg_kvazaar_ver=2.0.0              # 2020-04-21 - next 2021-10-13 (2.1.0)
+    ffmpeg_openh264_ver=2.1.1             # 2020-05-21 - next 2022-01-27 (2.2.0)
+    ffmpeg_libvpx_ver=1.9.0               # 2020-07-30 - next 2021-03-24 (1.10.0)
+    ffmpeg_dav1d_ver=0.8.1                # 2021-01-02 - next 2021-02-21 (0.8.2)
+    ffmpeg_davs2_ver=1.7                  # 2020-04-19 - latest as of 2024-02-09
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 2024-04-08
+    ffmpeg_vidstab_ver=1.1.1              # 2020-05-30 - latest as of 2024-02-11
+  ;;
 #  5.1.2) # 2022-09-25
 #   ffmpeg_nasm_ver=2.15.05   # 2020-08-28
 #   ffmpeg_libaom_ver=3.5.0   # 2022-09-21
@@ -812,6 +875,11 @@ module load libpng/${ffmpeg_libpng_ver}
 module load libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 module load zlib/${ffmpeg_zlib_ver}
 module load xz/${ffmpeg_xz_ver}
+eof
+if [ ! "${ffmpeg_libdeflate_ver}" == "0" ] ; then
+  echo "module load libdeflate/${ffmpeg_libdeflate_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
+fi
+cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 module load jbigkit/${ffmpeg_jbigkit_ver}
 module load zstd/${ffmpeg_zstd_ver}
 module load bzip2/${ffmpeg_bzip2_ver}
@@ -852,6 +920,11 @@ prereq libpng/${ffmpeg_libpng_ver}
 prereq libjpeg-turbo/${ffmpeg_libjpegturbo_ver}
 prereq zlib/${ffmpeg_zlib_ver}
 prereq xz/${ffmpeg_xz_ver}
+eof
+if [ ! "${ffmpeg_libdeflate_ver}" == "0" ] ; then
+  echo "prereq libdeflate/${ffmpeg_libdeflate_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
+fi
+cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 prereq jbigkit/${ffmpeg_jbigkit_ver}
 prereq zstd/${ffmpeg_zstd_ver}
 prereq bzip2/${ffmpeg_bzip2_ver}
@@ -902,6 +975,9 @@ eof
 check_nasm ${ffmpeg_nasm_ver}
 check_openssl ${ffmpeg_openssl_ver}
 check_zstd ${ffmpeg_zstd_ver}
+if [ ! "${ffmpeg_libdeflate_ver}" == "0" ] ; then
+  check_libdeflate ${ffmpeg_libdeflate_ver}
+fi
 check_jbigkit ${ffmpeg_jbigkit_ver}
 check_giflib ${ffmpeg_giflib_ver}
 check_libpng ${ffmpeg_libpng_ver}

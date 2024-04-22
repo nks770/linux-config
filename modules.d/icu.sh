@@ -65,11 +65,14 @@ case ${icu_v} in
 67.1) #2020-04-22
    icuarc=icu4c-67_1-src
    ;;
+68.2) #2020-12-16
+   icuarc=icu4c-68_2-src
+   ;;
 69.1) #2021-04-07
    icuarc=icu4c-69_1-src
    ;;
 *)
-   echo "ERROR: Need review for ICU ${1}"
+   echo "ERROR: Need review for ICU ${icu_v}"
    exit 4
    ;;
 esac

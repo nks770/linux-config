@@ -33,7 +33,8 @@ function build_libilbc() {
 # Get desired version number to install
 libilbc_v=${1}
 if [ -z "${libilbc_v}" ] ; then
-  libilbc_v=2.0.2
+  echo "ERROR: No libilbc version specified!"
+  exit 2
 fi
 
 case ${libilbc_v} in

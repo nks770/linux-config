@@ -44,6 +44,9 @@ case ${ninja_v} in
 1.10.0) # 2020-01-27
    ninja_python_ver=3.8.1 # 2019-12-18
    ;;
+1.10.2) # 2020-11-28
+   ninja_python_ver=3.9.0 # 2020-10-05
+   ;;
 *)
    echo "ERROR: Review needed for ninja ${ninja_v}"
    exit 4
@@ -75,7 +78,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 # Patch to use Python 3
-if [ "${ninja_v}" == "1.9.0" ] || [ "${ninja_v}" == "1.10.0" ] ; then
+if [ "${ninja_v}" == "1.9.0" ] || [ "${ninja_v}" == "1.10.0" ] || [ "${ninja_v}" == "1.10.2" ] ; then
 
 cat << eof > configure.patch
 --- configure.py

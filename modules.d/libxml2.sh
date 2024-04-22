@@ -351,7 +351,8 @@ function ff_build_libxml2() {
 # Get desired version number to install
 libxml2_v=${1}
 if [ -z "${libxml2_v}" ] ; then
-  libxml2_v=2.9.9
+  echo "ERROR: No libxml2 version specified!"
+  exit 2
 fi
 
 libxml2_ffmpeg_ver=${3}
@@ -384,6 +385,38 @@ if [ ${debug} -gt 0 ] ; then
   echo '>> Unzip complete'
   read k
 fi
+
+
+# ICU 68 no longer defines the TRUE macro, as outlined in their updated Coding Guidelines.
+# This causes building libxml2 with ICU 68 to fail.
+# Given that xmlUconvWrapper() defines the parameter as int flush, using 1 instead of TRUE seems like the best solution.
+# https://github.com/GNOME/libxml2/pull/24
+if [ "${libxml2_v}" == "2.9.10" ] && [ "${libxml2_icu_ver}" == "68.2" ] ; then
+cat << eof > icu68.patch
+--- encoding.c
++++ encoding.c
+@@ -1958,7 +1958,7 @@
+ #ifdef LIBXML_ICU_ENABLED
+     else if (handler->uconv_out != NULL) {
+         ret = xmlUconvWrapper(handler->uconv_out, 0, out, outlen, in, inlen,
+-                              TRUE);
++                              1);
+     }
+ #endif /* LIBXML_ICU_ENABLED */
+     else {
+eof
+
+patch -Z -b -p0 < icu68.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
+
 
 if [ "${libxml2_v}" == "2.9.11" ] ; then
 

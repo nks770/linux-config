@@ -200,7 +200,31 @@ case ${cmake_v} in
    cmake_manpath=0
    kwsys_warning=1
    ;;
+3.18.2) # 2020-08-20
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1g # 2020-04-21
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
+3.18.4) # 2020-10-06
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1h # 2020-09-22
+   cmake_manpath=0
+   kwsys_warning=1
+   ;;
 3.19.2) # 2020-12-16
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1i # 2020-12-08
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
+3.19.3) # 2021-01-13
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1i # 2020-12-08
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
+3.19.4) # 2021-01-28
    cmake_ncurses_ver=6.2    # 2020-02-12
    cmake_openssl_ver=1.1.1i # 2020-12-08
    cmake_manpath=0
@@ -214,7 +238,7 @@ case ${cmake_v} in
    rerun_failures=161
    ;;
 *)
-   echo "ERROR: Review needed for cmake ${1}"
+   echo "ERROR: Review needed for cmake ${cmake_v}"
    exit 4 # Need to review
    ;;
 esac

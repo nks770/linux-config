@@ -11,6 +11,9 @@ case ${1} in
   2.10.2)
     echo libfreetype.so.6.17.2
   ;;
+  2.10.4)
+    echo libfreetype.so.6.17.4
+  ;;
   *)
     echo ''
   ;;
@@ -48,7 +51,8 @@ function ff_build_freetype() {
 # Get desired version number to install
 freetype_v=${1}
 if [ -z "${freetype_v}" ] ; then
-  freetype_v=2.12.1
+  echo "ERROR: No freetype version specified!"
+  exit 2
 fi
 
 freetype_ffmpeg_ver=${3}
