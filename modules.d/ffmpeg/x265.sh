@@ -33,7 +33,8 @@ function build_x265() {
 # Get desired version number to install
 x265_v=${1}
 if [ -z "${x265_v}" ] ; then
-  x265_v=3.2.1
+  echo "ERROR: No x265 version specified!"
+  exit 2
 fi
 
 case ${x265_v} in
@@ -56,6 +57,11 @@ case ${x265_v} in
    x265_cmake_ver=3.19.3 # 2021-01-13
    x265_nasm_ver=2.14.02 # maximum version - using nasm 2.15.x produces tons of warnings during compile
    x265_srcdir=multicoreware-x265_git-57022ba54264
+  ;;
+  3.5) # 2021-03-16
+   x265_cmake_ver=3.19.7 # 2021-03-15
+   x265_nasm_ver=2.14.02 # maximum version - using nasm 2.15.x produces tons of warnings during compile
+   x265_srcdir=multicoreware-x265_git-f0c1022b6be1
   ;;
   *)
    echo "ERROR: Need review for x265 ${x265_v}"

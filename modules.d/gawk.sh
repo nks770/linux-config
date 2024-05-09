@@ -1,20 +1,9 @@
 #!/bin/bash
 
-# Functions for detecting and building xz
-echo 'Loading xz...'
+# Functions for detecting and building gawk
+echo 'Loading gawk...'
 
-function get_xz_library() {
-case ${1} in
-  5.4.2)
-    echo liblzma.so.5.4.2
-  ;;
-  *)
-    echo ''
-  ;;
-esac
-}
-
-function xzInstalled() {
+function gawkInstalled() {
 # Cannot evaulate if we dont have modules installed
 if [ ! -f /etc/profile.d/modules.sh ] ; then
   return 1
@@ -23,60 +12,54 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-# If modules is OK, then check xz
-if [ ! -f ${MODULEPATH}/xz/${1} ] ; then
+# If modules is OK, then check gawk
+if [ ! -f ${MODULEPATH}/gawk/${1} ] ; then
   return 1
 else
   return 0
 fi
 }
 
-function check_xz() {
-if xzInstalled ${1}; then
-  echo "xz ${1} is installed."
+function check_gawk() {
+if gawkInstalled ${1}; then
+  echo "gawk ${1} is installed."
 else
-  build_xz ${1}
+  build_gawk ${1}
 fi
 }
 
-function build_xz() {
+function build_gawk() {
 
 # Get desired version number to install
-xz_v=${1}
-if [ -z "${xz_v}" ] ; then
-  echo "ERROR: No xz version specified!"
+gawk_v=${1}
+if [ -z "${gawk_v}" ] ; then
+  echo "ERROR: No gawk version specified!"
   exit 2
 fi
 
-echo "Installing xz ${xz_v}..."
-xz_srcdir=xz-${xz_v}
+echo "Installing gawk ${gawk_v}..."
 
 check_modules
-
-downloadPackage xz-${xz_v}.tar.gz
-
-cd ${tmp}
-
-if [ -d ${tmp}/${xz_srcdir} ] ; then
-  rm -rf ${tmp}/${xz_srcdir}
-fi
-
-cd ${tmp}
-tar xvfz ${pkg}/xz-${xz_v}.tar.gz
-cd ${tmp}/${xz_srcdir}
-
-if [ ${debug} -gt 0 ] ; then
-  echo '>> Unzip complete'
-  read k
-fi
-
 module purge
 
-config="./configure --prefix=${opt}/xz-${xz_v}"
+downloadPackage gawk-${gawk_v}.tar.gz
+
+cd ${tmp}
+
+if [ -d ${tmp}/gawk-${gawk_v} ] ; then
+  rm -rf ${tmp}/gawk-${gawk_v}
+fi
+
+tar xvfz ${pkg}/gawk-${gawk_v}.tar.gz
+cd ${tmp}/gawk-${gawk_v}
+
+config="./configure --prefix=${opt}/gawk-${gawk_v}"
 
 if [ ${debug} -gt 0 ] ; then
   ./configure --help
-  echo
+  echo ''
+  module list
+  echo ''
   echo ${config}
   read k
 fi
@@ -118,19 +101,19 @@ fi
 if [ -z "${MODULEPATH}" ] ; then
   source /etc/profile.d/modules.sh
 fi 
-mkdir -pv ${MODULEPATH}/xz
-cat << eof > ${MODULEPATH}/xz/${xz_v}
+mkdir -pv ${MODULEPATH}/gawk
+cat << eof > ${MODULEPATH}/gawk/${gawk_v}
 #%Module
 
 proc ModulesHelp { } {
-   puts stderr "Puts xz-${xz_v} into your environment"
+   puts stderr "Puts gawk-${gawk_v} into your environment"
 }
 
-set VER ${xz_v}
-set PKG ${opt}/xz-\$VER
+set VER ${gawk_v}
+set PKG ${opt}/gawk-\$VER
 
-module-whatis   "Loads xz-${xz_v}"
-conflict xz
+module-whatis   "Loads gawk-${gawk_v}"
+conflict gawk
 
 prepend-path PATH \$PKG/bin
 prepend-path CPATH \$PKG/include
@@ -138,11 +121,10 @@ prepend-path C_INCLUDE_PATH \$PKG/include
 prepend-path CPLUS_INCLUDE_PATH \$PKG/include
 prepend-path LD_LIBRARY_PATH \$PKG/lib
 prepend-path MANPATH \$PKG/share/man
-prepend-path PKG_CONFIG_PATH \$PKG/lib/pkgconfig
 
 eof
 
 cd ${root}
-rm -rf ${tmp}/${xz_srcdir}
+rm -rf ${tmp}/gawk-${gawk_v}
 
 }

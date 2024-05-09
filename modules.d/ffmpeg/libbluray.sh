@@ -14,6 +14,9 @@ case ${1} in
   1.2.1)
     echo libbluray.so.2.3.0
   ;;
+  1.3.0)
+    echo libbluray.so.2.4.0
+  ;;
   *)
     echo ''
   ;;
@@ -59,6 +62,10 @@ case ${libbluray_v} in
   ;;
   1.2.1) # 2020-10-24
    libbluray_doxygen_ver=1.8.20    # 2020-08-24
+#   apacheant_ver=1.9.14  # 2019-03-17
+  ;;
+  1.3.0) # 2021-04-05
+   libbluray_doxygen_ver=1.9.1     # 2021-01-08
 #   apacheant_ver=1.9.14  # 2019-03-17
   ;;
   *)
@@ -138,7 +145,7 @@ if [ ! $? -eq 0 ] ; then
   exit 4
 fi
 fi
-if [ "${libbluray_v}" == "1.2.1" ] ; then
+if [ "${libbluray_v}" == "1.2.1" ] || [ "${libbluray_v}" == "1.3.0" ] ; then
 cat << eof > BDFileSystem.patch
 --- src/libbluray/bdj/java/java/io/BDFileSystem.java
 +++ src/libbluray/bdj/java/java/io/BDFileSystem.java

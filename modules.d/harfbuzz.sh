@@ -23,6 +23,9 @@ case ${1} in
   2.7.4)
     echo libharfbuzz.so.0.20704.0
   ;;
+  2.8.0)
+    echo libharfbuzz.so.0.20800.0
+  ;;
   *)
     echo ''
   ;;
@@ -79,6 +82,10 @@ case ${harfbuzz_v} in
    harfbuzz_tar=xvfJ
   ;;
   2.7.4) # 2020-12-26
+   harfbuzz_package=harfbuzz-${harfbuzz_v}.tar.xz
+   harfbuzz_tar=xvfJ
+  ;;
+  2.8.0) # 2021-03-16
    harfbuzz_package=harfbuzz-${harfbuzz_v}.tar.xz
    harfbuzz_tar=xvfJ
   ;;

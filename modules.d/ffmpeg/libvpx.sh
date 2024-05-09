@@ -43,6 +43,9 @@ case ${libvpx_v} in
   1.9.0) # Jul 30, 2020
    libvpx_yasm_ver=1.3.0 # August 10, 2014
   ;;
+  1.10.0) # Mar 24, 2021
+   libvpx_yasm_ver=1.3.0 # August 10, 2014
+  ;;
   *)
    echo "ERROR: Need review for libvpx ${libvpx_v}"
    exit 4

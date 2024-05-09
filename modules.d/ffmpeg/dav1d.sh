@@ -71,6 +71,13 @@ case ${dav1d_v} in
    dav1d_nasm_ver=2.15.05 # 2020-08-28
    dav1d_doxygen_ver=1.9.0 # 2020-12-27
   ;;
+  0.8.2) # 2021-02-21
+   dav1d_meson_ver=0.57.1 # 2021-02-20
+   dav1d_ninja_ver=1.10.2 # 2020-11-28
+   dav1d_python_ver=3.9.2 # 2021-02-19
+   dav1d_nasm_ver=2.15.05 # 2020-08-28
+   dav1d_doxygen_ver=1.9.1 # 2021-01-08
+  ;;
   *)
    echo "ERROR: Need review for dav1d ${dav1d_v}"
    exit 4
@@ -88,6 +95,9 @@ if [ "${dav1d_meson_ver}" == "0.54.2" ] && [ "${dav1d_python_ver}" == "3.8.3" ] 
 fi
 if [ "${dav1d_meson_ver}" == "0.56.0" ] && [ "${dav1d_python_ver}" == "3.9.1" ] ; then
   check_p3wheel ${dav1d_python_ver} wheel 0.36.1
+fi
+if [ "${librist_meson_ver}" == "0.57.1" ] && [ "${librist_python_ver}" == "3.9.2" ] ; then
+  check_p3wheel ${librist_python_ver} wheel 0.36.2
 fi
 check_p3wheel ${dav1d_python_ver} meson ${dav1d_meson_ver}
 

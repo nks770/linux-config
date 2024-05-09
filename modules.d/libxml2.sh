@@ -416,6 +416,31 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 fi
+if [ "${libxml2_v}" == "2.9.10" ] && [ "${libxml2_icu_ver}" == "69.1" ] ; then
+cat << eof > icu69.patch
+--- encoding.c
++++ encoding.c
+@@ -1958,7 +1958,7 @@
+ #ifdef LIBXML_ICU_ENABLED
+     else if (handler->uconv_out != NULL) {
+         ret = xmlUconvWrapper(handler->uconv_out, 0, out, outlen, in, inlen,
+-                              TRUE);
++                              1);
+     }
+ #endif /* LIBXML_ICU_ENABLED */
+     else {
+eof
+
+patch -Z -b -p0 < icu69.patch
+
+if [ ! $? -eq 0 ] ; then
+  exit 4
+fi
+if [ ${debug} -gt 0 ] ; then
+  echo '>> Patching complete'
+  read k
+fi
+fi
 
 
 if [ "${libxml2_v}" == "2.9.11" ] ; then

@@ -212,6 +212,12 @@ case ${cmake_v} in
    cmake_manpath=0
    kwsys_warning=1
    ;;
+3.19.1) # 2020-11-24
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1h # 2020-09-22
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
 3.19.2) # 2020-12-16
    cmake_ncurses_ver=6.2    # 2020-02-12
    cmake_openssl_ver=1.1.1i # 2020-12-08
@@ -229,6 +235,30 @@ case ${cmake_v} in
    cmake_openssl_ver=1.1.1i # 2020-12-08
    cmake_manpath=0
    chmod_warning=1
+   ;;
+3.19.6) # 2021-02-24
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1j # 2021-02-16
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
+3.19.7) # 2021-03-15
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1j # 2021-02-16
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
+3.20.0) # 2021-03-23
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1j # 2021-02-16
+   cmake_manpath=0
+   chmod_warning=1
+   ;;
+3.20.1) # 2021-04-08
+   cmake_ncurses_ver=6.2    # 2020-02-12
+   cmake_openssl_ver=1.1.1k # 2021-03-25
+   cmake_manpath=0
+   chmod_warning=0
    ;;
 3.24.0) # 2022-08-04
    cmake_ncurses_ver=6.3    # 2021-11-08

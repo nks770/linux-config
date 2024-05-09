@@ -207,7 +207,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 if [ ${run_tests} -gt 0 ] ; then
-  if [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] ; then
+  if [ "${gdbm_v}" == "1.18" ] || [ "${gdbm_v}" == "1.18.1" ] || [ "${gdbm_v}" == "1.19" ] ; then
     module unload dejagnu
   fi
   make check
