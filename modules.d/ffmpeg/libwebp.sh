@@ -14,6 +14,9 @@ case ${1} in
   1.2.0)
     echo libwebp.so.7.1.1
   ;;
+  1.2.1)
+    echo libwebp.so.7.1.2
+  ;;
   *)
     echo ''
   ;;
@@ -83,7 +86,7 @@ if [ ${debug} -gt 0 ] ; then
 fi
 
 module purge
-module load ffmpeg-dep/${tiff_ffmpeg_ver}
+module load ffmpeg-dep/${libwebp_ffmpeg_ver}
 module load libjpeg-turbo/${libwebp_libjpegturbo_ver}
 module load giflib/${libwebp_giflib_ver}
 module load libpng/${libwebp_libpng_ver}

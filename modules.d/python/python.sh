@@ -324,6 +324,21 @@ case ${python_v} in
    python_tk_ver=8.6.13
    curses_failure=1
    ;;
+3.9.6) #2021-06-28
+   python_gdbm_ver=1.19        #2020-12-23
+   python_readline_ver=8.1     #2020-12-06
+   python_ncurses_ver=6.2      #2020-02-12
+   python_bzip2_ver=1.0.8      #2019-07-13
+   python_xz_ver=5.2.5         #2020-03-17
+   python_openssl_ver=1.1.1k   #2021-03-25
+   python_sqlite_ver=3.36.0    #2021-06-18
+   python_zlib_ver=1.2.11      #2017-01-15
+   python_libffi_ver=3.4.2     #2021-06-28
+   python_utillinux_ver=2.37   #2021-06-01
+   python_tcl_ver=8.6.13
+   python_tk_ver=8.6.13
+   curses_failure=1
+   ;;
 3.9.16) #2022-12-06
    python_gdbm_ver=1.23        #2022-02-04
    python_readline_ver=8.1.2   #2022-01-05

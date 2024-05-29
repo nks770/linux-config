@@ -20,6 +20,9 @@ case ${1} in
   2.0.6)
     echo libjpeg.so.62.3.0
   ;;
+  2.1.1)
+    echo libjpeg.so.62.3.0
+  ;;
   *)
     echo ''
   ;;
@@ -86,17 +89,16 @@ case ${libjpegturbo_v} in
    libjpegturbo_nasm_ver=2.15.05 # 2020-08-28
    libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
   ;;
+  2.1.1) # 2021-08-09
+   libjpegturbo_cmake_ver=3.21.1 # 2021-07-27
+   libjpegturbo_nasm_ver=2.15.05 # 2020-08-28
+   libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
+  ;;
   *)
    echo "ERROR: Review needed for libjpeg-turbo ${libjpegturbo_v}"
    exit 4 # Please review
   ;;
 esac
-
-## Optimized dependency strategy
-#if [ "${dependency_strategy}" == "optimized" ] ; then
-#  tiff_zlib_ver=${global_zlib}
-#  tiff_xz_ver=${global_xz}
-#fi
 
 echo "Installing libjpeg-turbo ${libjpegturbo_v}..."
 libjpegturbo_srcdir=libjpeg-turbo-${libjpegturbo_v}

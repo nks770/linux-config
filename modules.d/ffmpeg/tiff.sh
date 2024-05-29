@@ -11,6 +11,9 @@ case ${1} in
   4.2.0)
     echo libtiff.so.5.6.0
   ;;
+  4.3.0)
+    echo libtiff.so.5.7.0
+  ;;
   *)
     echo ''
   ;;
@@ -58,6 +61,9 @@ case ${tiff_v} in
   4.2.0) # 2020-Dec-19
    tiff_cmake_ver=3.19.2 # 2020-12-16
   ;;
+  4.3.0) # 2021-Apr-20
+   tiff_cmake_ver=3.20.1 # 2021-04-08
+  ;;
   4.4.0) # 2022-May-27 14:53
    tiff_cmake_ver=3.21.6 # 2022-03-04
   ;;
@@ -76,6 +82,7 @@ tiff_libjpegturbo_ver=${ffmpeg_libjpegturbo_ver}
 tiff_zstd_ver=${ffmpeg_zstd_ver}
 tiff_libwebp_ver=${ffmpeg_libwebp_ver}
 tiff_libdeflate_ver=${ffmpeg_libdeflate_ver}
+tiff_lerc_ver=${ffmpeg_lerc_ver}
 
 tiff_zlib_lib=$(get_zlib_library ${tiff_zlib_ver})
 tiff_xz_lib=$(get_xz_library ${tiff_xz_ver})
@@ -140,10 +147,24 @@ fi
 
 # libdeflate support for tiff 4.2.0 and above
 unset tiff_libdeflate_cmake
+unset tiff_libdeflate_lib
+unset tiff_lerc_cmake
+unset tiff_lerc_lib
+unset tiff_lzma2_cmake
+
 if [ "${tiff_v}" == "4.2.0" ] ; then
   tiff_libdeflate_lib=$(get_libdeflate_library ${tiff_libdeflate_ver})
   tiff_libdeflate_cmake="-DDEFLATE_INCLUDE_DIR=${opt}/libdeflate-${tiff_libdeflate_ver}/include \
                          -DDEFLATE_LIBRARY=${opt}/libdeflate-${tiff_libdeflate_ver}/lib/${tiff_libdeflate_lib}"
+fi
+if [ "${tiff_v}" == "4.3.0" ] ; then
+  tiff_libdeflate_lib=$(get_libdeflate_library ${tiff_libdeflate_ver})
+  tiff_libdeflate_cmake="-DDeflate_INCLUDE_DIR=${opt}/libdeflate-${tiff_libdeflate_ver}/include \
+                         -DDeflate_LIBRARY=${opt}/libdeflate-${tiff_libdeflate_ver}/lib/${tiff_libdeflate_lib}"
+  tiff_lerc_lib=$(get_lerc_library ${tiff_lerc_ver})
+  tiff_lerc_cmake="-DLERC_INCLUDE_DIR=${opt}/lerc-${tiff_lerc_ver}/include \
+                   -DLERC_LIBRARY=${opt}/lerc-${tiff_lerc_ver}/lib/${tiff_lerc_lib}"
+  tiff_lzma2_cmake=-Dlzma=ON
 fi
 
 if [ ${debug} -gt 0 ] ; then
@@ -151,6 +172,7 @@ if [ ${debug} -gt 0 ] ; then
   module list
   echo ''
   echo cmake -L -G \"Unix Makefiles\" \
+      -DCMAKE_BUILD_TYPE=Release \
       -DJPEG_LIBRARY=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/lib/${tiff_libjpegturbo_lib} -DJPEG_INCLUDE_DIR=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/include \
       -DJBIG_LIBRARY=${opt}/jbigkit-${tiff_jbigkit_ver}/lib/${tiff_jbigkit_lib} -DJBIG_INCLUDE_DIR=${opt}/jbigkit-${tiff_jbigkit_ver}/include \
       -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
@@ -158,11 +180,14 @@ if [ ${debug} -gt 0 ] ; then
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
       ${tiff_libwebp_cmake} \
       ${tiff_libdeflate_cmake} \
+      ${tiff_lerc_cmake} \
+      ${tiff_lzma2_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
   read k
 fi
 
 cmake -L -G "Unix Makefiles" \
+      -DCMAKE_BUILD_TYPE=Release \
       -DJPEG_LIBRARY=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/lib/${tiff_libjpegturbo_lib} -DJPEG_INCLUDE_DIR=${opt}/libjpeg-turbo-${tiff_libjpegturbo_ver}/include \
       -DJBIG_LIBRARY=${opt}/jbigkit-${tiff_jbigkit_ver}/lib/${tiff_jbigkit_lib} -DJBIG_INCLUDE_DIR=${opt}/jbigkit-${tiff_jbigkit_ver}/include \
       -DZLIB_LIBRARY=${opt}/zlib-${tiff_zlib_ver}/lib/${tiff_zlib_lib} -DZLIB_INCLUDE_DIR=${opt}/zlib-${tiff_zlib_ver}/include \
@@ -170,6 +195,8 @@ cmake -L -G "Unix Makefiles" \
       -DZSTD_LIBRARY=${opt}/zstd-${tiff_zstd_ver}/lib/${tiff_zstd_lib} -DZSTD_INCLUDE_DIR=${opt}/zstd-${tiff_zstd_ver}/include \
       ${tiff_libwebp_cmake} \
       ${tiff_libdeflate_cmake} \
+      ${tiff_lerc_cmake} \
+      ${tiff_lzma2_cmake} \
       -DCMAKE_INSTALL_PREFIX=${tiff_prefix} ..
 
 else

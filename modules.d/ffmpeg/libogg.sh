@@ -8,6 +8,9 @@ case ${1} in
   1.3.4)
     echo libogg.so.0.8.4
   ;;
+  1.3.5)
+    echo libogg.so.0.8.5
+  ;;
   *)
     echo ''
   ;;

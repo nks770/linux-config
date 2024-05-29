@@ -33,6 +33,9 @@ case ${1} in
   2.9.10)
     echo libxml2.so.2.9.10
   ;;
+  2.9.12)
+    echo libxml2.so.2.9.12
+  ;;
   *)
     echo ''
   ;;
@@ -355,6 +358,45 @@ if [ -z "${libxml2_v}" ] ; then
   exit 2
 fi
 
+case ${libxml2_v} in
+2.9.1) # 2013-04-19
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.4) # 2016-05-23
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.7) # 2017-11-02
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.8) # 2018-03-05
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.9) # 2019-01-03
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.10) # 2019-10-30
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.11) # 2021-05-13
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.12) # 2021-05-13
+   libxml2_arc=xz
+   libxml2_tar=xvfJ
+   ;;
+*)
+   echo "ERROR: Need review for libxml2 ${libxml2_v}"
+   exit 4
+   ;;
+esac
+
 libxml2_ffmpeg_ver=${3}
 libxml2_xz_ver=${ffmpeg_xz_ver}
 libxml2_zlib_ver=${ffmpeg_zlib_ver}
@@ -370,7 +412,7 @@ check_xz ${libxml2_xz_ver}
 check_zlib ${libxml2_zlib_ver}
 check_icu ${libxml2_icu_ver}
 
-downloadPackage ${libxml2_srcdir}.tar.gz
+downloadPackage ${libxml2_srcdir}.tar.${libxml2_arc}
 
 cd ${tmp}
 
@@ -378,7 +420,7 @@ if [ -d ${tmp}/${libxml2_srcdir} ] ; then
   rm -rf ${tmp}/${libxml2_srcdir}
 fi
 
-tar xvfz ${pkg}/${libxml2_srcdir}.tar.gz
+tar ${libxml2_tar} ${pkg}/${libxml2_srcdir}.tar.${libxml2_arc}
 cd ${tmp}/${libxml2_srcdir}
 
 if [ ${debug} -gt 0 ] ; then

@@ -17,6 +17,9 @@ case ${1} in
   1.4.9)
     echo libzstd.so.1.4.9
   ;;
+  1.5.0)
+    echo libzstd.so.1.5.0
+  ;;
   *)
     echo ''
   ;;
@@ -80,6 +83,12 @@ case ${zstd_v} in
   ;;
   1.4.9) # 2021-03-03
     zstd_cmake_ver=3.19.6 # 2021-02-24
+    zstd_zlib_ver=1.2.11      #2017-01-15
+    zstd_xz_ver=5.2.5         #2020-03-17
+    zstd_lz4_ver=1.9.3        #2020-11-15 - next 2022-08-15 (1.9.4)
+  ;;
+  1.5.0) # 2021-05-14
+    zstd_cmake_ver=3.20.2 # 2021-04-29
     zstd_zlib_ver=1.2.11      #2017-01-15
     zstd_xz_ver=5.2.5         #2020-03-17
     zstd_lz4_ver=1.9.3        #2020-11-15 - next 2022-08-15 (1.9.4)

@@ -11,6 +11,9 @@ case ${1} in
   2.13.93)
     echo libfontconfig.so.1.12.0
   ;;
+  2.13.94)
+    echo libfontconfig.so.1.12.0
+  ;;
   *)
     echo ''
   ;;
@@ -69,6 +72,12 @@ case ${fontconfig_v} in
 #   fontconfig_utillinux_ver=2.34   # 2019-06-14
   ;;
   2.13.93) # 2020-11-28
+#   freetype_ver=2.10.0  # 2019-03-15
+#   fontconfig_expat_ver=2.2.7      # 2019-06-19
+   fontconfig_gperf_ver=3.1        # 2017-01-05 - latest as of 2024-04-20
+#   fontconfig_utillinux_ver=2.34   # 2019-06-14
+  ;;
+  2.13.94) # 2021-06-28
 #   freetype_ver=2.10.0  # 2019-03-15
 #   fontconfig_expat_ver=2.2.7      # 2019-06-19
    fontconfig_gperf_ver=3.1        # 2017-01-05 - latest as of 2024-04-20

@@ -50,6 +50,10 @@ case ${libffi_v} in
    libffi_dejagnu_ver=1.6.3
    libffi_include_dir=${opt}/libffi-${libffi_v}/include
    ;;
+3.4.2)
+   libffi_dejagnu_ver=1.6.3
+   libffi_include_dir=${opt}/libffi-${libffi_v}/include
+   ;;
 3.4.4)
    libffi_dejagnu_ver=1.6.3
    libffi_include_dir=${opt}/libffi-${libffi_v}/include

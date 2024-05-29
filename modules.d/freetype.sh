@@ -14,6 +14,9 @@ case ${1} in
   2.10.4)
     echo libfreetype.so.6.17.4
   ;;
+  2.11.0)
+    echo libfreetype.so.6.18.0
+  ;;
   *)
     echo ''
   ;;
