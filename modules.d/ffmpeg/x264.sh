@@ -70,6 +70,11 @@ case ${1} in
    x264_nasm_ver=2.15.05 # 2020-08-28
    x264_fix_bash_completion_dir=0
   ;;
+  20210929) # 2021-09-29
+   x264_srcdir=x264-66a5bc1bd1563d8227d5d18440b525a09bcf17ca
+   x264_nasm_ver=2.15.05 # 2020-08-28
+   x264_fix_bash_completion_dir=0
+  ;;
   20220601) # 2022-06-01
    x264_srcdir=x264-baee400fa9ced6f5481a728138fed6e867b0ff7f
    x264_nasm_ver=2.15.05 # 2020-08-28

@@ -54,6 +54,10 @@ case ${fribidi_v} in
    fribidi_arc=xz
    fribidi_tar=xvfJ
    ;;
+1.0.11) #2021-09-23
+   fribidi_arc=xz
+   fribidi_tar=xvfJ
+   ;;
 *)
    echo "ERROR: Need review for FriBidi ${fribidi_v}"
    exit 4

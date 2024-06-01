@@ -33,7 +33,8 @@ function build_libvpx() {
 # Get desired version number to install
 libvpx_v=${1}
 if [ -z "${libvpx_v}" ] ; then
-  libvpx_v=1.8.2
+  echo "ERROR: No libvpx version specified!"
+  exit 2
 fi
 
 case ${libvpx_v} in
@@ -44,6 +45,9 @@ case ${libvpx_v} in
    libvpx_yasm_ver=1.3.0 # August 10, 2014
   ;;
   1.10.0) # Mar 24, 2021
+   libvpx_yasm_ver=1.3.0 # August 10, 2014
+  ;;
+  1.11.0) # Oct 7, 2021
    libvpx_yasm_ver=1.3.0 # August 10, 2014
   ;;
   *)
