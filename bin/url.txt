@@ -80,6 +80,8 @@ cmake-3.19.6.tar.gz=https://cmake.org/files/v3.19/cmake-3.19.6.tar.gz
 cmake-3.19.7.tar.gz=https://cmake.org/files/v3.19/cmake-3.19.7.tar.gz
 cmake-3.20.0.tar.gz=https://cmake.org/files/v3.20/cmake-3.20.0.tar.gz
 cmake-3.20.1.tar.gz=https://cmake.org/files/v3.20/cmake-3.20.1.tar.gz
+cmake-3.20.2.tar.gz=https://cmake.org/files/v3.20/cmake-3.20.2.tar.gz
+cmake-3.20.5.tar.gz=https://cmake.org/files/v3.20/cmake-3.20.5.tar.gz
 cmake-3.21.0.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.0.tar.gz
 cmake-3.21.1.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.1.tar.gz
 cmake-3.21.3.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.3.tar.gz
@@ -175,6 +177,7 @@ ffmpeg-4.3.1.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.3.1.tar.gz
 ffmpeg-4.3.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.3.2.tar.gz
 ffmpeg-4.3.3.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.3.3.tar.gz
 ffmpeg-4.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.4.tar.gz
+ffmpeg-4.4.1.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.4.1.tar.gz
 ffmpeg-5.1.2.tar.gz=https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.gz
 
 # flac
@@ -371,6 +374,7 @@ libpng-1.6.37.tar.gz=https://master.dl.sourceforge.net/project/libpng/libpng16/1
 
 # librist
 librist-v0.2.0-RC6.tar.gz=https://code.videolan.org/rist/librist/-/archive/v0.2.0-RC6/librist-v0.2.0-RC6.tar.gz
+librist-v0.2.6.tar.gz=https://code.videolan.org/rist/librist/-/archive/v0.2.6/librist-v0.2.6.tar.gz
 
 # libsoxr
 #libsoxr-0.1.3.tar.gz=https://github.com/chirlu/soxr/archive/refs/tags/0.1.3.tar.gz
@@ -383,6 +387,7 @@ libsndfile-1.0.31.tar.bz2=https://github.com/libsndfile/libsndfile/releases/down
 
 # libsvtav1
 SVT-AV1-v0.8.6.tar.gz=https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v0.8.6/SVT-AV1-v0.8.6.tar.gz
+SVT-AV1-v0.8.7.tar.gz=https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v0.8.7/SVT-AV1-v0.8.7.tar.gz
 
 # libtheora
 # https://www.theora.org/
@@ -449,12 +454,14 @@ m4-1.4.19.tar.gz=http://ftp.gnu.org/gnu/m4/m4-1.4.19.tar.gz
 
 # mbed-tls
 mbedtls-2.26.0.tar.gz=https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v2.26.0.tar.gz
+mbedtls-3.0.0.tar.gz=https://github.com/Mbed-TLS/mbedtls/archive/refs/tags/v3.0.0.tar.gz
 
 # meson
 meson-0.52.0.tar.gz=https://files.pythonhosted.org/packages/33/96/9961fb3afbd9a61cb7a216ce2dbf8e8bab45987fa475f5f2c8e6c7817604/meson-0.52.0.tar.gz
 meson-0.54.2.tar.gz=https://files.pythonhosted.org/packages/78/14/53d77eeb196efb1230eedaba556c920fc59989f1ebd429e990cb129b41d3/meson-0.54.2.tar.gz
 meson-0.56.0.tar.gz=https://files.pythonhosted.org/packages/08/a0/4d3a1eb46c83a96b49c100c30762c8f1a60b62367dd052ab8730e73ab46b/meson-0.56.0.tar.gz
 meson-0.57.1.tar.gz=https://files.pythonhosted.org/packages/0f/f8/e67e447cb3c8fe391ad8cedd67cab81486831e37a3a028c9a6974fe63a38/meson-0.57.1.tar.gz
+meson-0.59.0.tar.gz=https://files.pythonhosted.org/packages/63/2d/a030b1b53166776890883a521220433959e315c83ed975846b5484f43c7c/meson-0.59.0.tar.gz
 meson-0.59.1.tar.gz=https://files.pythonhosted.org/packages/dd/01/3dba211a922c371044baa3ade48f3021e9b67e83c07b397f8eeeea99d3a6/meson-0.59.1.tar.gz
 #meson-0.52.0.tar.gz=https://github.com/mesonbuild/meson/releases/download/0.52.0/meson-0.52.0.tar.gz
 #meson-0.52.1.tar.gz=https://github.com/mesonbuild/meson/releases/download/0.52.1/meson-0.52.1.tar.gz
@@ -710,6 +717,7 @@ wheel-0.37.0-py2.py3-none-any.whl=https://files.pythonhosted.org/packages/04/80/
 # uavs3d
 #uavs3d-1.1.tar.gz=https://github.com/uavs3/uavs3d/archive/refs/tags/v1.1.tar.gz
 uavs3d-1.1.63.zip=https://github.com/uavs3/uavs3d/archive/26b088ed51a8c3f7ed73e2a70321777c8aff5a8a.zip
+uavs3d-1.1.67.zip=https://github.com/uavs3/uavs3d/archive/57d20183301d4197d1c938f62f8a5911e33465d7.zip
 
 # x264
 # https://www.videolan.org/developers/x264.html

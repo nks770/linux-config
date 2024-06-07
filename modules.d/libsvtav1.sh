@@ -8,6 +8,9 @@ case ${1} in
   0.8.6)
     echo libSvtAv1Enc.so.0.8.6
   ;;
+  0.8.7)
+    echo libSvtAv1Enc.so.0.8.7
+  ;;
   *)
     echo ''
   ;;
@@ -52,6 +55,11 @@ case ${libsvtav1_v} in
 0.8.6) # 2020-11-29
    libsvtav1_srcdir=SVT-AV1-v${libsvtav1_v}
    libsvtav1_cmake_ver=3.19.1    # 2020-11-24
+   libsvtav1_nasm_ver=2.15.05    # 2020-08-28
+   ;;
+0.8.7) # 2021-05-08
+   libsvtav1_srcdir=SVT-AV1-v${libsvtav1_v}
+   libsvtav1_cmake_ver=3.20.2    # 2021-04-29
    libsvtav1_nasm_ver=2.15.05    # 2020-08-28
    ;;
 *)

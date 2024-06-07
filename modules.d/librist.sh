@@ -51,6 +51,14 @@ case ${librist_v} in
    librist_cmake_ver=3.20.0 # 2021-03-23
    librist_mbedtls_ver=2.26.0 # 2021-03-12
   ;;
+  0.2.6) # 2021-07-22
+   librist_srcdir=librist-v${librist_v}
+   librist_meson_ver=0.59.0 # 2021-07-18
+   librist_ninja_ver=1.10.2 # 2020-11-28
+   librist_python_ver=3.9.6 # 2021-06-28
+   librist_cmake_ver=3.21.0 # 2021-07-14
+   librist_mbedtls_ver=3.0.0 # 2021-07-07
+  ;;
   *)
    echo "ERROR: Need review for librist ${librist_v}"
    exit 4
@@ -63,6 +71,9 @@ check_ninja ${librist_ninja_ver}
 check_python ${librist_python_ver}
 check_cmake ${librist_cmake_ver}
 if [ "${librist_meson_ver}" == "0.57.1" ] && [ "${librist_python_ver}" == "3.9.2" ] ; then
+  check_p3wheel ${librist_python_ver} wheel 0.36.2
+fi
+if [ "${librist_meson_ver}" == "0.59.0" ] && [ "${librist_python_ver}" == "3.9.6" ] ; then
   check_p3wheel ${librist_python_ver} wheel 0.36.2
 fi
 check_p3wheel ${librist_python_ver} meson ${librist_meson_ver}

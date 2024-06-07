@@ -8,6 +8,9 @@ case ${1} in
   1.1.63)
     echo libuavs3d.so
   ;;
+  1.1.67)
+    echo libuavs3d.so
+  ;;
   *)
     echo ''
   ;;
@@ -54,6 +57,12 @@ case ${uavs3d_v} in
    uavs3d_gawk_ver=5.1.0      # 2020-04-14
    uavs3d_commit=26b088ed51a8c3f7ed73e2a70321777c8aff5a8a
    uavs3d_build_num=63
+   ;;
+1.1.67) # 2021-08-03
+   uavs3d_cmake_ver=3.21.1    # 2021-07-27
+   uavs3d_gawk_ver=5.1.0      # 2020-04-14
+   uavs3d_commit=57d20183301d4197d1c938f62f8a5911e33465d7
+   uavs3d_build_num=67
    ;;
 *)
    echo "ERROR: Need review for uavs3d ${uavs3d_v}"

@@ -47,6 +47,12 @@ case ${mbedtls_v} in
    mbedtls_zlib_ver=1.2.11   # 2017-01-15
    mbedtls_create_pkgconfig=1
   ;;
+  3.0.0) # 2021-07-07
+   mbedtls_cmake_ver=3.20.5  # 2021-06-21
+   mbedtls_python_ver=3.9.6  # 2021-06-28
+   mbedtls_zlib_ver=1.2.11   # 2017-01-15
+   mbedtls_create_pkgconfig=1
+  ;;
   *)
    echo "ERROR: Review needed for mbedtls ${mbedtls_v}"
    exit 4 # Please review
@@ -88,20 +94,33 @@ module load zlib/${mbedtls_zlib_ver}
 module load cmake/${mbedtls_cmake_ver}
 module load Python/${mbedtls_python_ver}
 
+case ${mbedtls_v} in
+  2.26.0)
+     build_options="-DENABLE_ZLIB_SUPPORT=ON
+                    -DLINK_WITH_PTHREAD=ON"
+  ;;
+  3.0.0)
+     build_options="-DCMAKE_BUILD_TYPE=Release
+                    -DLINK_WITH_PTHREAD=ON"
+  ;;
+  *)
+   echo "ERROR: Review needed for mbedtls ${mbedtls_v}"
+   exit 4 # Please review
+  ;;
+esac
 if [ ${debug} -gt 0 ] ; then
   echo ''
   module list
   echo ''
   echo cmake -L -G \"Unix Makefiles\" \
-      -DENABLE_ZLIB_SUPPORT=ON \
-      -DLINK_WITH_PTHREAD=ON \
+      ${build_options} \
       -DUSE_SHARED_MBEDTLS_LIBRARY=ON \
       -DCMAKE_INSTALL_PREFIX=${mbedtls_prefix} ..
   read k
 fi
 
 cmake -L -G "Unix Makefiles" \
-      -DENABLE_ZLIB_SUPPORT=ON \
+      ${build_options} \
       -DUSE_SHARED_MBEDTLS_LIBRARY=ON \
       -DCMAKE_INSTALL_PREFIX=${mbedtls_prefix} ..
 
@@ -110,6 +129,7 @@ if [ ${debug} -gt 0 ] ; then
   read k
 fi
 
+#make
 make -j ${ncpu}
 
 if [ ! $? -eq 0 ] ; then
@@ -164,7 +184,7 @@ Requires.private: mbedcrypto mbedx509
 Cflags: -I"\${includedir}"
 Libs: -L"\${libdir}" -lmbedtls
 eof
-cat << eof > ${mbedtls_prefix}/lib/pkgconfig/mbedtls.pc
+cat << eof > ${mbedtls_prefix}/lib/pkgconfig/mbedx509.pc
 prefix=${mbedtls_prefix}
 includedir=\${prefix}/include
 libdir=\${prefix}/lib
