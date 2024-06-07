@@ -156,6 +156,7 @@ fdk-aac-2.0.2.tar.gz=https://downloads.sourceforge.net/opencore-amr/fdk-aac-2.0.
 # FFmpeg
 ffmpeg-2.8.16.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-2.8.16.tar.gz
 ffmpeg-2.8.17.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-2.8.17.tar.gz
+ffmpeg-2.8.18.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-2.8.18.tar.gz
 ffmpeg-3.2.15.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.2.15.tar.gz
 ffmpeg-3.2.16.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.2.16.tar.gz
 ffmpeg-3.4.8.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-3.4.8.tar.gz
