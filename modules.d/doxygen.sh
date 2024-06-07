@@ -139,6 +139,15 @@ case ${doxygen_v} in
    doxygen_build_system=cmake
    doxygen_manpath=0
   ;;
+  1.9.2) # 2021-08-18
+   doxygen_flex_ver=2.6.4    # 2017-05-06 - latest as of 2024-04-12
+   doxygen_bison_ver=3.7.6   # 2021-03-09
+   doxygen_cmake_ver=3.21.1   # 2021-07-27
+   doxygen_libxml2_ver=2.9.12 # 2021-05-13
+   doxygen_python_ver=3.9.6   # 2021-06-28
+   doxygen_build_system=cmake
+   doxygen_manpath=0
+  ;;
   *)
    echo "ERROR: Review needed for doxygen ${doxygen_v}"
    exit 4 # Please review

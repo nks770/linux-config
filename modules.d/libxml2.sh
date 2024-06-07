@@ -75,36 +75,57 @@ case ${libxml2_v} in
    libxml2_xz_ver=5.0.4    # 2012-06-22
    libxml2_zlib_ver=1.2.7.3 #2013-04-13
    libxml2_icu_ver=51.1    # 2013-03-22
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.4) # 2016-05-23
    libxml2_xz_ver=5.2.2    # 2015-09-29
    libxml2_zlib_ver=1.2.8  # 2013-04-28
    libxml2_icu_ver=57.1    # 2016-03-23
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.7) # 2017-11-02
    libxml2_xz_ver=5.2.3    # 2016-12-30
    libxml2_zlib_ver=1.2.11 # 2017-01-15
    libxml2_icu_ver=60.1    # 2017-11-01
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.8) # 2018-03-05
    libxml2_xz_ver=5.2.3    # 2016-12-30
    libxml2_zlib_ver=1.2.11 # 2017-01-15
    libxml2_icu_ver=60.2    # 2017-12-13
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.9) # 2019-01-03
    libxml2_xz_ver=5.2.4    # 2018-04-29
    libxml2_zlib_ver=1.2.11 # 2017-01-15
    libxml2_icu_ver=63.1    # 2018-10-15
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.10) # 2019-10-30
    libxml2_xz_ver=5.2.4    # 2018-04-29
    libxml2_zlib_ver=1.2.11 # 2017-01-15
    libxml2_icu_ver=65.1    # 2019-10-03
+   libxml2_arc=gz
+   libxml2_tar=xvfz
    ;;
 2.9.11) # 2021-05-13
    libxml2_xz_ver=5.2.5    # 2020-03-17
    libxml2_zlib_ver=1.2.11 # 2017-01-15
    libxml2_icu_ver=69.1    # 2021-04-07
+   libxml2_arc=gz
+   libxml2_tar=xvfz
+   ;;
+2.9.12) # 2021-05-13
+   libxml2_xz_ver=5.2.5    # 2020-03-17
+   libxml2_zlib_ver=1.2.11 # 2017-01-15
+   libxml2_icu_ver=69.1    # 2021-04-07
+   libxml2_arc=xz
+   libxml2_tar=xvfJ
    ;;
 *)
    echo "ERROR: Need review for libxml2 ${libxml2_v}"
@@ -125,7 +146,7 @@ check_xz ${libxml2_xz_ver}
 check_zlib ${libxml2_zlib_ver}
 check_icu ${libxml2_icu_ver}
 
-downloadPackage libxml2-${libxml2_v}.tar.gz
+downloadPackage libxml2-${libxml2_v}.tar.${libxml2_arc}
 
 cd ${tmp}
 
@@ -133,7 +154,7 @@ if [ -d ${tmp}/libxml2-${libxml2_v} ] ; then
   rm -rf ${tmp}/libxml2-${libxml2_v}
 fi
 
-tar xvfz ${pkg}/libxml2-${libxml2_v}.tar.gz
+tar ${libxml2_tar} ${pkg}/libxml2-${libxml2_v}.tar.${libxml2_arc}
 cd ${tmp}/libxml2-${libxml2_v}
 
 if [ ${debug} -gt 0 ] ; then

@@ -80,6 +80,13 @@ case ${libaom_v} in
    libaom_python_ver=3.9.6   # 2021-06-28
    libdir=lib # Directory where installed libraries go
   ;;
+  3.2.0) #Thu Oct 14 09:17:21 2021 -0700
+   libaom_yasm_ver=1.3.0     # 2014-08-10
+   libaom_doxygen_ver=1.8.15 # 2018-12-27 - maximum; starting with 1.8.16, an extra hash value is in the version string, which causes a cmake error.
+   libaom_cmake_ver=3.21.3   # 2021-09-20
+   libaom_python_ver=3.10.0  # 2021-10-04
+   libdir=lib # Directory where installed libraries go
+  ;;
   3.5.0) #Wed Sep 21 12:36:24 2022 -0400
    libaom_yasm_ver=1.3.0
    libaom_cmake_ver=3.24.2   # 2022-09-13

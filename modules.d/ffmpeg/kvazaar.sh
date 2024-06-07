@@ -58,6 +58,11 @@ case ${kvazaar_v} in
    kvazaar_simple_build=0
    kvazaar_share_man=1
   ;;
+  2.1.0) # 2021-10-13
+   kvazaar_yasm_ver=1.3.0 # 2014-08-10
+   kvazaar_simple_build=0
+   kvazaar_share_man=1
+  ;;
   *)
    echo "ERROR: Review needed for kvazaar ${kvazaar_v}"
    exit 4 # Please review
