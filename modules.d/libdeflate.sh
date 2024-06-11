@@ -11,6 +11,9 @@ case ${1} in
   1.8)
     echo libdeflate.so.0
   ;;
+  1.9)
+    echo libdeflate.so.0
+  ;;
   *)
     echo ''
   ;;

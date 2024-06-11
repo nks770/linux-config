@@ -23,6 +23,9 @@ case ${1} in
   2.1.1)
     echo libjpeg.so.62.3.0
   ;;
+  2.1.2)
+    echo libjpeg.so.62.3.0
+  ;;
   *)
     echo ''
   ;;
@@ -91,6 +94,11 @@ case ${libjpegturbo_v} in
   ;;
   2.1.1) # 2021-08-09
    libjpegturbo_cmake_ver=3.21.1 # 2021-07-27
+   libjpegturbo_nasm_ver=2.15.05 # 2020-08-28
+   libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
+  ;;
+  2.1.2) # 2021-11-18
+   libjpegturbo_cmake_ver=3.22.0 # 2021-11-18
    libjpegturbo_nasm_ver=2.15.05 # 2020-08-28
    libjpegturbo_use_cmake=1      # In libjpeg-turbo 2.0.4, cmake is used for all platforms, autotools not supported.
   ;;

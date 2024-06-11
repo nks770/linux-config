@@ -290,6 +290,12 @@ case ${cmake_v} in
    cmake_manpath=0
    chmod_warning=0
    ;;
+3.22.0) # 2021-11-18
+   cmake_ncurses_ver=6.3    # 2021-11-08
+   cmake_openssl_ver=1.1.1l # 2021-08-24
+   cmake_manpath=0
+   chmod_warning=0
+   ;;
 3.24.0) # 2022-08-04
    cmake_ncurses_ver=6.3    # 2021-11-08
    cmake_openssl_ver=1.1.1q # 2022-07-05

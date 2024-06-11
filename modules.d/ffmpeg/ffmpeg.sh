@@ -1340,6 +1340,70 @@ case ${ffmpeg_v} in
     ffmpeg_libsvtav1_ver=0.8.7            # 2021-05-08 - next 2022-01-22 (0.9.0)
     ffmpeg_uavs3d_ver=1.1.67              # 2021-08-03 - next 2021-11-02 (1.1.68)
   ;;
+  5.0) # 2022-01-14
+    # Compression libraries
+    ffmpeg_zstd_ver=1.5.1                 # 2021-12-20 - next 2022-01-20 (1.5.2)
+    ffmpeg_libdeflate_ver=1.9             # 2022-01-11 - next 2022-02-06 (1.10)
+    # Image processing libraries
+    ffmpeg_lerc_ver=3.0                   # 2021-07-30 - next 2022-07-15 (4.0)
+    ffmpeg_jbigkit_ver=2.1                # 2014-04-08 - latest as of 2024-02-09
+    ffmpeg_giflib_ver=5.2.1               # 2019-06-24 - latest as of 2024-02-09
+    ffmpeg_libpng_ver=1.6.37              # 2019-04-15 - next 2022-09-16 (1.6.38)
+    ffmpeg_libjpegturbo_ver=2.1.2         # 2021-11-18 - next 2022-02-25 (2.1.3)
+    ffmpeg_tiff_ver=4.3.0                 # 2021-04-20 - next 2022-05-27 (4.4.0)
+    ffmpeg_libwebp_ver=1.2.1              # 2021-08-13 - next 2022-01-20 (1.2.2)
+    ffmpeg_lcms2_ver=2.12                 # 2021-02-06 - next 2022-01-29 (2.13)
+    ffmpeg_openjpeg_ver=2.4.0             # 2020-12-28 - next 2022-05-13 (2.5.0)
+    # Font rendering libraries and dependencies
+    ffmpeg_aribb24_ver=1.0.3              # 2014-08-18 - latest as of 2024-02-09
+    ffmpeg_utillinux_ver=2.37.2           # 2021-08-16 - next 2022-01-24 (2.37.3)
+    ffmpeg_expat_ver=2.4.2                # 2021-12-19 - next 2022-01-16 (2.4.3)
+    ffmpeg_icu_ver=70.1                   # 2021-10-27 - next 2022-04-06 (71.1)
+    ffmpeg_graphite2_ver=1.3.14           # 2020-03-31 - latest as of 2024-02-09
+    ffmpeg_freetype_ver=2.11.1            # 2021-12-02 - next 2022-03-31 (2.12.0)
+    ffmpeg_fontconfig_ver=2.13.94         # 2021-06-28 - next 2022-01-31 (2.13.95)
+    ffmpeg_harfbuzz_ver=3.2.0             # 2021-12-11 - next 2022-01-31 (3.3.0)
+    ffmpeg_cairo_ver=1.16.0               # 2018-10-19 - next 2023-09-23 (1.18.0)
+    ffmpeg_pixman_ver=0.40.0              # 2020-04-19 - next 2022-10-18 (0.42.0)
+    ffmpeg_fribidi_ver=1.0.11             # 2021-09-23 - next 2022-04-19 (1.0.12)
+    ffmpeg_libass_ver=0.15.2              # 2021-09-11 - next 2022-05-12 (0.16.0)
+    # Miscellaneous extras
+    ffmpeg_libxml2_ver=2.9.12             # 2021-05-13 - next 2022-02-20 (2.9.13)
+    ffmpeg_libbluray_ver=1.3.0            # 2021-04-05 - next 2022-03-03 (1.3.1)
+    ffmpeg_nasm_ver=2.15.05               # 2020-08-28 - next 2022-12-20 (2.16)
+    ffmpeg_librist_ver=0.2.6              # 2021-07-22 - next 2022-03-20 (0.2.7)
+    # Xiph.org libraries
+    ffmpeg_libogg_ver=1.3.5               # 2021-06-03 - latest as of 2024-05-09
+    ffmpeg_libvorbis_ver=1.3.7            # 2020-07-04 - latest as of 2024-04-10
+    ffmpeg_libtheora_ver=1.1.1            # 2009-10-01 - latest as of 2024-02-09
+    ffmpeg_speex_ver=1.2.0                # 2016-12-07 - next 2022-06-16 (1.2.1)
+    ffmpeg_opus_ver=1.3.1                 # 2019-04-12 - next 2023-04-18 (1.4)
+    # Audio codecs
+    ffmpeg_libilbc_ver=3.0.4              # 2020-12-31 - latest as of 2024-04-11
+    ffmpeg_lame_ver=3.100                 # 2017-10-13 - latest as of 2024-02-09
+    ffmpeg_fdkaac_ver=2.0.2               # 2021-04-28 - next 2023-12-21 (2.0.3)
+    ffmpeg_flac_ver=1.3.3                 # 2019-08-04 - next 2022-02-20 (1.3.4)
+    ffmpeg_libsndfile_ver=1.0.31          # 2021-01-24 - next 2022-03-27 (1.1.0)
+    ffmpeg_twolame_ver=0.4.0              # 2019-10-11 - latest as of 2024-02-09
+    ffmpeg_libbs2b_ver=3.1.0              # 2009-06-04 - latest as of 2024-02-09
+    ffmpeg_opencoreamr_ver=0.1.5          # 2017-03-16 - next 2022-08-01 (0.1.6)
+    ffmpeg_voamrwbenc_ver=0.1.3           # 2013-07-27 - latest as of 2024-02-09
+    ffmpeg_soxr_ver=0.1.3                 # 2018-02-24 - latest as of 2024-02-09
+    # Video codecs
+    ffmpeg_libaom_ver=3.2.0               # 2021-10-14 - next 2022-02-15 (3.3.0)
+    ffmpeg_xvidcore_ver=1.3.7             # 2019-12-29 - latest as of 2024-02-09
+    ffmpeg_x264_ver=20211230              # 2021-12-30 - next 2022-01-24
+    ffmpeg_x265_ver=3.5                   # 2021-03-16 - next 2024-04-04 (3.6)
+    ffmpeg_kvazaar_ver=2.1.0              # 2021-10-13 - next 2023-01-04 (2.2.0)
+    ffmpeg_openh264_ver=2.1.1             # 2020-05-21 - next 2022-01-27 (2.2.0)
+    ffmpeg_libvpx_ver=1.11.0              # 2021-10-07 - next 2022-06-28 (1.12.0)
+    ffmpeg_dav1d_ver=0.9.2                # 2021-09-03 - next 2022-03-18 (1.0.0)
+    ffmpeg_davs2_ver=1.7                  # 2020-04-19 - latest as of 2024-02-09
+    ffmpeg_xavs2_ver=1.4                  # 2019-04-21 - latest as of 2024-04-08
+    ffmpeg_vidstab_ver=1.1.0              # 2017-05-30 - next 2022-05-30 (1.1.1)
+    ffmpeg_libsvtav1_ver=0.8.7            # 2021-05-08 - next 2022-01-22 (0.9.0)
+    ffmpeg_uavs3d_ver=1.1.70              # 2021-11-23 - next 2022-01-18 (1.1.71)
+  ;;
 #  5.1.2) # 2022-09-25
 #   ffmpeg_nasm_ver=2.15.05   # 2020-08-28
 #   ffmpeg_libaom_ver=3.5.0   # 2022-09-21
@@ -1444,14 +1508,14 @@ cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 module load opencore-amr/${ffmpeg_opencoreamr_ver}
 module load vo-amrwbenc/${ffmpeg_voamrwbenc_ver}
 eof
-if [ "${ffmpeg_v:0:1}" == "4" ] ; then
+if [ "${ffmpeg_v:0:1}" == "4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "module load libaom/${ffmpeg_libaom_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "module load davs2/${ffmpeg_davs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "module load xavs2/${ffmpeg_xavs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "module load librist/${ffmpeg_librist_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "module load libsvtav1/${ffmpeg_libsvtav1_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "module load uavs3d/${ffmpeg_uavs3d_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
@@ -1464,7 +1528,7 @@ module load kvazaar/${ffmpeg_kvazaar_ver}
 module load openh264/${ffmpeg_openh264_ver}
 module load libvpx/${ffmpeg_libvpx_ver}
 eof
-if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "module load dav1d/${ffmpeg_dav1d_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
 cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
@@ -1501,14 +1565,14 @@ cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 prereq opencore-amr/${ffmpeg_opencoreamr_ver}
 prereq vo-amrwbenc/${ffmpeg_voamrwbenc_ver}
 eof
-if [ "${ffmpeg_v:0:1}" == "4" ] ; then
+if [ "${ffmpeg_v:0:1}" == "4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "prereq libaom/${ffmpeg_libaom_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "prereq davs2/${ffmpeg_davs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "prereq xavs2/${ffmpeg_xavs2_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "prereq librist/${ffmpeg_librist_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "prereq libsvtav1/${ffmpeg_libsvtav1_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
   echo "prereq uavs3d/${ffmpeg_uavs3d_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
@@ -1521,7 +1585,7 @@ prereq kvazaar/${ffmpeg_kvazaar_ver}
 prereq openh264/${ffmpeg_openh264_ver}
 prereq libvpx/${ffmpeg_libvpx_ver}
 eof
-if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   echo "prereq dav1d/${ffmpeg_dav1d_ver}" >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
 fi
 cat << eof >> ${MODULEPATH}/ffmpeg-dep/${ffmpeg_v}
@@ -1564,14 +1628,14 @@ if [ "${ffmpeg_v:0:1}" == "2" ] || [ "${ffmpeg_v:0:1}" == "3" ] || [ "${ffmpeg_v
 fi
 check_opencoreamr ${ffmpeg_opencoreamr_ver}
 check_voamrwbenc ${ffmpeg_voamrwbenc_ver}
-if [ "${ffmpeg_v:0:1}" == "4" ] ; then
+if [ "${ffmpeg_v:0:1}" == "4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   check_libaom ${ffmpeg_libaom_ver}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.1" ] || [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   check_davs2 ${ffmpeg_davs2_ver}
   check_xavs2 ${ffmpeg_xavs2_ver}
 fi
-if [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   check_librist ${ffmpeg_librist_ver}
   check_libsvtav1 ${ffmpeg_libsvtav1_ver}
   check_uavs3d ${ffmpeg_uavs3d_ver}
@@ -1582,13 +1646,13 @@ check_x265 ${ffmpeg_x265_ver}
 check_kvazaar ${ffmpeg_kvazaar_ver}
 check_openh264 ${ffmpeg_openh264_ver}
 check_libvpx ${ffmpeg_libvpx_ver}
-if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   check_dav1d ${ffmpeg_dav1d_ver}
 fi
 check_soxr ${ffmpeg_soxr_ver}
 check_vidstab ${ffmpeg_vidstab_ver}
 
-if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.2" ] || [ "${ffmpeg_v:0:3}" == "4.3" ] || [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:1}" == "5" ] ; then
   ff_check_aribb24 ${ffmpeg_aribb24_ver} ${ffmpeg_depdir} ${ffmpeg_v}
 fi
 ff_check_tiff ${ffmpeg_tiff_ver} ${ffmpeg_depdir} ${ffmpeg_v}
@@ -2037,7 +2101,7 @@ ffconf_ldflgs="-L${ffmpeg_depdir}/lib \
 -L${opt}/soxr-${ffmpeg_soxr_ver}/lib"
 fi
 
-if [ "${ffmpeg_v:0:3}" == "4.4" ] ; then
+if [ "${ffmpeg_v:0:3}" == "4.4" ] || [ "${ffmpeg_v:0:3}" == "5.0" ] ; then
 ffconf_opt="--prefix=${ffmpeg_prefix} \
             --enable-gpl \
             --enable-version3 \

@@ -85,6 +85,7 @@ cmake-3.20.5.tar.gz=https://cmake.org/files/v3.20/cmake-3.20.5.tar.gz
 cmake-3.21.0.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.0.tar.gz
 cmake-3.21.1.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.1.tar.gz
 cmake-3.21.3.tar.gz=https://cmake.org/files/v3.21/cmake-3.21.3.tar.gz
+cmake-3.22.0.tar.gz=https://cmake.org/files/v3.22/cmake-3.22.0.tar.gz
 cmake-3.23.1.tar.gz=https://cmake.org/files/v3.23/cmake-3.23.1.tar.gz
 cmake-3.24.0.tar.gz=https://cmake.org/files/v3.24/cmake-3.24.0.tar.gz
 cmake-3.24.2.tar.gz=https://cmake.org/files/v3.24/cmake-3.24.2.tar.gz
@@ -134,6 +135,7 @@ expat-2.2.9.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2
 expat-2.2.10.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_2_10/expat-2.2.10.tar.bz2
 expat-2.3.0.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_3_0/expat-2.3.0.tar.bz2
 expat-2.4.1.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_4_1/expat-2.4.1.tar.bz2
+expat-2.4.2.tar.bz2=https://github.com/libexpat/libexpat/releases/download/R_2_4_2/expat-2.4.2.tar.bz2
 
 # expect
 expect5.45.4.tar.gz=https://cfhcable.dl.sourceforge.net/project/expect/Expect/5.45.4/expect5.45.4.tar.gz
@@ -178,6 +180,7 @@ ffmpeg-4.3.2.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.3.2.tar.gz
 ffmpeg-4.3.3.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.3.3.tar.gz
 ffmpeg-4.4.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.4.tar.gz
 ffmpeg-4.4.1.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-4.4.1.tar.gz
+ffmpeg-5.0.tar.gz=https://www.ffmpeg.org/releases/ffmpeg-5.0.tar.gz
 ffmpeg-5.1.2.tar.gz=https://ffmpeg.org/releases/ffmpeg-5.1.2.tar.gz
 
 # flac
@@ -202,6 +205,7 @@ freetype-2.10.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freet
 freetype-2.10.2.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.2.tar.gz
 freetype-2.10.4.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.10.4.tar.gz
 freetype-2.11.0.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.11.0.tar.gz
+freetype-2.11.1.tar.gz=https://download.savannah.gnu.org/releases/freetype/freetype-2.11.1.tar.gz
 
 # fribidi
 # https://github.com/fribidi/fribidi
@@ -213,6 +217,7 @@ fribidi-1.0.11.tar.xz=https://github.com/fribidi/fribidi/releases/download/v1.0.
 
 # gawk
 gawk-5.1.0.tar.gz=https://ftp.gnu.org/gnu/gawk/gawk-5.1.0.tar.gz
+gawk-5.1.1.tar.gz=https://ftp.gnu.org/gnu/gawk/gawk-5.1.1.tar.gz
 
 # gdbm
 gdbm-1.10.tar.gz=https://ftp.gnu.org/gnu/gdbm/gdbm-1.10.tar.gz
@@ -252,6 +257,7 @@ harfbuzz-2.7.4.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.7
 harfbuzz-2.8.0.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.8.0/harfbuzz-2.8.0.tar.xz
 harfbuzz-2.9.1.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/2.9.1/harfbuzz-2.9.1.tar.xz
 harfbuzz-3.0.0.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/3.0.0/harfbuzz-3.0.0.tar.xz
+harfbuzz-3.2.0.tar.xz=https://github.com/harfbuzz/harfbuzz/releases/download/3.2.0/harfbuzz-3.2.0.tar.xz
 
 # help2man
 # https://www.gnu.org/software/help2man/
@@ -271,6 +277,7 @@ icu4c-65_1-src.tgz=https://github.com/unicode-org/icu/releases/download/release-
 icu4c-67_1-src.tgz=https://github.com/unicode-org/icu/releases/download/release-67-1/icu4c-67_1-src.tgz
 icu4c-68_2-src.tgz=https://github.com/unicode-org/icu/releases/download/release-68-2/icu4c-68_2-src.tgz
 icu4c-69_1-src.tgz=https://github.com/unicode-org/icu/releases/download/release-69-1/icu4c-69_1-src.tgz
+icu4c-70_1-src.tgz=https://github.com/unicode-org/icu/releases/download/release-70-1/icu4c-70_1-src.tgz
 
 # jbigkit
 jbigkit-2.1.tar.gz=https://www.cl.cam.ac.uk/~mgk25/jbigkit/download/jbigkit-2.1.tar.gz
@@ -330,6 +337,7 @@ libbs2b-3.1.0.tar.gz=https://cfhcable.dl.sourceforge.net/project/bs2b/libbs2b/3.
 # libdeflate
 libdeflate-1.7.tar.gz=https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.7.tar.gz
 libdeflate-1.8.tar.gz=https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.8.tar.gz
+libdeflate-1.9.tar.gz=https://github.com/ebiggers/libdeflate/archive/refs/tags/v1.9.tar.gz
 
 # libffi
 libffi-3.0.13.tar.gz=https://gcc.gnu.org/pub/libffi/libffi-3.0.13.tar.gz
@@ -357,6 +365,7 @@ libjpeg-turbo-2.0.4.tar.gz=https://phoenixnap.dl.sourceforge.net/project/libjpeg
 libjpeg-turbo-2.0.5.tar.gz=https://cytranet.dl.sourceforge.net/project/libjpeg-turbo/2.0.5/libjpeg-turbo-2.0.5.tar.gz
 libjpeg-turbo-2.0.6.tar.gz=https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/2.0.6/libjpeg-turbo-2.0.6.tar.gz
 libjpeg-turbo-2.1.1.tar.gz=https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/2.1.1/libjpeg-turbo-2.1.1.tar.gz
+libjpeg-turbo-2.1.2.tar.gz=https://github.com/libjpeg-turbo/libjpeg-turbo/releases/download/2.1.2/libjpeg-turbo-2.1.2.tar.gz
 libjpeg-turbo-2.1.3.tar.gz=https://cfhcable.dl.sourceforge.net/project/libjpeg-turbo/2.1.3/libjpeg-turbo-2.1.3.tar.gz
 
 # libogg
@@ -718,6 +727,7 @@ wheel-0.37.0-py2.py3-none-any.whl=https://files.pythonhosted.org/packages/04/80/
 #uavs3d-1.1.tar.gz=https://github.com/uavs3/uavs3d/archive/refs/tags/v1.1.tar.gz
 uavs3d-1.1.63.zip=https://github.com/uavs3/uavs3d/archive/26b088ed51a8c3f7ed73e2a70321777c8aff5a8a.zip
 uavs3d-1.1.67.zip=https://github.com/uavs3/uavs3d/archive/57d20183301d4197d1c938f62f8a5911e33465d7.zip
+uavs3d-1.1.70.zip=https://github.com/uavs3/uavs3d/archive/23a42eefbcde8f4d826b71f2e158f948f3e2b3ee.zip
 
 # x264
 # https://www.videolan.org/developers/x264.html
@@ -729,6 +739,7 @@ x264-20200702.tar.gz=https://code.videolan.org/videolan/x264/-/archive/4c2aafd86
 x264-20210211.tar.gz=https://code.videolan.org/videolan/x264/-/archive/b86ae3c66f51ac9eab5ab7ad09a9d62e67961b8a/x264-b86ae3c66f51ac9eab5ab7ad09a9d62e67961b8a.tar.gz
 x264-20210825.tar.gz=https://code.videolan.org/videolan/x264/-/archive/8b2721d2770250cd8afa22fd20df3184943e857f/x264-8b2721d2770250cd8afa22fd20df3184943e857f.tar.gz
 x264-20210929.tar.gz=https://code.videolan.org/videolan/x264/-/archive/66a5bc1bd1563d8227d5d18440b525a09bcf17ca/x264-66a5bc1bd1563d8227d5d18440b525a09bcf17ca.tar.gz
+x264-20211230.tar.gz=https://code.videolan.org/videolan/x264/-/archive/19856cc41ad11e434549fb3cc6a019e645ce1efe/x264-19856cc41ad11e434549fb3cc6a019e645ce1efe.tar.gz
 x264-20220601.tar.gz=https://code.videolan.org/videolan/x264/-/archive/baee400fa9ced6f5481a728138fed6e867b0ff7f/x264-baee400fa9ced6f5481a728138fed6e867b0ff7f.tar.gz
 
 # x265
@@ -770,3 +781,4 @@ zstd-1.4.5.tar.gz=https://github.com/facebook/zstd/releases/download/v1.4.5/zstd
 zstd-1.4.8.tar.gz=https://github.com/facebook/zstd/releases/download/v1.4.8/zstd-1.4.8.tar.gz
 zstd-1.4.9.tar.gz=https://github.com/facebook/zstd/releases/download/v1.4.9/zstd-1.4.9.tar.gz
 zstd-1.5.0.tar.gz=https://github.com/facebook/zstd/releases/download/v1.5.0/zstd-1.5.0.tar.gz
+zstd-1.5.1.tar.gz=https://github.com/facebook/zstd/releases/download/v1.5.1/zstd-1.5.1.tar.gz

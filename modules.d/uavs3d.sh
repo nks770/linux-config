@@ -55,14 +55,23 @@ case ${uavs3d_v} in
 1.1.63) # 2021-04-09
    uavs3d_cmake_ver=3.20.1    # 2021-04-08
    uavs3d_gawk_ver=5.1.0      # 2020-04-14
+   uavs3d_awk_tool=gawk
    uavs3d_commit=26b088ed51a8c3f7ed73e2a70321777c8aff5a8a
    uavs3d_build_num=63
    ;;
 1.1.67) # 2021-08-03
    uavs3d_cmake_ver=3.21.1    # 2021-07-27
    uavs3d_gawk_ver=5.1.0      # 2020-04-14
+   uavs3d_awk_tool=gawk
    uavs3d_commit=57d20183301d4197d1c938f62f8a5911e33465d7
    uavs3d_build_num=67
+   ;;
+1.1.70) # 2021-11-23
+   uavs3d_cmake_ver=3.22.0    # 2021-11-18
+   uavs3d_gawk_ver=0
+   uavs3d_awk_tool=awk
+   uavs3d_commit=23a42eefbcde8f4d826b71f2e158f948f3e2b3ee
+   uavs3d_build_num=70
    ;;
 *)
    echo "ERROR: Need review for uavs3d ${uavs3d_v}"
@@ -78,7 +87,9 @@ uavs3d_prefix=${opt}/uavs3d-${uavs3d_v}
 
 check_modules
 check_cmake ${uavs3d_cmake_ver}
-check_gawk ${uavs3d_gawk_ver}
+if [ "${uavs3d_awk_tool}" == "gawk" ] ; then
+  check_gawk ${uavs3d_gawk_ver}
+fi
 
 downloadPackage ${uavs3d_zipfil}.zip
 
@@ -106,8 +117,8 @@ cat << eof > version.patch
      shell_dir=\$1
  fi
  
--VER_R=\`git rev-list origin/master | sort | wc -l | gawk '{print \$1}'\`
--VER_L=\`git rev-list HEAD | sort | wc -l | gawk '{print \$1}'\`
+-VER_R=\`git rev-list origin/master | sort | wc -l | ${uavs3d_awk_tool} '{print \$1}'\`
+-VER_L=\`git rev-list HEAD | sort | wc -l | ${uavs3d_awk_tool} '{print \$1}'\`
 +VER_R=${uavs3d_build_num}
 +VER_L=${uavs3d_build_num}
  VER_SHA1=\`git log -n 1 | head -n 1 | cut -d ' ' -f 2\`
@@ -127,7 +138,9 @@ cd ${tmp}/${uavs3d_srcdir}/build
 
 module purge
 module load cmake/${uavs3d_cmake_ver}
-module load gawk/${uavs3d_gawk_ver}
+if [ "${uavs3d_awk_tool}" == "gawk" ] ; then
+  module load gawk/${uavs3d_gawk_ver}
+fi
 
 if [ ${debug} -gt 0 ] ; then
   echo ''
